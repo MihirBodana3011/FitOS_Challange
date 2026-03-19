@@ -121,10 +121,19 @@
     }
 
     @keyframes logoPulse {
-      0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45); }
-      70% { box-shadow: 0 0 0 8px transparent; }
-      100% { box-shadow: 0 0 0 0 transparent; }
+      0% {
+        box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45);
+      }
+
+      70% {
+        box-shadow: 0 0 0 8px transparent;
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+      }
     }
+
     .lm {
       width: 36px;
       height: 36px;
@@ -154,6 +163,44 @@
       font-style: normal
     }
 
+    @keyframes badgePulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes floatIco {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
     .xbadge {
       font-size: 9px;
       font-weight: 800;
@@ -165,6 +212,7 @@
       padding: 2px 7px;
       border-radius: 20px;
       flex-shrink: 0;
+      animation: badgePulse 2s infinite ease-in-out;
     }
 
     .vbadge {
@@ -213,9 +261,11 @@
 
     .cbar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--amber), var(--red));
+      background: linear-gradient(90deg, var(--amber), var(--red), var(--amber));
+      background-size: 200% 100%;
       border-radius: 2px;
-      transition: width .6s ease
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: gradientShift 3s ease infinite;
     }
 
     .cv {
@@ -323,6 +373,23 @@
       border-radius: 11px;
       padding: 9px 10px;
       transition: all .2s;
+      animation: fup 0.4s ease both;
+    }
+
+    .pc:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .pc:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .pc:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .pc:nth-child(4) {
+      animation-delay: 0.2s;
     }
 
     .pc:hover {
@@ -398,7 +465,8 @@
     .rb-wrap svg {
       width: 110px;
       height: 110px;
-      transform: rotate(-90deg)
+      transform: rotate(-90deg);
+      animation: fup 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
 
     .rg-bg {
@@ -442,7 +510,9 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-top: 10px
+      margin-top: 10px;
+      animation: fup 0.6s ease both;
+      animation-delay: 0.1s;
     }
 
     .mr {
@@ -485,7 +555,9 @@
     .wgrid {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px
+      gap: 4px;
+      animation: fup 0.5s ease both;
+      animation-delay: 0.2s;
     }
 
     .wg {
@@ -515,8 +587,10 @@
     .wgf {
       width: 100%;
       height: 0;
-      background: linear-gradient(to top, var(--blue), rgba(37, 99, 235, .4));
-      transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: linear-gradient(to top, var(--blue), rgba(37, 99, 235, .5), var(--blue));
+      background-size: 100% 200%;
+      transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: gradientShift 3s ease infinite;
     }
 
     .wg.on .wgf {
@@ -541,7 +615,9 @@
     /* ISABGOL */
     .irow {
       display: flex;
-      gap: 6px
+      gap: 6px;
+      animation: fup 0.5s ease both;
+      animation-delay: 0.3s;
     }
 
     .ib {
@@ -606,7 +682,9 @@
     .sql {
       display: flex;
       flex-direction: column;
-      gap: 5px
+      gap: 5px;
+      animation: fup 0.5s ease both;
+      animation-delay: 0.4s;
     }
 
     .sq {
@@ -650,7 +728,9 @@
     .wk {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 3px
+      gap: 3px;
+      animation: fup 0.5s ease both;
+      animation-delay: 0.5s;
     }
 
     .wd {
@@ -753,6 +833,7 @@
         opacity: 0;
         transform: translateY(12px) scale(0.98);
       }
+
       100% {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -887,8 +968,8 @@
     }
 
     .gymb:hover {
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.15);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(5, 150, 105, 0.2), 0 4px 10px rgba(5, 150, 105, 0.05);
     }
 
     .gymb:active {
@@ -898,7 +979,8 @@
 
     .gymb-ico {
       font-size: 26px;
-      flex-shrink: 0
+      flex-shrink: 0;
+      animation: floatIco 3s ease-in-out infinite;
     }
 
     .gymb-title {
@@ -928,8 +1010,8 @@
 
     .mc:hover {
       border-color: var(--green);
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(5, 150, 105, 0.18), 0 4px 10px rgba(5, 150, 105, 0.05);
     }
 
     .mc:active {
@@ -962,6 +1044,7 @@
       justify-content: center;
       font-size: 18px;
       flex-shrink: 0;
+      animation: floatIco 3s ease-in-out infinite;
     }
 
     .mcnfo {
@@ -1023,9 +1106,17 @@
     }
 
     @keyframes checkPop {
-      0% { transform: scale(0.8); }
-      40% { transform: scale(1.25); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(0.8);
+      }
+
+      40% {
+        transform: scale(1.25);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     .chkb.done {
@@ -1303,7 +1394,9 @@
     .progfill {
       height: 100%;
       border-radius: 3px;
-      transition: width .5s ease
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background-size: 200% 100% !important;
+      animation: gradientShift 3s ease infinite;
     }
 
     /* EXERCISE CARDS */
@@ -1567,12 +1660,22 @@
       }
 
       /* Active states for better mobile touch feedback */
-      .gymb:active, .mc:active, .sc:active, .ib:active, .sdot:active, .exck:active, .vdb:active, .bntab:active, .tab:active {
+      .gymb:active,
+      .mc:active,
+      .sc:active,
+      .ib:active,
+      .sdot:active,
+      .exck:active,
+      .vdb:active,
+      .bntab:active,
+      .tab:active {
         transform: scale(0.97) !important;
         transition: transform 0.05s ease !important;
       }
-      
-      .opp:active, .chkb:active, .arb:active {
+
+      .opp:active,
+      .chkb:active,
+      .arb:active {
         transform: scale(0.92) !important;
         transition: transform 0.05s ease !important;
       }
@@ -1593,7 +1696,7 @@
         position: sticky;
         top: 0;
         z-index: 500;
-        box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
       }
 
       .topright {
@@ -1634,7 +1737,8 @@
         display: none;
         flex-direction: column;
         gap: 14px;
-        margin-top: 0; /* natural flow */
+        margin-top: 0;
+        /* natural flow */
       }
 
       .sidebar.mob-visible {
@@ -1645,13 +1749,15 @@
       .main {
         margin-top: 0;
         flex: 1;
-        overflow: visible; /* iOS smooth scrolling fix */
+        overflow: visible;
+        /* iOS smooth scrolling fix */
       }
 
       /* Tabbar inside main — normal flow */
       .tabbar {
         position: sticky;
-        top: 54px; /* Sticks precisely under topbar */
+        top: 54px;
+        /* Sticks precisely under topbar */
         padding: 0 8px;
         z-index: 300;
         background: rgba(255, 255, 255, 0.98);
@@ -1680,6 +1786,7 @@
       .sec-hdr {
         margin: 22px 0 12px;
       }
+
       .sdiv {
         padding: 18px 0 8px;
       }
@@ -1712,7 +1819,7 @@
         font-size: 19px;
         border-radius: 12px
       }
-      
+
       .mcb {
         padding: 14px;
       }
@@ -2056,19 +2163,19 @@
         <div class="sh">Supplements Schedule</div>
         <div class="sql">
           <div class="sq">
+            <div class="sd" style="background:var(--green)"></div>
+            <div class="sn">Jeera · Saunf · Ajwain</div>
+            <div class="st">12:40 PM · 4:00 PM</div>
+          </div>
+          <div class="sq">
             <div class="sd" style="background:var(--teal)"></div>
             <div class="sn">Isabgol (2×)</div>
-            <div class="st">2:40 PM · 5:45 PM</div>
+            <div class="st">12:50 PM · 4:15 PM</div>
           </div>
           <div class="sq">
             <div class="sd" style="background:var(--amber)"></div>
             <div class="sn">Apple Cider Vinegar</div>
-            <div class="st">2:50 PM</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--green)"></div>
-            <div class="sn">Jeera · Saunf · Ajwain</div>
-            <div class="st">4:00 PM</div>
+            <div class="st">1:00 PM · 4:30 PM</div>
           </div>
           <div class="sq">
             <div class="sd" style="background:var(--teal)"></div>
@@ -2107,7 +2214,6 @@
           <span class="highlight">No eggs, no meat — maximum fat loss through food timing and discipline.</span><br>
           Isabgol before meals = natural hunger control. ACV before lunch = blood sugar control. 4L water =
           non-negotiable.
-          <strong>Never skip post-workout breakfast (6:00 AM)</strong> — it protects your muscle before you sleep.
           Fat burner: gym days only at 3:15 AM. Gym: 4:00 AM – 6:00 AM after office shift.
           <span class="highlight">Expected: 5–8 kg fat loss per month</span> on this plan.
         </div>
@@ -2151,31 +2257,38 @@
     // ============================================================
     const DIET = [
       {
-        id: 'wake', time: '14:30', disp: '2:30 PM', type: 'meal', color: 'amber', icon: '☀️',
+        id: 'wake', time: '12:30', disp: '12:30 PM', type: 'meal', color: 'amber', icon: '☀️',
         name: 'Wake Up — Fasted State', sub: 'Kick-start metabolism',
-        cal: 55, p: 3, c: 5, f: 2, fib: 0,
+        cal: 77, p: 3, c: 5, f: 5, fib: 0,
         items: ['Warm water + fresh lemon juice (1 glass) + 1 pinch rock salt', 'Soaked almonds (6) + walnuts (2) + 1 soaked fig']
       },
 
       {
-        id: 'isa1', time: '14:40', disp: '2:40 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'AM FIBER',
+        id: 'j1', time: '12:40', disp: '12:40 PM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
+        name: 'Jeera · Saunf · Ajwain Drink',
+        desc: '½ tsp each powder in 250ml lukewarm water.',
+        why: 'Eliminates bloating and activates digestive enzymes. Reduces water retention.'
+      },
+
+      {
+        id: 'isa1', time: '12:50', disp: '12:50 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'AM FIBER',
         name: 'Isabgol — First Dose',
         desc: '2 level tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY.',
         why: 'Natural stomach filler before the first big meal. Reduces appetite by 30–40%.'
       },
 
       {
-        id: 'acv', time: '14:50', disp: '2:50 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
+        id: 'acv', time: '13:00', disp: '1:00 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
         name: 'Apple Cider Vinegar',
         desc: '1 tbsp ACV in 250ml warm water — drink 10 min before lunch. Do NOT take on empty stomach.',
         why: 'Lowers blood sugar spike from lunch, suppresses appetite, activates fat-burning enzymes.'
       },
 
       {
-        id: 'lunch', time: '15:00', disp: '3:00 PM', type: 'meal', color: 'blue', icon: '🥗',
-        name: 'First Meal (Lunch)', sub: 'Biggest Meal — High Fiber + Protein',
-        cal: 350, p: 25, c: 40, f: 8, fib: 10,
-        items: ['2 multigrain roti OR 120g brown rice', 'Dal 200ml — moong / masoor / mixed', 'Sabzi 200g — strictly minimal oil', 'Salad + 150g low-fat curd']
+        id: 'lunch', time: '13:15', disp: '1:15 PM', type: 'meal', color: 'blue', icon: '🥗',
+        name: 'First Meal (Lunch)', sub: 'Biggest Meal — High Fiber',
+        cal: 497, p: 35, c: 60, f: 13, fib: 12,
+        items: ['2 multigrain roti OR 120g brown rice', 'Dal 200ml — moong / masoor / mixed', 'Sabzi 200g — minimal oil', 'Salad + 150g low-fat curd']
       },
 
       {
@@ -2186,30 +2299,36 @@
       },
 
       {
-        id: 'isa2', time: '17:45', disp: '5:45 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'PM FIBER',
+        id: 'isa2', time: '16:15', disp: '4:15 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'PM FIBER',
         name: 'Isabgol — Evening Dose',
         desc: '2 tsp isabgol in 300ml warm water before dinner/office.',
         why: 'Reduces appetite for dinner — keeps you from overeating before the shift.'
       },
+      {
+        id: 'acv', time: '16:30', disp: '4:30 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
+        name: 'Apple Cider Vinegar',
+        desc: '1 tbsp ACV in 250ml warm water — drink 10 min before lunch. Do NOT take on empty stomach.',
+        why: 'Lowers blood sugar spike from lunch, suppresses appetite, activates fat-burning enzymes.'
+      },
 
       {
-        id: 'dinner', time: '18:00', disp: '6:00 PM', type: 'meal', color: 'orange', icon: '🍱',
+        id: 'dinner', time: '17:00', disp: '5:00 PM', type: 'meal', color: 'orange', icon: '🍱',
         name: 'Pre-Shift Dinner', sub: 'Lean Fuel for Night Shift',
-        cal: 300, p: 30, c: 20, f: 8, fib: 8,
+        cal: 446, p: 40, c: 40, f: 14, fib: 12,
         opts: [
-          { id: 'A', label: 'Grilled Paneer', desc: 'Paneer tikka 150g + mixed veg salad + 1 roti. High protein, low carb.' },
-          { id: 'B', label: 'Soya Chunks Curry', desc: 'Soya chunks curry 150g + 1 roti + salad. Exceptional plant protein.' },
+          { id: 'A', label: 'Grilled Low-Fat Paneer', desc: 'Low-fat Paneer tikka 200g + mixed veg salad + 1 roti. High protein.' },
+          { id: 'B', label: 'Soya Chunks Curry', desc: 'Soya chunks 80g curry + small salad + 1 roti. Plant protein.' },
           { id: 'C', label: 'Tofu Stir Fry', desc: 'Tofu 200g stir-fried with veggies + 1 roti. Light & filling.' },
         ]
       },
 
       {
         id: 'brk1', time: '21:30', disp: '9:30 PM', type: 'meal', color: 'amber', icon: '☕',
-        name: 'Office Break 1', sub: 'Keep under 45 cal',
-        cal: 45, p: 2, c: 6, f: 1, fib: 2,
+        name: 'Office Break 1', sub: 'Keep under 50 cal',
+        cal: 50, p: 2, c: 6, f: 2, fib: 2,
         opts: [
           { id: 'A', label: 'Makhana', desc: 'Green tea + 30g roasted makhana — extremely low calorie, crunchy.' },
-          { id: 'B', label: 'Black Coffee', desc: 'Black coffee (no sugar) + 1 small apple.' },
+          { id: 'B', label: 'Black Coffee', desc: 'Black coffee (no sugar) + half small apple.' },
           { id: 'C', label: '✓ Skip It', desc: 'Just hot water + green tea.' },
         ]
       },
@@ -2231,25 +2350,14 @@
       {
         id: 'pwk', time: '03:30', disp: '3:30 AM', type: 'meal', color: 'green', icon: '⚡',
         name: 'Pre-Workout Fuel', sub: 'Quick Energy Before 4 AM Gym',
-        cal: 100, p: 4, c: 18, f: 2, fib: 2,
+        cal: 116, p: 1, c: 28, f: 0, fib: 3,
         opts: [
-          { id: 'A', label: 'Banana + Black Coffee', desc: '1 large banana + 1 cup black coffee. Strongest combo for 4 AM energy.' },
-          { id: 'B', label: 'Dates + Milk', desc: '3 soaked dates + 100ml low-fat milk. Natural sugar + protein.' },
+          { id: 'A', label: 'Banana + Black Coffee', desc: '1 medium banana + 1 cup black coffee. Strongest combo for 4 AM energy.' },
+          { id: 'B', label: 'Dates + Milk', desc: '3 soaked dates + 50ml skim milk. Natural sugar.' },
         ]
       },
 
-      { id: 'gym', time: '04:00', disp: '4:00 AM', type: 'gymblock' },
-
-      {
-        id: 'brunch', time: '06:00', disp: '6:00 AM', type: 'meal', color: 'green', icon: '💪',
-        name: 'Post-Workout Breakfast', sub: 'Critical Recovery Window BEFORE Sleep',
-        cal: 350, p: 35, c: 30, f: 10, fib: 7,
-        opts: [
-          { id: 'A', label: 'Paneer Bhurji', desc: 'Paneer bhurji 150g + 1 multigrain roti + chaas.' },
-          { id: 'B', label: 'Besan Chilla', desc: '3 besan chilla + mint chutney + tea.' },
-          { id: 'C', label: 'Moong Dal Cheela', desc: '3 moong dal cheela + cucumber salad.' },
-        ]
-      },
+      { id: 'gym', time: '04:00', disp: '4:00 AM', type: 'gymblock' }
     ];
 
     // ============================================================
@@ -2477,7 +2585,7 @@
     const DNAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const WMETA = { upper: 'Upper+Arms', legs: 'Legs', abs: 'Abs+Cardio', rest: 'Rest' };
     const WCOL = { upper: 'var(--blue)', legs: 'var(--green)', abs: 'var(--amber)', rest: 'var(--t3)' };
-    const MAC = { cal: 1200, p: 125, c: 100, f: 35, fib: 30 };
+    const MAC = { cal: 1186, p: 81, c: 139, f: 34, fib: 29 };
     const COL = { amber: 'var(--amber)', green: 'var(--green)', blue: 'var(--blue)', coral: 'var(--red)', red: 'var(--red)', purple: 'var(--purple)', teal: 'var(--teal)', orange: 'var(--orange)' };
     const BGD = { amber: 'rgba(217,119,6,.1)', green: 'rgba(5,150,105,.1)', blue: 'rgba(37,99,235,.1)', coral: 'rgba(220,38,38,.1)', red: 'rgba(220,38,38,.1)', purple: 'rgba(124,58,237,.1)', teal: 'rgba(13,148,136,.1)', orange: 'rgba(234,88,12,.1)' };
     const TBADGE = {
