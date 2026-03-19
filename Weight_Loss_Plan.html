@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
+  <title>FitOS Extreme v3</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ============================================================
+   RESET + TOKENS
+   ============================================================ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #EEF2FF;
+      --bg2: #FFFFFF;
+      --bg3: #F8FAFC;
+      --bg4: #F1F5F9;
+      --bd: rgba(0, 0, 0, .07);
+      --bd2: rgba(0, 0, 0, .13);
+      --bd3: rgba(0, 0, 0, .22);
+      --t: #0F172A;
+      --t2: #475569;
+      --t3: #94A3B8;
+      --green: #059669;
+      --gd: rgba(5, 150, 105, .1);
+      --amber: #D97706;
+      --ad: rgba(217, 119, 6, .1);
+      --red: #DC2626;
+      --rdd: rgba(220, 38, 38, .1);
+      --blue: #2563EB;
+      --bld: rgba(37, 99, 235, .1);
+      --purple: #7C3AED;
+      --pd: rgba(124, 58, 237, .1);
+      --teal: #0D9488;
+      --tld: rgba(13, 148, 136, .1);
+      --orange: #EA580C;
+      --od: rgba(234, 88, 12, .1);
+      --font: 'Manrope', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --topbar: 56px;
+      --botnav: 64px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--t);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, .12);
+      border-radius: 3px
+    }
+
+    /* ============================================================
+   DESKTOP LAYOUT (≥ 769px)
+   ============================================================ */
+    .layout {
+      display: grid;
+      grid-template-rows: var(--topbar) 1fr;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .botnav {
+      display: none
+    }
+
+    /* ============================================================
+   TOPBAR
+   ============================================================ */
+    .topbar {
+      grid-column: 1/-1;
+      background: #fff;
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 300;
+      height: var(--topbar);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .06);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto
+    }
+
+    @keyframes logoPulse {
+      0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45); }
+      70% { box-shadow: 0 0 0 8px transparent; }
+      100% { box-shadow: 0 0 0 0 transparent; }
+    }
+    .lm {
+      width: 36px;
+      height: 36px;
+      background: var(--green);
+      border-radius: 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      animation: logoPulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+
+    .lt {
+      font-family: 'Raleway', sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -.5px;
+      color: var(--t)
+    }
+
+    .lt em {
+      color: var(--green);
+      font-style: normal
+    }
+
+    .xbadge {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: var(--rdd);
+      color: var(--red);
+      border: 1px solid rgba(220, 38, 38, .25);
+      padding: 2px 7px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .vbadge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--gd);
+      color: var(--green);
+      border: 1px solid rgba(5, 150, 105, .25);
+      padding: 2px 7px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .topright {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .dc {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 18px;
+      border: 1px solid;
+      white-space: nowrap
+    }
+
+    .cstrip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--t2)
+    }
+
+    .cbar-wrap {
+      width: 80px;
+      height: 4px;
+      background: rgba(0, 0, 0, .09);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .cbar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--red));
+      border-radius: 2px;
+      transition: width .6s ease
+    }
+
+    .cv {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber)
+    }
+
+    .bmi-b {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--t2)
+    }
+
+    .bmi-v {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red)
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pl 2s infinite
+    }
+
+    @keyframes pl {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(5, 150, 105, .6)
+      }
+
+      60% {
+        box-shadow: 0 0 0 6px transparent
+      }
+    }
+
+    .clkwrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px
+    }
+
+    .clk {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--t)
+    }
+
+    .datelbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--t3);
+      letter-spacing: .03em
+    }
+
+    /* ============================================================
+   SIDEBAR (desktop)
+   ============================================================ */
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid var(--bd);
+      overflow-y: auto;
+      position: sticky;
+      top: var(--topbar);
+      height: calc(100vh - var(--topbar));
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sh {
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--t3);
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    /* PROFILE */
+    .pgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 6px
+    }
+
+    .pc {
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 11px;
+      padding: 9px 10px;
+      transition: all .2s;
+    }
+
+    .pc:hover {
+      border-color: var(--bd2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .07)
+    }
+
+    .pc-l {
+      font-size: 9px;
+      color: var(--t3);
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 2px
+    }
+
+    .pc-v {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1
+    }
+
+    .pc-s {
+      font-size: 9.5px;
+      color: var(--t3);
+      margin-top: 2px
+    }
+
+    .bmibar {
+      height: 3px;
+      background: rgba(0, 0, 0, .07);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 5px
+    }
+
+    .bmif {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--amber), var(--red));
+      border-radius: 2px
+    }
+
+    .premark {
+      font-size: 10px;
+      color: var(--t2);
+      font-style: italic;
+      line-height: 1.55;
+      background: var(--gd);
+      border: 1px solid rgba(5, 150, 105, .2);
+      border-radius: 9px;
+      padding: 7px 10px;
+    }
+
+    .premark span {
+      color: var(--green);
+      font-weight: 700;
+      font-style: normal
+    }
+
+    /* CAL RING */
+    .ring-c {
+      display: flex;
+      justify-content: center
+    }
+
+    .rb-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px
+    }
+
+    .rb-wrap svg {
+      width: 110px;
+      height: 110px;
+      transform: rotate(-90deg)
+    }
+
+    .rg-bg {
+      fill: none;
+      stroke: rgba(0, 0, 0, .07);
+      stroke-width: 9
+    }
+
+    .rg-fill {
+      fill: none;
+      stroke-width: 9;
+      stroke-linecap: round;
+      transition: stroke-dashoffset .8s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    .ri {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
+
+    .ri-n {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--amber);
+      line-height: 1
+    }
+
+    .ri-l {
+      font-size: 9px;
+      color: var(--t3);
+      margin-top: 2px
+    }
+
+    /* MACRO BARS */
+    .mbars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px
+    }
+
+    .mr {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .ml2 {
+      font-size: 10px;
+      font-weight: 700;
+      width: 42px;
+      flex-shrink: 0
+    }
+
+    .mt {
+      flex: 1;
+      height: 4px;
+      background: rgba(0, 0, 0, .07);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .mf {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .7s cubic-bezier(.34, 1.56, .64, 1)
+    }
+
+    .mv2 {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      color: var(--t2);
+      width: 46px;
+      text-align: right;
+      flex-shrink: 0
+    }
+
+    /* WATER */
+    .wgrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px
+    }
+
+    .wg {
+      width: 24px;
+      height: 32px;
+      border-radius: 4px 4px 9px 9px;
+      border: 1px solid var(--bd);
+      background: var(--bg3);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wg:active {
+      transform: scaleY(1.06)
+    }
+
+    .wg.on {
+      border-color: rgba(37, 99, 235, .4);
+      background: rgba(37, 99, 235, .04)
+    }
+
+    .wgf {
+      width: 100%;
+      height: 0;
+      background: linear-gradient(to top, var(--blue), rgba(37, 99, 235, .4));
+      transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .wg.on .wgf {
+      height: 100%
+    }
+
+    .wrow2 {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--t3);
+      margin-top: 5px
+    }
+
+    .wcnt {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue)
+    }
+
+    /* ISABGOL */
+    .irow {
+      display: flex;
+      gap: 6px
+    }
+
+    .ib {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: var(--font);
+      min-height: 60px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .ib:active {
+      transform: scale(.97)
+    }
+
+    .ib.done {
+      background: rgba(13, 148, 136, .1);
+      border-color: rgba(13, 148, 136, .4)
+    }
+
+    .ib-ico {
+      font-size: 16px;
+      display: block;
+      margin-bottom: 2px
+    }
+
+    .ib-l {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--t2);
+      transition: color .2s
+    }
+
+    .ib.done .ib-l {
+      color: var(--teal)
+    }
+
+    .ib-t {
+      font-size: 9px;
+      color: var(--t3);
+      margin-top: 1px
+    }
+
+    .isab-note {
+      font-size: 9.5px;
+      color: var(--t2);
+      font-style: italic;
+      line-height: 1.5;
+      margin-top: 5px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 6px 9px
+    }
+
+    /* SUPP LIST */
+    .sql {
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .sq {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 9px;
+      padding: 8px 10px;
+      transition: all .15s;
+    }
+
+    .sq:active {
+      background: var(--bg4)
+    }
+
+    .sd {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .sn {
+      font-size: 11.5px;
+      font-weight: 600;
+      flex: 1;
+      line-height: 1.2;
+      color: var(--t)
+    }
+
+    .st {
+      font-size: 9.5px;
+      color: var(--t3);
+      text-align: right;
+      white-space: nowrap
+    }
+
+    /* WEEK GRID */
+    .wk {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px
+    }
+
+    .wd {
+      text-align: center;
+      padding: 6px 2px;
+      border-radius: 8px;
+      border: 1px solid var(--bd);
+      background: var(--bg3)
+    }
+
+    .wd.tday {
+      border-color: rgba(5, 150, 105, .45);
+      background: rgba(5, 150, 105, .08);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, .14)
+    }
+
+    .wdn {
+      font-size: 7.5px;
+      color: var(--t3);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 2px
+    }
+
+    .wdt {
+      font-size: 7.5px;
+      font-weight: 700;
+      line-height: 1.4
+    }
+
+    /* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+    .main {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg)
+    }
+
+    /* TABBAR */
+    .tabbar {
+      display: flex;
+      border-bottom: 1px solid var(--bd);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      padding: 0 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    }
+
+    .tabbar::-webkit-scrollbar {
+      display: none
+    }
+
+    .tab {
+      padding: 14px 13px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--t2);
+      cursor: pointer;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      background: none;
+      font-family: var(--font);
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab:active {
+      color: var(--t)
+    }
+
+    .tab.on {
+      border-bottom-color: var(--green);
+      color: var(--green)
+    }
+
+    /* TAB CONTENT */
+    .tc {
+      display: none;
+      padding: 14px;
+      animation: fup .25s ease
+    }
+
+    .tc.on {
+      display: block
+    }
+
+    @keyframes fup {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ============================================================
+   TIMELINE
+   ============================================================ */
+    .tl {
+      display: flex;
+      flex-direction: column
+    }
+
+    .trow {
+      display: flex;
+      gap: 10px;
+      position: relative;
+      animation: fup .35s ease both
+    }
+
+    .trow::after {
+      content: '';
+      position: absolute;
+      left: 74px;
+      top: 42px;
+      width: 1px;
+      height: calc(100% + 2px);
+      background: var(--bd);
+      z-index: 0;
+    }
+
+    .trow:last-child::after {
+      display: none
+    }
+
+    .trow.sr::after {
+      background: repeating-linear-gradient(to bottom, var(--bd) 0, var(--bd) 4px, transparent 4px, transparent 8px);
+    }
+
+    .tt {
+      width: 62px;
+      flex-shrink: 0;
+      text-align: right;
+      padding-top: 13px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      font-weight: 600;
+    }
+
+    .tt.now {
+      color: var(--green);
+      font-weight: 700
+    }
+
+    .tdw {
+      width: 14px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 14px
+    }
+
+    .tdot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      z-index: 1;
+      border: 2px solid var(--bg);
+      transition: all .3s;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, .08);
+    }
+
+    .trow.sr .tdot {
+      width: 8px;
+      height: 8px;
+      margin-top: 2px;
+      border-width: 1.5px
+    }
+
+    .tdot.now {
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, .3)
+    }
+
+    .tcrd {
+      flex: 1;
+      margin-bottom: 8px;
+      min-width: 0
+    }
+
+    /* SECTION DIVIDER */
+    .sdiv {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0 4px
+    }
+
+    .sdiv-l {
+      flex: 1;
+      height: 1px;
+      background: var(--bd)
+    }
+
+    .sdiv-t {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--t2);
+      white-space: nowrap;
+      background: var(--bg4);
+      border: 1px solid var(--bd);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* GYM BLOCK */
+    .gymb {
+      border-radius: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(5, 150, 105, .25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: linear-gradient(135deg, rgba(5, 150, 105, .07), rgba(5, 150, 105, .03));
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .gymb:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.15);
+    }
+
+    .gymb:active {
+      transform: scale(.97);
+      transition: transform 0.05s ease;
+    }
+
+    .gymb-ico {
+      font-size: 26px;
+      flex-shrink: 0
+    }
+
+    .gymb-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 2px;
+      color: var(--green)
+    }
+
+    .gymb-sub {
+      font-size: 11px;
+      color: var(--t2);
+      line-height: 1.4
+    }
+
+    /* MEAL CARD */
+    .mc {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mc:hover {
+      border-color: var(--green);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.12);
+    }
+
+    .mc:active {
+      transform: scale(.97);
+      transition: transform 0.05s ease;
+    }
+
+    .mc.anow {
+      border-color: rgba(5, 150, 105, .45);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, .15), 0 4px 16px rgba(5, 150, 105, .07)
+    }
+
+    .mc.ck {
+      opacity: .42
+    }
+
+    .mch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 13px
+    }
+
+    .mcico {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .mcnfo {
+      flex: 1;
+      min-width: 0
+    }
+
+    .mcnm {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--t)
+    }
+
+    .mcsb {
+      font-size: 11px;
+      color: var(--t2);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .mcrt {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0
+    }
+
+    .ctag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 10px;
+      white-space: nowrap
+    }
+
+    .chkb {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid var(--bd2);
+      background: none;
+      color: var(--t3);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .chkb:active {
+      background: rgba(5, 150, 105, .08)
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0.8); }
+      40% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+
+    .chkb.done {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      font-weight: 800;
+      animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .arb {
+      background: none;
+      border: none;
+      color: var(--t3);
+      cursor: pointer;
+      font-size: 11px;
+      transition: transform .2s;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mc.op .arb {
+      transform: rotate(180deg)
+    }
+
+    .mcb {
+      display: none;
+      border-top: 1px solid var(--bd);
+      padding: 12px 13px;
+      animation: fup .2s ease;
+      background: var(--bg3);
+    }
+
+    .mc.op .mcb {
+      display: block
+    }
+
+    .il {
+      list-style: none;
+      margin-bottom: 9px
+    }
+
+    .il li {
+      font-size: 12.5px;
+      color: var(--t2);
+      padding: 3px 0;
+      display: flex;
+      gap: 7px;
+      line-height: 1.55
+    }
+
+    .il li::before {
+      content: '—';
+      color: var(--t3);
+      flex-shrink: 0
+    }
+
+    .og {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px
+    }
+
+    .opp {
+      padding: 6px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--bd2);
+      background: #fff;
+      color: var(--t2);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: var(--font);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .opp.sel {
+      background: rgba(5, 150, 105, .08);
+      border-color: var(--green);
+      color: var(--green)
+    }
+
+    .odesc {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 9px;
+      padding: 9px 12px;
+      font-size: 12px;
+      color: var(--t2);
+      line-height: 1.7;
+      display: none;
+      margin-bottom: 7px;
+    }
+
+    .odesc.on {
+      display: block
+    }
+
+    .mchips {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 8px
+    }
+
+    .mchip {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 7px;
+      padding: 3px 8px;
+      font-size: 11px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .mclbl {
+      color: var(--t3)
+    }
+
+    .mcval {
+      font-family: var(--mono);
+      font-weight: 700
+    }
+
+    /* SUPP CARD */
+    .sc {
+      border-radius: 13px;
+      padding: 11px 13px;
+      border: 1px solid;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      transition: all .15s;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+    }
+
+    .scl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      min-width: 44px
+    }
+
+    .scico {
+      font-size: 18px
+    }
+
+    .sctag {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 9px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .scn {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      line-height: 1.2;
+      color: var(--t)
+    }
+
+    .scd {
+      font-size: 12px;
+      color: var(--t2);
+      margin-bottom: 3px;
+      line-height: 1.5
+    }
+
+    .scw {
+      font-size: 11px;
+      color: var(--t3);
+      font-style: italic;
+      line-height: 1.4
+    }
+
+    /* FOOT NOTE */
+    .foot {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 13px;
+      padding: 13px 15px;
+      margin-top: 14px;
+      font-size: 12.5px;
+      color: var(--t2);
+      line-height: 1.9;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+    }
+
+    .foot strong {
+      color: var(--t);
+      font-weight: 700
+    }
+
+    .foot .highlight {
+      color: var(--green);
+      font-weight: 700
+    }
+
+    /* ============================================================
+   WORKOUT TAB
+   ============================================================ */
+    .wo-header {
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+    }
+
+    .wo-day {
+      font-family: 'Raleway', sans-serif;
+      font-size: 19px;
+      font-weight: 900;
+      margin-bottom: 2px
+    }
+
+    .wo-meta {
+      font-size: 11.5px;
+      margin-bottom: 6px;
+      color: var(--t2)
+    }
+
+    .wo-tip {
+      font-size: 12px;
+      color: var(--t2);
+      font-style: italic;
+      line-height: 1.6;
+      padding: 8px 11px;
+      background: var(--bg3);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--green);
+    }
+
+    .wo-stats {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    .ws-v {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1
+    }
+
+    .ws-l {
+      font-size: 9.5px;
+      color: var(--t3);
+      margin-top: 2px
+    }
+
+    .progbar {
+      height: 5px;
+      background: rgba(0, 0, 0, .07);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 14px
+    }
+
+    .progfill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .5s ease
+    }
+
+    /* EXERCISE CARDS */
+    .exlist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .excard {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      transition: all .2s;
+      animation: fup .3s ease both;
+      cursor: default;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+      flex-wrap: wrap;
+    }
+
+    .excard.done-ex {
+      opacity: .35;
+      filter: grayscale(40%)
+    }
+
+    .exnum {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--t3);
+      width: 18px;
+      flex-shrink: 0;
+      text-align: center
+    }
+
+    .exinfo {
+      flex: 1;
+      min-width: 0
+    }
+
+    .exnm {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 2px;
+      color: var(--t)
+    }
+
+    .exdt {
+      font-size: 11px;
+      color: var(--t2);
+      line-height: 1.4
+    }
+
+    .extbadge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9px;
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .setrow {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-shrink: 0
+    }
+
+    .sdot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--bd2);
+      background: none;
+      cursor: pointer;
+      font-size: 10px;
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--t3);
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sdot:active {
+      background: rgba(5, 150, 105, .08)
+    }
+
+    .sdot.dn {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      font-weight: 800;
+      animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .exck {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid var(--bd2);
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all .2s;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t3);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .exck.dn {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      font-weight: 800;
+      animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* SECTION HEADER */
+    .sec-hdr {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 14px 0 8px
+    }
+
+    .sec-line {
+      flex: 1;
+      height: 1px;
+      background: var(--bd)
+    }
+
+    .sec-lbl {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      border: 1px solid var(--bd);
+      color: var(--t3);
+      white-space: nowrap;
+      background: var(--bg4);
+    }
+
+    /* ANIMATION DELAYS */
+    .trow:nth-child(1) {
+      animation-delay: .03s
+    }
+
+    .trow:nth-child(2) {
+      animation-delay: .06s
+    }
+
+    .trow:nth-child(3) {
+      animation-delay: .09s
+    }
+
+    .trow:nth-child(4) {
+      animation-delay: .12s
+    }
+
+    .trow:nth-child(5) {
+      animation-delay: .15s
+    }
+
+    .trow:nth-child(6) {
+      animation-delay: .18s
+    }
+
+    .trow:nth-child(7) {
+      animation-delay: .21s
+    }
+
+    .trow:nth-child(8) {
+      animation-delay: .24s
+    }
+
+    .trow:nth-child(9) {
+      animation-delay: .27s
+    }
+
+    .trow:nth-child(10) {
+      animation-delay: .30s
+    }
+
+    .trow:nth-child(11) {
+      animation-delay: .33s
+    }
+
+    .trow:nth-child(12) {
+      animation-delay: .36s
+    }
+
+    .trow:nth-child(13) {
+      animation-delay: .39s
+    }
+
+    .trow:nth-child(14) {
+      animation-delay: .42s
+    }
+
+    .trow:nth-child(15) {
+      animation-delay: .45s
+    }
+
+    .excard:nth-child(1) {
+      animation-delay: .03s
+    }
+
+    .excard:nth-child(2) {
+      animation-delay: .06s
+    }
+
+    .excard:nth-child(3) {
+      animation-delay: .09s
+    }
+
+    .excard:nth-child(4) {
+      animation-delay: .12s
+    }
+
+    .excard:nth-child(5) {
+      animation-delay: .15s
+    }
+
+    .excard:nth-child(6) {
+      animation-delay: .18s
+    }
+
+    .excard:nth-child(7) {
+      animation-delay: .21s
+    }
+
+    .excard:nth-child(8) {
+      animation-delay: .24s
+    }
+
+    /* ============================================================
+   MOBILE — ≤ 768px
+   ============================================================ */
+    @media(max-width:768px) {
+
+      /* Layout switches to single column */
+      .layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-bottom: calc(var(--botnav) + var(--safe-b) + 12px);
+      }
+
+      /* Active states for better mobile touch feedback */
+      .gymb:active, .mc:active, .sc:active, .ib:active, .sdot:active, .exck:active, .vdb:active, .bntab:active, .tab:active {
+        transform: scale(0.97) !important;
+        transition: transform 0.05s ease !important;
+      }
+      
+      .opp:active, .chkb:active, .arb:active {
+        transform: scale(0.92) !important;
+        transition: transform 0.05s ease !important;
+      }
+
+      /* Adjust section headings */
+      .sh {
+        font-size: 13.5px;
+        letter-spacing: 0.2px;
+        margin-bottom: 12px;
+      }
+
+
+      /* Topbar slimmer on mobile, using native sticky */
+      .topbar {
+        height: 54px;
+        padding: 0 14px;
+        gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 500;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      }
+
+      .topright {
+        display: none
+      }
+
+      .lm {
+        width: 32px;
+        height: 32px;
+        font-size: 12px
+      }
+
+      .lt {
+        font-size: 15px
+      }
+
+      .xbadge,
+      .vbadge {
+        display: none
+      }
+
+      .clk {
+        font-size: 12px
+      }
+
+      .datelbl {
+        font-size: 9.5px
+      }
+
+      /* Sidebar becomes a tab panel, hidden by default */
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: none;
+        overflow: visible;
+        padding: 14px 14px 0;
+        display: none;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 0; /* natural flow */
+      }
+
+      .sidebar.mob-visible {
+        display: flex
+      }
+
+      /* Main area natural flow */
+      .main {
+        margin-top: 0;
+        flex: 1;
+        overflow: visible; /* iOS smooth scrolling fix */
+      }
+
+      /* Tabbar inside main — normal flow */
+      .tabbar {
+        position: sticky;
+        top: 54px; /* Sticks precisely under topbar */
+        padding: 0 8px;
+        z-index: 300;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(8px);
+      }
+
+      .tab {
+        padding: 12px 10px;
+        font-size: 11.5px;
+        gap: 4px;
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* Tab content */
+      .tc {
+        padding: 16px 12px 24px;
+      }
+
+      /* Timeline adjustments */
+      .trow {
+        gap: 10px
+      }
+
+      /* Section headers need more breathing room to avoid squishing text */
+      .sec-hdr {
+        margin: 22px 0 12px;
+      }
+      .sdiv {
+        padding: 18px 0 8px;
+      }
+
+      .trow::after {
+        left: 68px
+      }
+
+      .tt {
+        width: 58px;
+        font-size: 9.5px;
+        padding-top: 12px
+      }
+
+      .mcsb {
+        display: none
+      }
+
+      /* hide subtitle on very small to save space */
+
+      /* Meal card header tighter */
+      .mch {
+        padding: 13px 14px;
+        gap: 12px
+      }
+
+      .mcico {
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+        border-radius: 12px
+      }
+      
+      .mcb {
+        padding: 14px;
+      }
+
+      /* Exercise card - set dots wrap below on mobile */
+      .excard {
+        flex-wrap: wrap;
+        row-gap: 8px
+      }
+
+      .setrow {
+        width: 100%;
+        padding-left: 27px;
+        flex-wrap: wrap;
+        gap: 6px
+      }
+
+      .sdot {
+        width: 34px;
+        height: 34px;
+        font-size: 11px
+      }
+
+      /* bigger touch target */
+      .exck {
+        width: 38px;
+        height: 38px;
+        font-size: 15px
+      }
+
+      /* Workout header */
+      .wo-header {
+        padding: 16px 16px
+      }
+
+      .wo-day {
+        font-size: 19px;
+        letter-spacing: -0.3px;
+      }
+
+      .wo-stats {
+        gap: 14px
+      }
+
+      .ws-v {
+        font-size: 16px
+      }
+
+      /* Profile grid 4-col on mobile */
+      .pgrid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      /* Wider water drops */
+      .wg {
+        width: calc((100% - 60px) / 16);
+        min-width: 20px;
+        height: 34px
+      }
+
+      /* Cal ring bigger on mobile stats */
+      .rb-wrap {
+        width: 130px;
+        height: 130px
+      }
+
+      .rb-wrap svg {
+        width: 130px;
+        height: 130px
+      }
+
+      .ri-n {
+        font-size: 28px
+      }
+
+      /* ============================================================
+     BOTTOM NAVIGATION BAR
+     ============================================================ */
+      .botnav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: calc(var(--botnav) + var(--safe-b));
+        padding-bottom: var(--safe-b);
+        background: #fff;
+        border-top: 1px solid var(--bd);
+        z-index: 400;
+        box-shadow: 0 -2px 16px rgba(0, 0, 0, .08);
+      }
+
+      .bntab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-family: var(--font);
+        padding: 8px 4px;
+        transition: all .2s;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
+      }
+
+      .bntab:active {
+        background: rgba(0, 0, 0, .03)
+      }
+
+      .bnico {
+        font-size: 20px;
+        line-height: 1;
+        transition: transform .2s
+      }
+
+      .bnlbl {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--t3);
+        transition: color .2s;
+        letter-spacing: -.2px
+      }
+
+      .bntab.on .bnlbl {
+        color: var(--green)
+      }
+
+      .bntab.on .bnico {
+        transform: scale(1.1)
+      }
+
+      .bntab.on::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 28px;
+        height: 2.5px;
+        background: var(--green);
+        border-radius: 0 0 3px 3px;
+      }
+
+      /* Bottom nav active dot */
+      .bn-dot {
+        position: absolute;
+        top: 6px;
+        right: calc(50% - 16px);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--red);
+        border: 1.5px solid #fff;
+        display: none;
+      }
+
+      .bn-dot.on {
+        display: block
+      }
+    }
+
+    /* ============================================================
+   VERY SMALL — ≤ 390px
+   ============================================================ */
+    @media(max-width:390px) {
+      .lt {
+        font-size: 14px
+      }
+
+      .tab {
+        padding: 11px 7px;
+        font-size: 11px
+      }
+
+      .bnlbl {
+        font-size: 9px
+      }
+
+      .exnm {
+        font-size: 12px
+      }
+
+      .exdt {
+        font-size: 10.5px
+      }
+
+      .mcnm {
+        font-size: 12.5px
+      }
+
+      .sdot {
+        width: 32px;
+        height: 32px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- ============================================================
+     TOPBAR
+     ============================================================ -->
+    <header class="topbar">
+      <div class="logo">
+        <div class="lm">F</div>
+        <div class="lt">Fit<em>OS</em></div>
+        <div class="xbadge">EXTREME</div>
+        <div class="vbadge">🌱 VEG</div>
+      </div>
+      <div class="topright">
+        <div class="dc" id="dayChip">Loading...</div>
+        <div class="cstrip">
+          <span>Cal</span>
+          <div class="cbar-wrap">
+            <div class="cbar-fill" id="topBar" style="width:0"></div>
+          </div>
+          <span class="cv" id="topVal">0/1200</span>
+        </div>
+        <div class="bmi-b">
+          <div class="pulse"></div><span>BMI</span><span class="bmi-v">40.1</span>
+        </div>
+      </div>
+      <div class="clkwrap">
+        <div class="clk" id="clk">--:--:-- --</div>
+        <div class="datelbl" id="dateLbl">--/---/----</div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+     SIDEBAR (desktop) / Stats Panel (mobile)
+     ============================================================ -->
+    <aside class="sidebar" id="sidebarPanel">
+
+      <div>
+        <div class="sh">Your Extreme Profile</div>
+        <div class="pgrid">
+          <div class="pc">
+            <div class="pc-l">Current</div>
+            <div class="pc-v" style="color:var(--red)">120<span style="font-size:11px;color:var(--t3)">kg</span></div>
+            <div class="pc-s">Starting weight</div>
+          </div>
+          <div class="pc">
+            <div class="pc-l">Target</div>
+            <div class="pc-v" style="color:var(--green)">75<span style="font-size:11px;color:var(--t3)">kg</span></div>
+            <div class="pc-s">Goal weight</div>
+          </div>
+          <div class="pc">
+            <div class="pc-l">BMI</div>
+            <div class="pc-v" style="color:var(--red)">40.1</div>
+            <div class="pc-s">Obese III</div>
+            <div class="bmibar">
+              <div class="bmif" style="width:80%"></div>
+            </div>
+          </div>
+          <div class="pc">
+            <div class="pc-l">Lose</div>
+            <div class="pc-v" style="color:var(--amber)">45<span style="font-size:11px;color:var(--t3)">kg</span></div>
+            <div class="pc-s">~10–12 months</div>
+          </div>
+        </div>
+        <div class="premark">Age 26 · Night Shift 6:30–2:30 AM · Gym 4:00–6:00 AM · <span>Pure
+            Vegetarian</span><br><span>Extreme Protocol: 5–8 kg loss/month 🔥</span></div>
+      </div>
+
+      <div>
+        <div class="sh">Daily Calories — 1200 kcal Target</div>
+        <div class="ring-c">
+          <div class="rb-wrap">
+            <svg viewBox="0 0 110 110">
+              <circle class="rg-bg" cx="55" cy="55" r="46" />
+              <circle class="rg-fill" id="calRing" cx="55" cy="55" r="46" stroke="var(--amber)" stroke-dasharray="289"
+                stroke-dashoffset="289" />
+            </svg>
+            <div class="ri">
+              <div class="ri-n" id="calVal">0</div>
+              <div class="ri-l">of 1200 kcal</div>
+            </div>
+          </div>
+        </div>
+        <div class="mbars">
+          <div class="mr">
+            <div class="ml2" style="color:var(--blue)">Protein</div>
+            <div class="mt">
+              <div class="mf" id="bP" style="width:0%;background:var(--blue)"></div>
+            </div>
+            <div class="mv2" id="vP">0/125g</div>
+          </div>
+          <div class="mr">
+            <div class="ml2" style="color:var(--green)">Carbs</div>
+            <div class="mt">
+              <div class="mf" id="bC" style="width:0%;background:var(--green)"></div>
+            </div>
+            <div class="mv2" id="vC">0/100g</div>
+          </div>
+          <div class="mr">
+            <div class="ml2" style="color:var(--amber)">Fat</div>
+            <div class="mt">
+              <div class="mf" id="bF" style="width:0%;background:var(--amber)"></div>
+            </div>
+            <div class="mv2" id="vF">0/35g</div>
+          </div>
+          <div class="mr">
+            <div class="ml2" style="color:var(--teal)">Fiber</div>
+            <div class="mt">
+              <div class="mf" id="bFib" style="width:0%;background:var(--teal)"></div>
+            </div>
+            <div class="mv2" id="vFib">0/30g</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sh">Water Tracker — Target 4L (16 Glasses)</div>
+        <div class="wgrid" id="wgrid"></div>
+        <div class="wrow2"><span id="wlbl">0 / 16 glasses</span><span class="wcnt" id="wml">0 ml</span></div>
+      </div>
+
+      <div>
+        <div class="sh">Isabgol (Psyllium Husk) — 2× Daily</div>
+        <div class="irow">
+          <button class="ib" onclick="togIsab(0)" id="isab0"><span class="ib-ico">🌾</span>
+            <div class="ib-l">Dose 1</div>
+            <div class="ib-t">2:40 PM</div>
+          </button>
+          <button class="ib" onclick="togIsab(1)" id="isab1"><span class="ib-ico">🌾</span>
+            <div class="ib-l">Dose 2</div>
+            <div class="ib-t">5:45 PM</div>
+          </button>
+        </div>
+        <div class="isab-note">2 tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY. Reduces hunger by
+          30–40%.</div>
+      </div>
+
+      <div>
+        <div class="sh">Supplements Schedule</div>
+        <div class="sql">
+          <div class="sq">
+            <div class="sd" style="background:var(--teal)"></div>
+            <div class="sn">Isabgol (2×)</div>
+            <div class="st">2:40 PM · 5:45 PM</div>
+          </div>
+          <div class="sq">
+            <div class="sd" style="background:var(--amber)"></div>
+            <div class="sn">Apple Cider Vinegar</div>
+            <div class="st">2:50 PM</div>
+          </div>
+          <div class="sq">
+            <div class="sd" style="background:var(--green)"></div>
+            <div class="sn">Jeera · Saunf · Ajwain</div>
+            <div class="st">4:00 PM</div>
+          </div>
+          <div class="sq">
+            <div class="sd" style="background:var(--teal)"></div>
+            <div class="sn">Green Tea</div>
+            <div class="st">12:00 AM</div>
+          </div>
+          <div class="sq">
+            <div class="sd" style="background:var(--purple)"></div>
+            <div class="sn">Fat Burner Tablet</div>
+            <div class="st">3:15 AM (gym days)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding-bottom:8px">
+        <div class="sh">Weekly Workout Split</div>
+        <div class="wk" id="weekGrid"></div>
+      </div>
+
+    </aside>
+
+    <!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+    <main class="main" id="mainArea">
+      <div class="tabbar" id="desktopTabbar">
+        <button class="tab on" onclick="showTab('diet',this)">🍱 Diet Plan</button>
+        <button class="tab" onclick="showTab('workout',this)">💪 Today's Workout</button>
+        <button class="tab" onclick="showTab('rest',this)">🏠 Rest Day</button>
+      </div>
+
+      <div class="tc on" id="tc-diet">
+        <div class="tl" id="dietTL"></div>
+        <div class="foot">
+          <strong>120kg Extreme Vegetarian Protocol —</strong>
+          <span class="highlight">No eggs, no meat — maximum fat loss through food timing and discipline.</span><br>
+          Isabgol before meals = natural hunger control. ACV before lunch = blood sugar control. 4L water =
+          non-negotiable.
+          <strong>Never skip post-workout breakfast (6:00 AM)</strong> — it protects your muscle before you sleep.
+          Fat burner: gym days only at 3:15 AM. Gym: 4:00 AM – 6:00 AM after office shift.
+          <span class="highlight">Expected: 5–8 kg fat loss per month</span> on this plan.
+        </div>
+      </div>
+
+      <div class="tc" id="tc-workout">
+        <div id="wocontent"></div>
+      </div>
+      <div class="tc" id="tc-rest">
+        <div id="restcontent"></div>
+      </div>
+    </main>
+
+  </div><!-- /.layout -->
+
+  <!-- ============================================================
+     BOTTOM NAV (mobile only)
+     ============================================================ -->
+  <nav class="botnav" id="botnav">
+    <button class="bntab on" id="bn-diet" onclick="mobTab('diet',this)">
+      <span class="bnico">🍱</span>
+      <span class="bnlbl">Diet</span>
+    </button>
+    <button class="bntab" id="bn-workout" onclick="mobTab('workout',this)">
+      <span class="bnico">💪</span>
+      <span class="bnlbl">Workout</span>
+    </button>
+    <button class="bntab" id="bn-rest" onclick="mobTab('rest',this)">
+      <span class="bnico">🏠</span>
+      <span class="bnlbl">Rest Day</span>
+    </button>
+    <button class="bntab" id="bn-stats" onclick="mobTab('stats',this)">
+      <span class="bnico">📊</span>
+      <span class="bnlbl">Stats</span>
+    </button>
+  </nav>
+
+  <script>
+    // ============================================================
+    // DATA
+    // ============================================================
+    const DIET = [
+      {
+        id: 'wake', time: '14:30', disp: '2:30 PM', type: 'meal', color: 'amber', icon: '☀️',
+        name: 'Wake Up — Fasted State', sub: 'Kick-start metabolism',
+        cal: 55, p: 3, c: 5, f: 2, fib: 0,
+        items: ['Warm water + fresh lemon juice (1 glass) + 1 pinch rock salt', 'Soaked almonds (6) + walnuts (2) + 1 soaked fig']
+      },
+
+      {
+        id: 'isa1', time: '14:40', disp: '2:40 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'AM FIBER',
+        name: 'Isabgol — First Dose',
+        desc: '2 level tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY.',
+        why: 'Natural stomach filler before the first big meal. Reduces appetite by 30–40%.'
+      },
+
+      {
+        id: 'acv', time: '14:50', disp: '2:50 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
+        name: 'Apple Cider Vinegar',
+        desc: '1 tbsp ACV in 250ml warm water — drink 10 min before lunch. Do NOT take on empty stomach.',
+        why: 'Lowers blood sugar spike from lunch, suppresses appetite, activates fat-burning enzymes.'
+      },
+
+      {
+        id: 'lunch', time: '15:00', disp: '3:00 PM', type: 'meal', color: 'blue', icon: '🥗',
+        name: 'First Meal (Lunch)', sub: 'Biggest Meal — High Fiber + Protein',
+        cal: 350, p: 25, c: 40, f: 8, fib: 10,
+        items: ['2 multigrain roti OR 120g brown rice', 'Dal 200ml — moong / masoor / mixed', 'Sabzi 200g — strictly minimal oil', 'Salad + 150g low-fat curd']
+      },
+
+      {
+        id: 'j1', time: '16:00', disp: '4:00 PM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
+        name: 'Jeera · Saunf · Ajwain Drink',
+        desc: '½ tsp each powder in 250ml lukewarm water.',
+        why: 'Eliminates bloating and activates digestive enzymes. Reduces water retention.'
+      },
+
+      {
+        id: 'isa2', time: '17:45', disp: '5:45 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'PM FIBER',
+        name: 'Isabgol — Evening Dose',
+        desc: '2 tsp isabgol in 300ml warm water before dinner/office.',
+        why: 'Reduces appetite for dinner — keeps you from overeating before the shift.'
+      },
+
+      {
+        id: 'dinner', time: '18:00', disp: '6:00 PM', type: 'meal', color: 'orange', icon: '🍱',
+        name: 'Pre-Shift Dinner', sub: 'Lean Fuel for Night Shift',
+        cal: 300, p: 30, c: 20, f: 8, fib: 8,
+        opts: [
+          { id: 'A', label: 'Grilled Paneer', desc: 'Paneer tikka 150g + mixed veg salad + 1 roti. High protein, low carb.' },
+          { id: 'B', label: 'Soya Chunks Curry', desc: 'Soya chunks curry 150g + 1 roti + salad. Exceptional plant protein.' },
+          { id: 'C', label: 'Tofu Stir Fry', desc: 'Tofu 200g stir-fried with veggies + 1 roti. Light & filling.' },
+        ]
+      },
+
+      {
+        id: 'brk1', time: '21:30', disp: '9:30 PM', type: 'meal', color: 'amber', icon: '☕',
+        name: 'Office Break 1', sub: 'Keep under 45 cal',
+        cal: 45, p: 2, c: 6, f: 1, fib: 2,
+        opts: [
+          { id: 'A', label: 'Makhana', desc: 'Green tea + 30g roasted makhana — extremely low calorie, crunchy.' },
+          { id: 'B', label: 'Black Coffee', desc: 'Black coffee (no sugar) + 1 small apple.' },
+          { id: 'C', label: '✓ Skip It', desc: 'Just hot water + green tea.' },
+        ]
+      },
+
+      {
+        id: 'gt', time: '00:00', disp: '12:00 AM', type: 'supp', color: 'teal', icon: '🍵', tag: 'NIGHT-METAB',
+        name: 'Green Tea + Lemon',
+        desc: '1 cup green tea with lemon — no sugar, no milk.',
+        why: 'Boosts fat oxidation over the remaining shift hours. EGCG activates thermogenesis.'
+      },
+
+      {
+        id: 'fatb', time: '03:15', disp: '3:15 AM', type: 'supp', color: 'purple', icon: '💊', tag: 'PRE-WORKOUT',
+        name: 'Dr. Morepen Fat Burner',
+        desc: '1 tablet with water — 45 min before the gym. GYM DAYS ONLY.',
+        why: 'Peak thermogenic window during the 4 AM workout for maximum fat oxidation.'
+      },
+
+      {
+        id: 'pwk', time: '03:30', disp: '3:30 AM', type: 'meal', color: 'green', icon: '⚡',
+        name: 'Pre-Workout Fuel', sub: 'Quick Energy Before 4 AM Gym',
+        cal: 100, p: 4, c: 18, f: 2, fib: 2,
+        opts: [
+          { id: 'A', label: 'Banana + Black Coffee', desc: '1 large banana + 1 cup black coffee. Strongest combo for 4 AM energy.' },
+          { id: 'B', label: 'Dates + Milk', desc: '3 soaked dates + 100ml low-fat milk. Natural sugar + protein.' },
+        ]
+      },
+
+      { id: 'gym', time: '04:00', disp: '4:00 AM', type: 'gymblock' },
+
+      {
+        id: 'brunch', time: '06:00', disp: '6:00 AM', type: 'meal', color: 'green', icon: '💪',
+        name: 'Post-Workout Breakfast', sub: 'Critical Recovery Window BEFORE Sleep',
+        cal: 350, p: 35, c: 30, f: 10, fib: 7,
+        opts: [
+          { id: 'A', label: 'Paneer Bhurji', desc: 'Paneer bhurji 150g + 1 multigrain roti + chaas.' },
+          { id: 'B', label: 'Besan Chilla', desc: '3 besan chilla + mint chutney + tea.' },
+          { id: 'C', label: 'Moong Dal Cheela', desc: '3 moong dal cheela + cucumber salad.' },
+        ]
+      },
+    ];
+
+    // ============================================================
+    // WORKOUTS
+    // ============================================================
+    const WORKOUTS = {
+      upper: {
+        name: 'Upper Body + Arms — Chest · Back · Shoulders + Biceps · Triceps · Forearms',
+        days: 'Monday & Thursday', color: 'blue', cal: 680,
+        tip: 'Chest, back, shoulder compounds FIRST. Then Biceps, Triceps, Forearms. Control the negative — 2 sec down, explode up. EXTREME volume. Progressive overload every week.',
+        sections: [
+          {
+            name: '🔥 Warm-up', exercises: [
+              { n: 'Cycling Warm-up', d: '10 min · Moderate pace · HR 120–130 BPM', t: 'cardio', s: 1 },
+              { n: 'Shoulder Rotation + Arm Circles', d: '2 × 30 sec each direction', t: 'warmup', s: 1 },
+              { n: 'Band Pull-Aparts', d: '2 × 20 reps · Activates rear delts before pressing', t: 'warmup', s: 1 },
+            ]
+          },
+          {
+            name: '💪 Chest', exercises: [
+              { n: 'Machine Chest Press', d: '4 sets × 15 reps · Full range · Squeeze at top · 45 sec rest', t: 'chest', s: 4 },
+              { n: 'Machine Pec Fly (Butterfly)', d: '3 sets × 15 reps · Feel stretch at open · Controlled', t: 'chest', s: 3 },
+              { n: 'Incline Chest Press (Machine)', d: '3 sets × 12 reps · Upper chest · Don\'t bounce weight', t: 'chest', s: 3 },
+              { n: 'Decline Bench Press / Machine', d: '3 sets × 12 reps · Lower chest · Full ROM · Slow neg', t: 'chest', s: 3 },
+              { n: 'Cable Crossover', d: '3 sets × 15 reps · High to low · Squeeze hard at bottom', t: 'chest', s: 3 },
+              { n: 'Dumbbell Pullover', d: '3 sets × 12 reps · Lats + lower chest · Full stretch overhead', t: 'chest', s: 3 },
+            ]
+          },
+          {
+            name: '🏋️ Back', exercises: [
+              { n: 'Machine Lat Pulldown', d: '4 sets × 15 reps · Wide overhand grip · Pull to upper chest', t: 'back', s: 4 },
+              { n: 'Machine Seated Row', d: '3 sets × 15 reps · Elbows close · Full scapular retraction', t: 'back', s: 3 },
+              { n: 'Cable Straight-Arm Pulldown', d: '3 sets × 12 reps · Arms straight · Great lat isolation', t: 'back', s: 3 },
+              { n: 'Assisted Pull-ups', d: '3 sets × 10 reps · Build vertical pulling strength', t: 'back', s: 3 },
+              { n: 'T-Bar Row Machine', d: '3 sets × 12 reps · Core tight · Pull elbows far back', t: 'back', s: 3 },
+              { n: 'Single-Arm Dumbbell Row', d: '3 sets × 10 reps each · Full stretch at bottom', t: 'back', s: 3 },
+            ]
+          },
+          {
+            name: '🎯 Shoulders', exercises: [
+              { n: 'Machine Shoulder Press', d: '4 sets × 15 reps · Don\'t lock elbows · Full range', t: 'shoulder', s: 4 },
+              { n: 'Dumbbell Lateral Raise', d: '3 sets × 15 reps · Lift to shoulder height only', t: 'shoulder', s: 3 },
+              { n: 'Cable Face Pulls', d: '3 sets × 15 reps · Pull to forehead · Targets rear delts', t: 'shoulder', s: 3 },
+              { n: 'EZ-Bar Upright Row', d: '3 sets × 12 reps · Pull to chest · Elbows high', t: 'shoulder', s: 3 },
+              { n: 'Dumbbell Front Raise', d: '3 sets × 12 reps · Alternate arms · Control lowering', t: 'shoulder', s: 3 },
+              { n: 'Rear Delt Fly Machine', d: '3 sets × 15 reps · Reverse pec deck · Peak squeeze', t: 'shoulder', s: 3 },
+              { n: 'Dumbbell Shrug', d: '3 sets × 20 reps · Hold at top 1 sec · Builds upper traps', t: 'shoulder', s: 3 },
+            ]
+          },
+          {
+            name: '💪 Biceps', exercises: [
+              { n: 'Barbell / EZ-Bar Curl', d: '4 sets × 15 reps · Dead hang to full curl · No swinging', t: 'biceps', s: 4 },
+              { n: 'Dumbbell Hammer Curl', d: '3 sets × 15 reps · Neutral grip · Targets brachialis', t: 'biceps', s: 3 },
+              { n: 'Incline Dumbbell Curl', d: '3 sets × 12 reps · Deep stretch at bottom', t: 'biceps', s: 3 },
+              { n: 'Spider Curls', d: '3 sets × 12 reps · Chest on incline · Full isolation', t: 'biceps', s: 3 },
+              { n: 'Cable Bicep Curl', d: '3 sets × 15 reps · Constant tension · Elbows fixed', t: 'biceps', s: 3 },
+              { n: 'Preacher Curl', d: '3 sets × 12 reps · Upper arm locked · Full stretch', t: 'biceps', s: 3 },
+              { n: 'Concentration Curl', d: '3 sets × 12 reps each · Elbow on inner thigh · Peak contraction', t: 'biceps', s: 3 },
+            ]
+          },
+          {
+            name: '💪 Triceps', exercises: [
+              { n: 'Cable Tricep Pushdown (Bar)', d: '4 sets × 15 reps · Elbows locked · Full extension', t: 'triceps', s: 4 },
+              { n: 'Overhead Tricep Extension', d: '3 sets × 12 reps · Full stretch behind head', t: 'triceps', s: 3 },
+              { n: 'Close-Grip Bench Press', d: '3 sets × 12 reps · Shoulder-width · Heavy compound', t: 'triceps', s: 3 },
+              { n: 'Tricep Kickbacks', d: '3 sets × 15 reps · Absolute squeeze at top', t: 'triceps', s: 3 },
+              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12 reps · Body upright · Go deep', t: 'triceps', s: 3 },
+              { n: 'Skull Crushers / Lying Tricep Extension', d: '3 sets × 12 reps · EZ-bar to forehead · Controlled', t: 'triceps', s: 3 },
+            ]
+          },
+          {
+            name: '🖐️ Forearms', exercises: [
+              { n: 'Barbell Wrist Curl (Palms Up)', d: '3 sets × 20 reps · Wrists off bench · Full curl', t: 'forearms', s: 3 },
+              { n: 'Reverse Wrist Curl (Palms Down)', d: '3 sets × 20 reps · Outer forearm + grip', t: 'forearms', s: 3 },
+              { n: 'Cable Reverse Curls', d: '3 sets × 15 reps · Great brachioradialis builder', t: 'forearms', s: 3 },
+              { n: 'Dead Hang (Grip Finisher)', d: '3 holds × 30–45 sec · Bar hang · Builds crushing grip', t: 'forearms', s: 3 },
+            ]
+          },
+          {
+            name: '🏃 Cardio Finish', exercises: [
+              { n: 'Treadmill Cooldown', d: '10 min · 5–6 km/h · Cool down HR below 100 BPM', t: 'cardio', s: 1 },
+            ]
+          },
+        ]
+      },
+
+      legs: {
+        name: 'Leg Day — Quads · Hamstrings · Glutes · Calves',
+        days: 'Tuesday & Friday', color: 'green', cal: 450,
+        tip: 'Legs = largest muscle group = most calories burned. At 120kg, DEPTH matters more than weight. Protect your knees — don\'t let them cave inward. Drive hips back on every squat pattern.',
+        sections: [
+          {
+            name: '🔥 Warm-up', exercises: [
+              { n: 'Cycling Warm-up', d: '10 min · Warm up knee joints and hip flexors', t: 'cardio', s: 1 },
+              { n: 'Bodyweight Squat (Warm-up)', d: '2 × 15 reps · Full depth · No weight · Joint prep', t: 'legs', s: 1 },
+              { n: 'Leg Swings + Hip Circles', d: '2 × 30 sec each leg · Hip flexor activation', t: 'warmup', s: 1 },
+              { n: 'Glute Bridges (Warm-up)', d: '2 × 15 reps · Hip hinge activation before heavy squats', t: 'legs', s: 1 },
+            ]
+          },
+          {
+            name: '🦵 Quads', exercises: [
+              { n: 'Squat (Machine/Smith/Barbell)', d: '4 sets × 15 reps · Depth to parallel · Knees over toes', t: 'legs', s: 4 },
+              { n: 'Sumo Squat', d: '3 sets × 15 reps · Wide stance, toes 45° out', t: 'legs', s: 3 },
+              { n: 'Leg Press Machine', d: '4 sets × 15 reps · Feet shoulder-width · Don\'t lock knees', t: 'legs', s: 4 },
+              { n: 'Hack Squat Machine', d: '3 sets × 12 reps · Deep stretch for teardrop quad', t: 'legs', s: 3 },
+              { n: 'Walking Lunges', d: '3 sets × 20 steps · Core engaged · Step deep', t: 'legs', s: 3 },
+              { n: 'Leg Extension Machine', d: '3 sets × 15 reps · Full extension · 2-sec slow lower', t: 'legs', s: 3 },
+              { n: 'Single-Leg Press', d: '3 sets × 10 reps each · Fix muscle imbalances', t: 'legs', s: 3 },
+            ]
+          },
+          {
+            name: '🦵 Hamstrings & Glutes', exercises: [
+              { n: 'Leg Curl Machine (Lying/Seated)', d: '4 sets × 15 reps · Full curl · Squeeze · 3-sec neg', t: 'legs', s: 4 },
+              { n: 'Romanian Deadlift (Light)', d: '3 sets × 12 reps · Hinge at hips · Back straight', t: 'legs', s: 3 },
+              { n: 'Bulgarian Split Squats', d: '3 sets × 10 reps per leg · Extreme burn · Unilateral', t: 'legs', s: 3 },
+              { n: 'Glute Kickbacks (Cable/Machine)', d: '3 sets × 15 reps per leg · Isolate glutes', t: 'legs', s: 3 },
+              { n: 'Hip Thrust (Machine/Barbell)', d: '3 sets × 15 reps · Squeeze hard at top · Full extension', t: 'legs', s: 3 },
+              { n: 'Stability Ball Leg Curl', d: '3 sets × 12 reps · Hamstring + core stability', t: 'legs', s: 3 },
+            ]
+          },
+          {
+            name: '↔️ Hip Abductors & Adductors', exercises: [
+              { n: 'Hip Abductor Machine', d: '3 sets × 20 reps · Outer thigh + glute med', t: 'legs', s: 3 },
+              { n: 'Hip Adductor Machine', d: '3 sets × 20 reps · Inner thigh · Smooth motion', t: 'legs', s: 3 },
+            ]
+          },
+          {
+            name: '🦶 Calves', exercises: [
+              { n: 'Standing Calf Raise', d: '4 sets × 20 reps · Full range · Pause at top · 3-sec lower', t: 'legs', s: 4 },
+              { n: 'Seated Calf Raise', d: '3 sets × 20 reps · Targets soleus deeper muscle', t: 'legs', s: 3 },
+              { n: 'Donkey Calf Raise (Machine)', d: '3 sets × 15 reps · Excellent calf mass builder', t: 'legs', s: 3 },
+              { n: 'Single-Leg Calf Raise', d: '3 sets × 15 reps each · Fix calf imbalances', t: 'legs', s: 3 },
+            ]
+          },
+          {
+            name: '🏃 Cardio Finish', exercises: [
+              { n: 'Incline Treadmill Walk', d: '15–20 min · 5–6 km/h at 6–8% incline · Max fat burn', t: 'cardio', s: 1 },
+            ]
+          },
+        ]
+      },
+
+      abs: {
+        name: 'Abs & Cardio — Core · HIIT · Burn Zone',
+        days: 'Wednesday & Saturday', color: 'amber', cal: 500,
+        tip: 'Maximum calorie-burn day. Double cardio + full ab circuit. Keep HR above 130 BPM for 30+ minutes. This session burns the most fat. No phones during cardio — focus on breathing.',
+        sections: [
+          {
+            name: '🔥 Warm-up + Cardio 1', exercises: [
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase to 70–80% effort', t: 'cardio', s: 1 },
+              { n: 'Treadmill — Brisk Walk/Jog', d: '10 min · 5.5–7 km/h · Incline 4–6%', t: 'cardio', s: 1 },
+            ]
+          },
+          {
+            name: '🏋️ Core Circuit', exercises: [
+              { n: 'Abs Crunch (Machine/Floor)', d: '4 sets × 20 reps · Exhale at top · Don\'t pull neck', t: 'abs', s: 4 },
+              { n: 'Cable Crunches', d: '3 sets × 20 reps · Kneeling · Rope behind neck · Flex abs hard', t: 'abs', s: 3 },
+              { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · Control the lowering', t: 'abs', s: 3 },
+              { n: 'Ab Wheel Rollouts', d: '3 sets × 10 reps · Core extremely tight · No arching', t: 'abs', s: 3 },
+              { n: 'Side Bench / Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques', t: 'abs', s: 3 },
+              { n: 'Bicycle Crunch', d: '3 sets × 20 reps · Elbow to opposite knee · Slow', t: 'abs', s: 3 },
+              { n: 'Russian Twist', d: '3 sets × 20 reps · Feet raised · Use medicine ball if available', t: 'abs', s: 3 },
+              { n: 'Plank Hold', d: '3 holds × 60–90 sec · Hips neutral · Core tight · Breathe', t: 'abs', s: 3 },
+              { n: 'Mountain Climbers', d: '3 sets × 40 reps · Fast pace · Cardio + core burn', t: 'abs', s: 3 },
+              { n: 'Side Plank', d: '2 holds × 30–45 sec each side · Hip raised · Straight line', t: 'abs', s: 2 },
+              { n: 'Decline Sit-ups', d: '3 sets × 20 reps · Decline bench · Full range', t: 'abs', s: 3 },
+              { n: 'Dead Bug', d: '3 sets × 10 reps each side · Opposite arm + leg · Lumbar flat', t: 'abs', s: 3 },
+              { n: 'Hollow Body Hold', d: '3 holds × 25–30 sec · Lower back flat · Arms overhead', t: 'abs', s: 3 },
+              { n: 'Cable Woodchopper', d: '3 sets × 12 reps each side · Rotational core power', t: 'abs', s: 3 },
+              { n: 'V-Ups', d: '3 sets × 15 reps · Touch toes at top · Core + hip flexors', t: 'abs', s: 3 },
+            ]
+          },
+          {
+            name: '🏃 Cardio Finish — Burn Zone', exercises: [
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · Moderate-high effort · Arms active', t: 'cardio', s: 1 },
+              { n: 'Treadmill Final Sprint Intervals', d: '5 min · 30s fast + 30s slow × 5 · Afterburn', t: 'cardio', s: 1 },
+              { n: 'Jump Rope / Skipping', d: '3 rounds × 2 min · Rest 30s · Intense HIIT finisher', t: 'cardio', s: 3 },
+            ]
+          },
+        ]
+      },
+    };
+
+    const REST_EX = {
+      sections: [
+        {
+          name: '🏃 Morning Fasted Walk (Priority #1)', exercises: [
+            { n: 'Brisk Outdoor Walk / Light Jog', d: '40–50 min fasted · Empty stomach = fat burning · Park, terrace, anywhere', t: 'cardio', s: 1 },
+          ]
+        },
+        {
+          name: '🏋️ Upper Body Home', exercises: [
+            { n: 'Wall Push-ups', d: '3 sets × 15 reps · Hands on wall, body at angle', t: 'upper', s: 3 },
+            { n: 'Chair Dips (Triceps)', d: '3 sets × 10 reps · Hands on chair edge · Push up', t: 'triceps', s: 3 },
+            { n: 'Standing Shoulder Taps', d: '3 sets × 20 taps · Push-up position · Alternating', t: 'upper', s: 3 },
+          ]
+        },
+        {
+          name: '🦵 Lower Body Home', exercises: [
+            { n: 'Chair Squat / Sit-to-Stand', d: '3 sets × 15 reps · Sit fully then stand', t: 'legs', s: 3 },
+            { n: 'Wall Sit Hold', d: '3 holds × 45–60 sec · Thighs parallel to floor', t: 'legs', s: 3 },
+            { n: 'Standing Calf Raises', d: '3 sets × 25 reps · Full range · Slow lowering', t: 'legs', s: 3 },
+            { n: 'Step-ups (Stair / Box)', d: '3 sets × 10 each leg · Cardio + glutes', t: 'legs', s: 3 },
+          ]
+        },
+        {
+          name: '🎯 Core Home', exercises: [
+            { n: 'Plank Hold', d: '3 holds × 45–60 sec · Build to 2 min over weeks', t: 'abs', s: 3 },
+            { n: 'Crunches', d: '3 sets × 20 reps · Don\'t pull neck · Exhale at top', t: 'abs', s: 3 },
+            { n: 'Seated Leg Raises', d: '3 sets × 15 reps · Chair edge · Both legs straight', t: 'abs', s: 3 },
+            { n: 'Side Plank', d: '2 holds × 25–35 sec each · Hips up · Straight line', t: 'abs', s: 2 },
+          ]
+        },
+        {
+          name: '🧘 Flexibility + Recovery', exercises: [
+            { n: 'Full Body Stretch Routine', d: '10–15 min · Hips, hamstrings, chest, shoulders, calves', t: 'stretch', s: 1 },
+            { n: 'Deep Breathing (Pranayam)', d: '5 min · Anulom-vilom + kapalbhati · Reduces cortisol', t: 'stretch', s: 1 },
+          ]
+        },
+      ]
+    };
+
+    // CONFIG
+    const DAYMAP = { 0: 'rest', 1: 'upper', 2: 'legs', 3: 'abs', 4: 'upper', 5: 'legs', 6: 'abs' };
+    const DNAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const WMETA = { upper: 'Upper+Arms', legs: 'Legs', abs: 'Abs+Cardio', rest: 'Rest' };
+    const WCOL = { upper: 'var(--blue)', legs: 'var(--green)', abs: 'var(--amber)', rest: 'var(--t3)' };
+    const MAC = { cal: 1200, p: 125, c: 100, f: 35, fib: 30 };
+    const COL = { amber: 'var(--amber)', green: 'var(--green)', blue: 'var(--blue)', coral: 'var(--red)', red: 'var(--red)', purple: 'var(--purple)', teal: 'var(--teal)', orange: 'var(--orange)' };
+    const BGD = { amber: 'rgba(217,119,6,.1)', green: 'rgba(5,150,105,.1)', blue: 'rgba(37,99,235,.1)', coral: 'rgba(220,38,38,.1)', red: 'rgba(220,38,38,.1)', purple: 'rgba(124,58,237,.1)', teal: 'rgba(13,148,136,.1)', orange: 'rgba(234,88,12,.1)' };
+    const TBADGE = {
+      cardio: 'color:var(--teal);background:rgba(13,148,136,.12)',
+      warmup: 'color:var(--t2);background:rgba(0,0,0,.06)',
+      stretch: 'color:var(--teal);background:rgba(13,148,136,.12)',
+      chest: 'color:var(--blue);background:rgba(37,99,235,.12)',
+      back: 'color:var(--blue);background:rgba(37,99,235,.12)',
+      shoulder: 'color:var(--purple);background:rgba(124,58,237,.12)',
+      legs: 'color:var(--green);background:rgba(5,150,105,.12)',
+      abs: 'color:var(--amber);background:rgba(217,119,6,.12)',
+      upper: 'color:var(--blue);background:rgba(37,99,235,.12)',
+      biceps: 'color:var(--orange);background:rgba(234,88,12,.12)',
+      triceps: 'color:var(--red);background:rgba(220,38,38,.12)',
+      forearms: 'color:var(--amber);background:rgba(217,119,6,.12)',
+    };
+
+    const S = { cal: 0, p: 0, c: 0, f: 0, fib: 0, done: new Set(), water: 0, isab: [false, false] };
+    const EX = {};
+
+    const $ = id => document.getElementById(id);
+    const col = k => COL[k] || 'var(--t)';
+    const bg = k => BGD[k] || 'rgba(0,0,0,.05)';
+    const todayWT = () => DAYMAP[new Date().getDay()];
+    const isMobile = () => window.innerWidth <= 768;
+    const getAllEx = type => {
+      if (type === 'rest') return REST_EX.sections.flatMap(s => s.exercises);
+      return (WORKOUTS[type]?.sections || []).flatMap(s => s.exercises);
+    };
+
+    // CLOCK + DATE
+    function tick() {
+      const n = new Date(), p = v => String(v).padStart(2, '0');
+      const h = n.getHours(), ampm = h >= 12 ? 'PM' : 'AM', h12 = h % 12 || 12;
+      $('clk').textContent = `${p(h12)}:${p(n.getMinutes())}:${p(n.getSeconds())} ${ampm}`;
+      const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      $('dateLbl').textContent = `${p(n.getDate())}-${M[n.getMonth()]}-${n.getFullYear()}`;
+    }
+
+    // DAY CHIP
+    function updDay() {
+      const wt = todayWT();
+      const bgs = { upper: 'rgba(37,99,235,.1)', legs: 'rgba(5,150,105,.1)', abs: 'rgba(217,119,6,.1)', rest: 'rgba(0,0,0,.05)' };
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dc = $('dayChip');
+      dc.style.cssText = `background:${bgs[wt] || bgs.rest};color:${WCOL[wt]};border-color:${WCOL[wt]}55`;
+      dc.textContent = `${days[new Date().getDay()]} · ${WMETA[wt]}`;
+    }
+
+    // WEEK GRID
+    function buildWeek() {
+      const today = new Date().getDay();
+      const map = { 1: 'upper', 2: 'legs', 3: 'abs', 4: 'upper', 5: 'legs', 6: 'abs', 0: 'rest' };
+      const meta = { upper: 'Upper', legs: 'Legs', abs: 'Abs', rest: 'Rest' };
+      $('weekGrid').innerHTML = DNAMES.map((d, i) => {
+        const wt = map[i];
+        return `<div class="wd${i === today ? ' tday' : ''}">
+      <div class="wdn">${d}</div>
+      <div class="wdt" style="color:${i === today ? 'var(--green)' : WCOL[wt] || 'var(--t3)'}">${meta[wt]}</div>
+    </div>`;
+      }).join('');
+    }
+
+    // WATER
+    function buildWater() {
+      const g = $('wgrid'); g.innerHTML = '';
+      for (let i = 0; i < 16; i++) {
+        const el = document.createElement('div'); el.className = 'wg';
+        el.innerHTML = '<div class="wgf"></div>'; el.title = `Glass ${i + 1} (${(i + 1) * 250}ml)`;
+        el.onclick = () => {
+          const all = g.querySelectorAll('.wg');
+          const wasFull = el.classList.contains('on');
+          all.forEach((gl, idx) => gl.classList.toggle('on', !wasFull ? idx <= i : idx < i));
+          S.water = g.querySelectorAll('.wg.on').length;
+          $('wlbl').textContent = `${S.water} / 16 glasses`;
+          $('wml').textContent = `${S.water * 250} ml`;
+        };
+        g.appendChild(el);
+      }
+    }
+
+    // ISABGOL
+    function togIsab(i) {
+      S.isab[i] = !S.isab[i];
+      const b = $('isab' + i); b.classList.toggle('done', S.isab[i]);
+      b.querySelector('.ib-l').textContent = S.isab[i] ? '✓ Done' : `Dose ${i + 1}`;
+    }
+
+    // MACROS
+    function updMacros() {
+      const pct = (v, t) => Math.min(v / t * 100, 100).toFixed(0) + '%';
+      $('calVal').textContent = S.cal;
+      $('calRing').style.strokeDashoffset = 289 * (1 - Math.min(S.cal / MAC.cal, 1));
+      $('bP').style.width = pct(S.p, MAC.p); $('vP').textContent = `${S.p}/${MAC.p}g`;
+      $('bC').style.width = pct(S.c, MAC.c); $('vC').textContent = `${S.c}/${MAC.c}g`;
+      $('bF').style.width = pct(S.f, MAC.f); $('vF').textContent = `${S.f}/${MAC.f}g`;
+      $('bFib').style.width = pct(S.fib, MAC.fib); $('vFib').textContent = `${S.fib}/${MAC.fib}g`;
+      const p = Math.min(S.cal / MAC.cal * 100, 100);
+      $('topBar').style.width = p + '%'; $('topVal').textContent = `${S.cal}/${MAC.cal}`;
+    }
+
+    // DIET INTERACTIONS
+    function togMeal(e, id) {
+      e.stopPropagation();
+      const s = DIET.find(x => x.id === id); if (!s || s.type !== 'meal') return;
+      const btn = $('chk_' + id), card = document.querySelector(`[data-id="${id}"]`);
+      if (S.done.has(id)) {
+        S.done.delete(id); btn.classList.remove('done');
+        if (card) { card.classList.remove('ck', 'anow'); }
+        S.cal -= s.cal; S.p -= s.p; S.c -= s.c; S.f -= s.f; S.fib -= (s.fib || 0);
+      } else {
+        S.done.add(id); btn.classList.add('done');
+        if (card) { card.classList.add('ck'); card.classList.remove('anow'); }
+        S.cal += s.cal; S.p += s.p; S.c += s.c; S.f += s.f; S.fib += (s.fib || 0);
+      }
+      updMacros();
+    }
+    function togCard(e, id) {
+      const card = document.querySelector(`[data-id="${id}"]`); if (!card) return;
+      card.classList.toggle('op');
+    }
+    function selOpt(mid, btn) {
+      document.getElementById('og_' + mid).querySelectorAll('.opp').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+      const d = $('od_' + mid); d.textContent = btn.dataset.desc; d.classList.add('on');
+    }
+
+    // RENDER DIET
+    function renderDiet() {
+      const tl = $('dietTL'); let html = '';
+      DIET.forEach((s) => {
+        if (s.id === 'brk1') html += `<div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-t">⏱ Night Shift — 6:30 PM</div><div class="sdiv-l"></div></div>`;
+        const dotC = col(s.color || 'green');
+        let card = '';
+        if (s.type === 'gymblock') {
+          const wd = WORKOUTS[todayWT()];
+          card = `<div class="gymb" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})">
+        <div class="gymb-ico">🏋️</div>
+        <div style="flex:1"><div class="gymb-title">${wd.name}</div>
+        <div class="gymb-sub">04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} cal burned</div></div>
+        <div style="font-size:22px;color:var(--green);flex-shrink:0">↗</div>
+      </div>`;
+        } else if (s.type === 'supp') {
+          card = `<div class="sc" style="background:${bg(s.color)};border-color:${col(s.color)}33">
+        <div class="scl"><div class="scico">${s.icon}</div><div class="sctag" style="background:${bg(s.color)};color:${col(s.color)}">${s.tag}</div></div>
+        <div><div class="scn" style="color:${col(s.color)}">${s.name}</div><div class="scd">${s.desc}</div><div class="scw">${s.why}</div></div>
+      </div>`;
+        } else {
+          const ii = s.items ? `<ul class="il">${s.items.map(it => `<li>${it}</li>`).join('')}</ul>` : '';
+          const oi = s.opts ? `<div class="og" id="og_${s.id}">${s.opts.map(o => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}">${o.id}: ${o.label}</button>`).join('')}</div><div class="odesc" id="od_${s.id}"></div>` : '';
+          card = `<div class="mc" data-id="${s.id}" onclick="togCard(event,'${s.id}')">
+        <div class="mch">
+          <div class="mcico" style="background:${bg(s.color)}">${s.icon}</div>
+          <div class="mcnfo"><div class="mcnm">${s.name}</div><div class="mcsb">${s.sub}</div></div>
+          <div class="mcrt">
+            <div class="ctag" style="background:${bg(s.color)};color:${col(s.color)}">${s.cal} kcal</div>
+            <button class="chkb" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')">✓</button>
+            <button class="arb">▾</button>
+          </div>
+        </div>
+        <div class="mcb">${ii}${oi}
+          <div class="mchips">
+            <div class="mchip"><span class="mclbl">P</span><span class="mcval" style="color:var(--blue)">${s.p}g</span></div>
+            <div class="mchip"><span class="mclbl">C</span><span class="mcval" style="color:var(--green)">${s.c}g</span></div>
+            <div class="mchip"><span class="mclbl">F</span><span class="mcval" style="color:var(--amber)">${s.f}g</span></div>
+            ${s.fib ? `<div class="mchip"><span class="mclbl">Fiber</span><span class="mcval" style="color:var(--teal)">${s.fib}g</span></div>` : ''}
+          </div>
+        </div>
+      </div>`;
+        }
+        html += `<div class="trow${s.type === 'supp' ? ' sr' : ''}">
+      <div class="tt" id="tt_${s.id}">${s.disp}</div>
+      <div class="tdw"><div class="tdot" id="dt_${s.id}" style="background:${dotC};${s.type !== 'supp' ? 'border:2px solid var(--bg)' : 'border:1.5px solid var(--bg)'}"></div></div>
+      <div class="tcrd">${card}</div>
+    </div>`;
+      });
+      tl.innerHTML = html;
+    }
+
+    // HIGHLIGHT CURRENT SLOT
+    function hlSlot() {
+      const n = new Date(), cur = n.getHours() * 60 + n.getMinutes();
+      const toM = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m + (h < 12 ? 1440 : 0) };
+      const ca = cur < 720 ? cur + 1440 : cur;
+      let ai = -1;
+      for (let i = 0; i < DIET.length; i++) {
+        const t = toM(DIET[i].time), nx = i + 1 < DIET.length ? toM(DIET[i + 1].time) : t + 90;
+        if (ca >= t && ca < nx) { ai = i; break; }
+      }
+      DIET.forEach((s, i) => {
+        const card = document.querySelector(`[data-id="${s.id}"]`);
+        if (card && s.type === 'meal') card.classList.toggle('anow', i === ai && !S.done.has(s.id));
+        const dt = $('dt_' + s.id), tt = $('tt_' + s.id);
+        if (dt) dt.classList.toggle('now', i === ai);
+        if (tt) tt.classList.toggle('now', i === ai);
+      });
+    }
+
+    // WORKOUT BUILDER
+    function buildWorkoutHTML(type) {
+      const isRest = type === 'rest';
+      const wd = isRest ? {
+        name: 'Active Recovery', days: 'Sunday', color: 'rest', cal: 200,
+        tip: 'Active recovery burns calories without straining joints. Morning fasted walk is the #1 priority today.',
+        sections: REST_EX.sections
+      } : WORKOUTS[type];
+      if (!EX[type]) EX[type] = {};
+      const allEx = getAllEx(type);
+      let exIdx = 0, secHTML = '';
+      wd.sections.forEach(sec => {
+        secHTML += `<div class="sec-hdr"><div class="sec-line"></div><div class="sec-lbl">${sec.name}</div><div class="sec-line"></div></div><div class="exlist">`;
+        sec.exercises.forEach(ex => {
+          const i = exIdx++;
+          if (!EX[type][i]) EX[type][i] = { done: 0, completed: false };
+          const tb = TBADGE[ex.t] || 'color:var(--t2);background:rgba(0,0,0,.06)';
+          const setDots = ex.s > 1 ? `<div class="setrow" id="sr_${type}_${i}">${Array.from({ length: ex.s }, (_, si) =>
+            `<div class="sdot${EX[type][i].done > si ? ' dn' : ''}" onclick="togSet('${type}',${i},${si})">${si + 1}</div>`).join('')}</div>` : '';
+          const ck = ex.s === 1 ? `<button class="exck${EX[type][i].completed ? ' dn' : ''}" id="ek_${type}_${i}" onclick="togSingle('${type}',${i})">✓</button>` : '';
+          secHTML += `<div class="excard${EX[type][i].completed ? ' done-ex' : ''}" id="exc_${type}_${i}">
+        <div class="exnum">${i + 1}</div>
+        <div class="exinfo"><div class="exnm">${ex.n}</div><div class="exdt">${ex.d}</div></div>
+        <div class="extbadge" style="${tb}">${ex.t}</div>
+        ${setDots}${ck}
+      </div>`;
+        });
+        secHTML += `</div>`;
+      });
+      const done = allEx.filter((_, i) => EX[type][i] && EX[type][i].completed).length;
+      const pct = allEx.length > 0 ? done / allEx.length * 100 : 0;
+      const totalSets = allEx.reduce((a, e) => a + (e.s || 1), 0);
+      const wc = WCOL[wd.color || type] || 'var(--green)';
+      return `<div class="wo-header" style="border-color:${wc}33">
+    <div class="wo-day" style="color:${wc}">${wd.name}</div>
+    <div class="wo-meta">${wd.days} · Fit Master Gym, Gota · 4:00 AM – 6:00 AM</div>
+    <div class="wo-tip">${wd.tip}</div>
+    <div class="wo-stats">
+      <div><div class="ws-v" id="wod_${type}" style="color:${wc}">${done}/${allEx.length}</div><div class="ws-l">exercises done</div></div>
+      <div><div class="ws-v" style="color:var(--amber)">${totalSets}</div><div class="ws-l">total sets</div></div>
+      <div><div class="ws-v" style="color:var(--red)">~${wd.cal}</div><div class="ws-l">cal burned</div></div>
+      <div><div class="ws-v" style="color:var(--t2)">${Math.round(pct)}%</div><div class="ws-l">complete</div></div>
+    </div>
+  </div>
+  <div class="progbar"><div class="progfill" id="pb_${type}" style="width:${pct}%;background:linear-gradient(90deg,${wc},${wc}99)"></div></div>
+  ${secHTML}`;
+    }
+
+    // SET TRACKING
+    function togSet(type, ei, si) {
+      if (!EX[type]) EX[type] = {};
+      if (!EX[type][ei]) EX[type][ei] = { done: 0, completed: false };
+      const exList = getAllEx(type);
+      EX[type][ei].done = EX[type][ei].done === (si + 1) ? si : si + 1;
+      const ad = EX[type][ei].done;
+      const row = document.getElementById(`sr_${type}_${ei}`);
+      if (row) row.querySelectorAll('.sdot').forEach((d, j) => d.classList.toggle('dn', j < ad));
+      EX[type][ei].completed = ad >= exList[ei].s;
+      const card = document.getElementById(`exc_${type}_${ei}`);
+      if (card) card.classList.toggle('done-ex', EX[type][ei].completed);
+      updWoProg(type);
+    }
+    function togSingle(type, ei) {
+      if (!EX[type]) EX[type] = {};
+      if (!EX[type][ei]) EX[type][ei] = { done: 0, completed: false };
+      EX[type][ei].completed = !EX[type][ei].completed;
+      EX[type][ei].done = EX[type][ei].completed ? 1 : 0;
+      const b = document.getElementById(`ek_${type}_${ei}`);
+      if (b) b.classList.toggle('dn', EX[type][ei].completed);
+      const card = document.getElementById(`exc_${type}_${ei}`);
+      if (card) card.classList.toggle('done-ex', EX[type][ei].completed);
+      updWoProg(type);
+    }
+    function updWoProg(type) {
+      const exList = getAllEx(type);
+      const done = exList.filter((_, i) => EX[type] && EX[type][i] && EX[type][i].completed).length;
+      const pct = exList.length > 0 ? done / exList.length * 100 : 0;
+      const pb = document.getElementById(`pb_${type}`);
+      const wd = document.getElementById(`wod_${type}`);
+      if (pb) pb.style.width = pct + '%';
+      if (wd) wd.textContent = `${done}/${exList.length}`;
+    }
+
+    // ============================================================
+    // TAB SWITCHING — handles both desktop tabs + mobile bottom nav
+    // ============================================================
+    let curMobTab = 'diet';
+
+    function showTab(id, btn) {
+      // Desktop tabs (inside main area)
+      document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('#desktopTabbar .tab').forEach(b => b.classList.remove('on'));
+      const tc = document.getElementById('tc-' + id);
+      if (tc) tc.classList.add('on');
+      if (btn) btn.classList.add('on');
+      else {
+        document.querySelectorAll('#desktopTabbar .tab').forEach(b => {
+          if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('on');
+        });
+      }
+      // Hide stats panel if visible on desktop
+      $('sidebarPanel').classList.remove('mob-visible');
+      if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
+      if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+    }
+
+    function mobTab(id, btn) {
+      // Sync bottom nav highlight
+      document.querySelectorAll('.bntab').forEach(b => b.classList.remove('on'));
+      if (btn) btn.classList.add('on');
+      curMobTab = id;
+
+      const panel = $('sidebarPanel');
+      const mainArea = $('mainArea');
+
+      if (id === 'stats') {
+        // Show stats panel, hide main content tabs
+        panel.classList.add('mob-visible');
+        mainArea.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Show main area, hide stats panel
+      panel.classList.remove('mob-visible');
+      mainArea.style.display = '';
+
+      // Switch content tabs
+      document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('#desktopTabbar .tab').forEach(b => b.classList.remove('on'));
+      const tc = document.getElementById('tc-' + id);
+      if (tc) tc.classList.add('on');
+      document.querySelectorAll('#desktopTabbar .tab').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('on');
+      });
+      if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
+      if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    buildWeek();
+    buildWater();
+    renderDiet();
+    updDay();
+    tick(); setInterval(tick, 1000);
+    hlSlot(); setInterval(hlSlot, 60000);
+    setTimeout(updMacros, 300);
+  </script>
+</body>
+
+</html>
