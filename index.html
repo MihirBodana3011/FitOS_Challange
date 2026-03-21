@@ -7,7 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#0A1628">
   <title>FitOS Extreme Weight Loss</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
@@ -25,30 +25,33 @@
     }
 
     :root {
-      --bg: #EEF2FF;
-      --bg2: #FFFFFF;
-      --bg3: #F8FAFC;
-      --bg4: #F1F5F9;
-      --bd: rgba(0, 0, 0, .07);
-      --bd2: rgba(0, 0, 0, .13);
-      --bd3: rgba(0, 0, 0, .22);
-      --t: #0F172A;
-      --t2: #475569;
-      --t3: #94A3B8;
-      --green: #059669;
-      --gd: rgba(5, 150, 105, .1);
-      --amber: #D97706;
-      --ad: rgba(217, 119, 6, .1);
-      --red: #DC2626;
-      --rdd: rgba(220, 38, 38, .1);
-      --blue: #2563EB;
-      --bld: rgba(37, 99, 235, .1);
-      --purple: #7C3AED;
-      --pd: rgba(124, 58, 237, .1);
-      --teal: #0D9488;
-      --tld: rgba(13, 148, 136, .1);
-      --orange: #EA580C;
-      --od: rgba(234, 88, 12, .1);
+      --bg: #070F1E;
+      --bg2: #0D1B2E;
+      --bg3: #112240;
+      --bg4: #162A4F;
+      --bd: rgba(255, 255, 255, .07);
+      --bd2: rgba(255, 255, 255, .13);
+      --bd3: rgba(255, 255, 255, .22);
+      --t: #E8F0FF;
+      --t2: #8BAAC8;
+      --t3: #4A6280;
+      --green: #10B981;
+      --gd: rgba(16, 185, 129, .12);
+      --amber: #D4A847;
+      --ad: rgba(212, 168, 71, .13);
+      --red: #F05252;
+      --rdd: rgba(240, 82, 82, .12);
+      --blue: #4B83E8;
+      --bld: rgba(75, 131, 232, .12);
+      --purple: #8B5CF6;
+      --pd: rgba(139, 92, 246, .12);
+      --teal: #14B8A6;
+      --tld: rgba(20, 184, 166, .12);
+      --orange: #FB923C;
+      --od: rgba(251, 146, 60, .12);
+      --gold: #D4A847;
+      --gold-d: rgba(212, 168, 71, .13);
+      --gold-b: rgba(212, 168, 71, .35);
       --font: 'Manrope', sans-serif;
       --mono: 'JetBrains Mono', monospace;
       --topbar: 56px;
@@ -77,7 +80,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, .12);
+      background: rgba(212, 168, 71, .25);
       border-radius: 3px
     }
 
@@ -100,7 +103,7 @@
    ============================================================ */
     .topbar {
       grid-column: 1/-1;
-      background: #fff;
+      background: var(--bg2);
       border-bottom: 1px solid var(--bd);
       display: flex;
       align-items: center;
@@ -110,7 +113,7 @@
       top: 0;
       z-index: 300;
       height: var(--topbar);
-      box-shadow: 0 1px 6px rgba(0, 0, 0, .06);
+      box-shadow: 0 1px 16px rgba(0, 0, 0, .4);
     }
 
     .logo {
@@ -122,7 +125,7 @@
 
     @keyframes logoPulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.45);
+        box-shadow: 0 0 0 0 rgba(212, 168, 71, 0.55);
       }
 
       70% {
@@ -137,12 +140,12 @@
     .lm {
       width: 36px;
       height: 36px;
-      background: var(--green);
+      background: linear-gradient(135deg, #D4A847, #B8880F);
       border-radius: 10px;
       font-family: var(--mono);
       font-size: 13px;
       font-weight: 700;
-      color: #fff;
+      color: #0A1628;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -159,7 +162,7 @@
     }
 
     .lt em {
-      color: var(--green);
+      color: var(--gold);
       font-style: normal
     }
 
@@ -338,7 +341,7 @@
    SIDEBAR (desktop)
    ============================================================ */
     .sidebar {
-      background: #fff;
+      background: var(--bg2);
       border-right: 1px solid var(--bd);
       overflow-y: auto;
       position: sticky;
@@ -438,14 +441,14 @@
       color: var(--t2);
       font-style: italic;
       line-height: 1.55;
-      background: var(--gd);
-      border: 1px solid rgba(5, 150, 105, .2);
+      background: var(--gold-d);
+      border: 1px solid var(--gold-b);
       border-radius: 9px;
       padding: 7px 10px;
     }
 
     .premark span {
-      color: var(--green);
+      color: var(--gold);
       font-weight: 700;
       font-style: normal
     }
@@ -495,7 +498,7 @@
       font-family: var(--mono);
       font-size: 22px;
       font-weight: 700;
-      color: var(--amber);
+      color: var(--gold);
       line-height: 1
     }
 
@@ -580,14 +583,14 @@
     }
 
     .wg.on {
-      border-color: rgba(37, 99, 235, .4);
-      background: rgba(37, 99, 235, .04)
+      border-color: rgba(212, 168, 71, .5);
+      background: rgba(212, 168, 71, .07)
     }
 
     .wgf {
       width: 100%;
       height: 0;
-      background: linear-gradient(to top, var(--blue), rgba(37, 99, 235, .5), var(--blue));
+      background: linear-gradient(to top, var(--gold), rgba(212, 168, 71, .4), var(--gold));
       background-size: 100% 200%;
       transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       animation: gradientShift 3s ease infinite;
@@ -742,9 +745,9 @@
     }
 
     .wd.tday {
-      border-color: rgba(5, 150, 105, .45);
-      background: rgba(5, 150, 105, .08);
-      box-shadow: 0 0 0 2px rgba(5, 150, 105, .14)
+      border-color: rgba(212, 168, 71, .5);
+      background: rgba(212, 168, 71, .1);
+      box-shadow: 0 0 0 2px rgba(212, 168, 71, .18)
     }
 
     .wdn {
@@ -775,14 +778,14 @@
     .tabbar {
       display: flex;
       border-bottom: 1px solid var(--bd);
-      background: #fff;
+      background: var(--bg2);
       position: sticky;
       top: 0;
       z-index: 200;
       padding: 0 14px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+      box-shadow: 0 1px 12px rgba(0, 0, 0, .3);
     }
 
     .tabbar::-webkit-scrollbar {
@@ -813,8 +816,8 @@
     }
 
     .tab.on {
-      border-bottom-color: var(--green);
-      color: var(--green)
+      border-bottom-color: var(--gold);
+      color: var(--gold)
     }
 
     /* TAB CONTENT */
@@ -957,19 +960,19 @@
     .gymb {
       border-radius: 14px;
       padding: 14px 16px;
-      border: 1px solid rgba(5, 150, 105, .25);
+      border: 1px solid rgba(212, 168, 71, .3);
       display: flex;
       align-items: center;
       gap: 12px;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      background: linear-gradient(135deg, rgba(5, 150, 105, .07), rgba(5, 150, 105, .03));
+      background: linear-gradient(135deg, rgba(212, 168, 71, .1), rgba(212, 168, 71, .04));
       -webkit-tap-highlight-color: transparent;
     }
 
     .gymb:hover {
       transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 28px rgba(5, 150, 105, 0.2), 0 4px 10px rgba(5, 150, 105, 0.05);
+      box-shadow: 0 12px 28px rgba(212, 168, 71, 0.2), 0 4px 10px rgba(212, 168, 71, 0.05);
     }
 
     .gymb:active {
@@ -987,7 +990,7 @@
       font-size: 13px;
       font-weight: 800;
       margin-bottom: 2px;
-      color: var(--green)
+      color: var(--gold)
     }
 
     .gymb-sub {
@@ -998,20 +1001,20 @@
 
     /* MEAL CARD */
     .mc {
-      background: #fff;
+      background: var(--bg2);
       border: 1px solid var(--bd);
       border-radius: 14px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .25);
       -webkit-tap-highlight-color: transparent;
     }
 
     .mc:hover {
-      border-color: var(--green);
+      border-color: var(--gold);
       transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 28px rgba(5, 150, 105, 0.18), 0 4px 10px rgba(5, 150, 105, 0.05);
+      box-shadow: 0 12px 28px rgba(212, 168, 71, 0.18), 0 4px 10px rgba(212, 168, 71, 0.06);
     }
 
     .mc:active {
@@ -1020,8 +1023,8 @@
     }
 
     .mc.anow {
-      border-color: rgba(5, 150, 105, .45);
-      box-shadow: 0 0 0 2px rgba(5, 150, 105, .15), 0 4px 16px rgba(5, 150, 105, .07)
+      border-color: rgba(212, 168, 71, .55);
+      box-shadow: 0 0 0 2px rgba(212, 168, 71, .18), 0 4px 16px rgba(212, 168, 71, .1)
     }
 
     .mc.ck {
@@ -1187,7 +1190,7 @@
       padding: 6px 12px;
       border-radius: 16px;
       border: 1px solid var(--bd2);
-      background: #fff;
+      background: var(--bg3);
       color: var(--t2);
       font-size: 12px;
       cursor: pointer;
@@ -1197,13 +1200,13 @@
     }
 
     .opp.sel {
-      background: rgba(5, 150, 105, .08);
-      border-color: var(--green);
-      color: var(--green)
+      background: rgba(212, 168, 71, .1);
+      border-color: var(--gold);
+      color: var(--gold)
     }
 
     .odesc {
-      background: #fff;
+      background: var(--bg3);
       border: 1px solid var(--bd);
       border-radius: 9px;
       padding: 9px 12px;
@@ -1226,7 +1229,7 @@
     }
 
     .mchip {
-      background: #fff;
+      background: var(--bg4);
       border: 1px solid var(--bd);
       border-radius: 7px;
       padding: 3px 8px;
@@ -1254,8 +1257,8 @@
       gap: 10px;
       align-items: flex-start;
       transition: all .15s;
-      background: #fff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+      background: var(--bg2);
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
 
     .scl {
@@ -1306,7 +1309,7 @@
 
     /* FOOT NOTE */
     .foot {
-      background: #fff;
+      background: var(--bg2);
       border: 1px solid var(--bd);
       border-radius: 13px;
       padding: 13px 15px;
@@ -1314,7 +1317,7 @@
       font-size: 12.5px;
       color: var(--t2);
       line-height: 1.9;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
 
     .foot strong {
@@ -1323,7 +1326,7 @@
     }
 
     .foot .highlight {
-      color: var(--green);
+      color: var(--gold);
       font-weight: 700
     }
 
@@ -1335,8 +1338,8 @@
       padding: 14px 16px;
       margin-bottom: 12px;
       border: 1px solid;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+      background: var(--bg2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .3);
     }
 
     .wo-day {
@@ -1361,7 +1364,7 @@
       background: var(--bg3);
       border-radius: 8px;
       margin-bottom: 10px;
-      border-left: 3px solid var(--green);
+      border-left: 3px solid var(--gold);
     }
 
     .wo-stats {
@@ -1385,7 +1388,7 @@
 
     .progbar {
       height: 5px;
-      background: rgba(0, 0, 0, .07);
+      background: rgba(255, 255, 255, .07);
       border-radius: 3px;
       overflow: hidden;
       margin-bottom: 14px
@@ -1407,7 +1410,7 @@
     }
 
     .excard {
-      background: #fff;
+      background: var(--bg2);
       border: 1px solid var(--bd);
       border-radius: 12px;
       padding: 11px 12px;
@@ -1417,13 +1420,13 @@
       transition: all .2s;
       animation: fup .3s ease both;
       cursor: default;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
       flex-wrap: wrap;
     }
 
     .excard.done-ex {
-      opacity: .35;
-      filter: grayscale(40%)
+      opacity: .3;
+      filter: grayscale(50%)
     }
 
     .exnum {
@@ -1760,7 +1763,7 @@
         /* Sticks precisely under topbar */
         padding: 0 8px;
         z-index: 300;
-        background: rgba(255, 255, 255, 0.98);
+        background: rgba(13, 27, 46, 0.98);
         backdrop-filter: blur(8px);
       }
 
@@ -1906,10 +1909,10 @@
         right: 0;
         height: calc(var(--botnav) + var(--safe-b));
         padding-bottom: var(--safe-b);
-        background: #fff;
+        background: var(--bg2);
         border-top: 1px solid var(--bd);
         z-index: 400;
-        box-shadow: 0 -2px 16px rgba(0, 0, 0, .08);
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, .4);
       }
 
       .bntab {
@@ -1930,7 +1933,7 @@
       }
 
       .bntab:active {
-        background: rgba(0, 0, 0, .03)
+        background: rgba(212, 168, 71, .06)
       }
 
       .bnico {
@@ -1948,7 +1951,7 @@
       }
 
       .bntab.on .bnlbl {
-        color: var(--green)
+        color: var(--gold)
       }
 
       .bntab.on .bnico {
@@ -1963,7 +1966,7 @@
         transform: translateX(-50%);
         width: 28px;
         height: 2.5px;
-        background: var(--green);
+        background: var(--gold);
         border-radius: 0 0 3px 3px;
       }
 
@@ -2019,6 +2022,166 @@
         height: 32px
       }
     }
+    /* ============================================================
+   PROGRESS TRACKING — Weight Log + History
+   ============================================================ */
+    .wt-entry-box {
+      background: linear-gradient(135deg, rgba(212,168,71,.12), rgba(212,168,71,.04));
+      border: 1px solid var(--gold-b);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+    .wt-entry-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .wt-input {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--bd2);
+      border-radius: 10px;
+      color: var(--t);
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .wt-input:focus { border-color: var(--gold); }
+    .wt-save-btn {
+      background: linear-gradient(135deg, #D4A847, #B8880F);
+      border: none;
+      border-radius: 10px;
+      color: #0A1628;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .wt-save-btn:active { transform: scale(.95); }
+    .wt-current-lbl { font-size: 11px; color: var(--t3); }
+    .wt-current-val {
+      font-family: var(--mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .wt-lost {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    /* Weight History Log */
+    .wlog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .wlog-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg3);
+      border: 1px solid var(--bd);
+      border-radius: 9px;
+      padding: 7px 11px;
+      font-size: 12px;
+      animation: fup .25s ease both;
+    }
+    .wlog-date { color: var(--t3); font-size: 11px; }
+    .wlog-kg {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gold);
+    }
+    .wlog-delta { font-size: 11px; font-weight: 700; }
+    .wlog-del {
+      background: none; border: none; color: var(--t3);
+      cursor: pointer; font-size: 14px; padding: 2px 4px;
+      border-radius: 5px; transition: all .15s;
+    }
+    .wlog-del:hover { color: var(--red); background: var(--rdd); }
+    /* Progress Tab */
+    .prog-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .prog-stat {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 13px;
+      padding: 13px 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
+    .prog-stat-l { font-size: 10px; color: var(--t3); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+    .prog-stat-v { font-family: var(--mono); font-size: 22px; font-weight: 700; line-height: 1; }
+    .prog-stat-s { font-size: 10px; color: var(--t3); margin-top: 3px; }
+    .streak-fire { font-size: 22px; }
+    /* Mini bar chart for weight */
+    .wt-chart {
+      background: var(--bg2);
+      border: 1px solid var(--bd);
+      border-radius: 13px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    }
+    .wt-chart-title { font-size: 11px; color: var(--t3); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+    .wt-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 80px;
+    }
+    .wt-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; }
+    .wt-bar {
+      width: 100%;
+      background: linear-gradient(to top, #D4A847, #B8880F88);
+      border-radius: 4px 4px 0 0;
+      transition: height .6s cubic-bezier(0.34,1.56,0.64,1);
+      min-height: 4px;
+    }
+    .wt-bar-lbl { font-size: 8px; color: var(--t3); font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; width: 100%; }
+    .wt-bar-val { font-size: 9px; font-family: var(--mono); color: var(--gold); font-weight: 700; }
+    /* Daily log summary rows */
+    .dlog-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg2); border: 1px solid var(--bd);
+      border-radius: 10px; padding: 9px 12px; margin-bottom: 6px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.15);
+      animation: fup .25s ease both;
+    }
+    .dlog-date { font-size: 11px; color: var(--t3); width: 72px; flex-shrink: 0; }
+    .dlog-chips { display: flex; gap: 5px; flex: 1; flex-wrap: wrap; }
+    .dlog-chip {
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    /* Pulse bar for green dots */
+    @keyframes pl2 {
+      0%,100% { box-shadow: 0 0 0 0 rgba(212,168,71,.5) }
+      60% { box-shadow: 0 0 0 5px transparent }
+    }
+    .pulse-gold {
+      width: 8px; height: 8px; background: var(--gold);
+      border-radius: 50%; flex-shrink: 0;
+      animation: pl2 2s infinite;
+    }
   </style>
 </head>
 
@@ -2042,7 +2205,7 @@
           <div class="cbar-wrap">
             <div class="cbar-fill" id="topBar" style="width:0"></div>
           </div>
-          <span class="cv" id="topVal">0/1200</span>
+          <span class="cv" id="topVal">0/1117</span>
         </div>
         <div class="bmi-b">
           <div class="pulse"></div><span>BMI</span><span class="bmi-v">40.1</span>
@@ -2086,7 +2249,7 @@
             <div class="pc-s">~10–12 months</div>
           </div>
         </div>
-        <div class="premark">Age 26 · Night Shift 6:30–2:30 AM · Gym 4:00–6:00 AM · <span>Pure
+        <div class="premark">Age 26 · Night Shift 6:30 PM–2:30 AM · Gym 1:00–3:00 PM · <span>Pure
             Vegetarian</span><br><span>Extreme Protocol: 5–8 kg loss/month 🔥</span></div>
       </div>
 
@@ -2101,7 +2264,7 @@
             </svg>
             <div class="ri">
               <div class="ri-n" id="calVal">0</div>
-              <div class="ri-l">of 1200 kcal</div>
+              <div class="ri-l">of 1117 kcal</div>
             </div>
           </div>
         </div>
@@ -2148,11 +2311,11 @@
         <div class="irow">
           <button class="ib" onclick="togIsab(0)" id="isab0"><span class="ib-ico">🌾</span>
             <div class="ib-l">Dose 1</div>
-            <div class="ib-t">2:40 PM</div>
+            <div class="ib-t">11:30 AM</div>
           </button>
           <button class="ib" onclick="togIsab(1)" id="isab1"><span class="ib-ico">🌾</span>
             <div class="ib-l">Dose 2</div>
-            <div class="ib-t">5:45 PM</div>
+            <div class="ib-t">4:45 PM</div>
           </button>
         </div>
         <div class="isab-note">2 tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY. Reduces hunger by
@@ -2165,27 +2328,27 @@
           <div class="sq">
             <div class="sd" style="background:var(--green)"></div>
             <div class="sn">Jeera · Saunf · Ajwain</div>
-            <div class="st">12:40 PM · 4:00 PM</div>
+            <div class="st">10:15 AM · 4:30 PM</div>
           </div>
           <div class="sq">
             <div class="sd" style="background:var(--teal)"></div>
             <div class="sn">Isabgol (2×)</div>
-            <div class="st">12:50 PM · 4:15 PM</div>
+            <div class="st">11:30 AM · 4:45 PM</div>
           </div>
           <div class="sq">
             <div class="sd" style="background:var(--amber)"></div>
-            <div class="sn">Apple Cider Vinegar</div>
-            <div class="st">1:00 PM · 4:30 PM</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--teal)"></div>
-            <div class="sn">Green Tea</div>
-            <div class="st">12:00 AM</div>
+            <div class="sn">Apple Cider Vinegar (2×)</div>
+            <div class="st">3:00 PM · 5:00 PM</div>
           </div>
           <div class="sq">
             <div class="sd" style="background:var(--purple)"></div>
             <div class="sn">Fat Burner Tablet</div>
-            <div class="st">3:15 AM (gym days)</div>
+            <div class="st">12:15 PM (gym days only)</div>
+          </div>
+          <div class="sq">
+            <div class="sd" style="background:var(--teal)"></div>
+            <div class="sn">Green Tea</div>
+            <div class="st">12:00 AM (night shift)</div>
           </div>
         </div>
       </div>
@@ -2193,6 +2356,28 @@
       <div style="padding-bottom:8px">
         <div class="sh">Weekly Workout Split</div>
         <div class="wk" id="weekGrid"></div>
+      </div>
+
+      <div style="padding-bottom:8px">
+        <div class="sh">⚖️ Today's Weight — Log It</div>
+        <div class="wt-entry-box">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div class="wt-current-lbl">Current Weight</div>
+              <div class="wt-current-val" id="wtCurVal">—</div>
+              <div class="wt-lost" id="wtLostLbl"></div>
+            </div>
+            <div style="text-align:right">
+              <div class="wt-current-lbl">Target</div>
+              <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">75 kg</div>
+              <div class="wt-current-lbl" id="wtRemain"></div>
+            </div>
+          </div>
+          <div class="wt-entry-row">
+            <input class="wt-input" type="number" id="wtInput" placeholder="119.5" step="0.1" min="50" max="200">
+            <button class="wt-save-btn" onclick="saveWeight()">Log ✓</button>
+          </div>
+        </div>
       </div>
 
     </aside>
@@ -2205,6 +2390,7 @@
         <button class="tab on" onclick="showTab('diet',this)">🍱 Diet Plan</button>
         <button class="tab" onclick="showTab('workout',this)">💪 Today's Workout</button>
         <button class="tab" onclick="showTab('rest',this)">🏠 Rest Day</button>
+        <button class="tab" onclick="showTab('progress',this)">📈 My Progress</button>
       </div>
 
       <div class="tc on" id="tc-diet">
@@ -2212,9 +2398,9 @@
         <div class="foot">
           <strong>120kg Extreme Vegetarian Protocol —</strong>
           <span class="highlight">No eggs, no meat — maximum fat loss through food timing and discipline.</span><br>
-          Isabgol before meals = natural hunger control. ACV before lunch = blood sugar control. 4L water =
+          Isabgol before meals = natural hunger control. ACV before dinner = blood sugar control. 4L water =
           non-negotiable.
-          Fat burner: gym days only at 3:15 AM. Gym: 4:00 AM – 6:00 AM after office shift.
+          Fat burner: gym days only at 12:15 PM. Gym: 1:00 PM – 3:00 PM · Fit Master Gym, Gota.
           <span class="highlight">Expected: 5–8 kg fat loss per month</span> on this plan.
         </div>
       </div>
@@ -2224,6 +2410,10 @@
       </div>
       <div class="tc" id="tc-rest">
         <div id="restcontent"></div>
+      </div>
+
+      <div class="tc" id="tc-progress">
+        <div id="progressContent"></div>
       </div>
     </main>
 
@@ -2245,6 +2435,10 @@
       <span class="bnico">🏠</span>
       <span class="bnlbl">Rest Day</span>
     </button>
+    <button class="bntab" id="bn-progress" onclick="mobTab('progress',this)">
+      <span class="bnico">📈</span>
+      <span class="bnlbl">Progress</span>
+    </button>
     <button class="bntab" id="bn-stats" onclick="mobTab('stats',this)">
       <span class="bnico">📊</span>
       <span class="bnlbl">Stats</span>
@@ -2256,80 +2450,115 @@
     // DATA
     // ============================================================
     const DIET = [
+      // ── WAKE UP ──────────────────────────────────────────────
       {
-        id: 'wake', time: '12:30', disp: '12:30 PM', type: 'meal', color: 'amber', icon: '☀️',
-        name: 'Wake Up — Fasted State', sub: 'Kick-start metabolism',
+        id: 'wake', time: '10:00', disp: '10:00 AM', type: 'meal', color: 'amber', icon: '☀️',
+        name: 'Wake Up — Fasted Kickstart', sub: 'Activate metabolism first thing',
         cal: 77, p: 3, c: 5, f: 5, fib: 0,
-        items: ['Warm water + fresh lemon juice (1 glass) + 1 pinch rock salt', 'Soaked almonds (6) + walnuts (2) + 1 soaked fig']
-      },
-
-      {
-        id: 'j1', time: '12:40', disp: '12:40 PM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
-        name: 'Jeera · Saunf · Ajwain Drink',
-        desc: '½ tsp each powder in 250ml lukewarm water.',
-        why: 'Eliminates bloating and activates digestive enzymes. Reduces water retention.'
-      },
-
-      {
-        id: 'isa1', time: '12:50', disp: '12:50 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'AM FIBER',
-        name: 'Isabgol — First Dose',
-        desc: '2 level tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY.',
-        why: 'Natural stomach filler before the first big meal. Reduces appetite by 30–40%.'
-      },
-
-      {
-        id: 'acv', time: '13:00', disp: '1:00 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
-        name: 'Apple Cider Vinegar',
-        desc: '1 tbsp ACV in 250ml warm water — drink 10 min before lunch. Do NOT take on empty stomach.',
-        why: 'Lowers blood sugar spike from lunch, suppresses appetite, activates fat-burning enzymes.'
-      },
-
-      {
-        id: 'lunch', time: '13:15', disp: '1:15 PM', type: 'meal', color: 'blue', icon: '🥗',
-        name: 'First Meal (Lunch)', sub: 'Biggest Meal — High Fiber',
-        cal: 497, p: 35, c: 60, f: 13, fib: 12,
-        items: ['2 multigrain roti OR 120g brown rice', 'Dal 200ml — moong / masoor / mixed', 'Sabzi 200g — minimal oil', 'Salad + 150g low-fat curd']
-      },
-
-      {
-        id: 'j1', time: '16:00', disp: '4:00 PM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
-        name: 'Jeera · Saunf · Ajwain Drink',
-        desc: '½ tsp each powder in 250ml lukewarm water.',
-        why: 'Eliminates bloating and activates digestive enzymes. Reduces water retention.'
-      },
-
-      {
-        id: 'isa2', time: '16:15', disp: '4:15 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'PM FIBER',
-        name: 'Isabgol — Evening Dose',
-        desc: '2 tsp isabgol in 300ml warm water before dinner/office.',
-        why: 'Reduces appetite for dinner — keeps you from overeating before the shift.'
-      },
-      {
-        id: 'acv', time: '16:30', disp: '4:30 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
-        name: 'Apple Cider Vinegar',
-        desc: '1 tbsp ACV in 250ml warm water — drink 10 min before lunch. Do NOT take on empty stomach.',
-        why: 'Lowers blood sugar spike from lunch, suppresses appetite, activates fat-burning enzymes.'
-      },
-
-      {
-        id: 'dinner', time: '17:00', disp: '5:00 PM', type: 'meal', color: 'orange', icon: '🍱',
-        name: 'Pre-Shift Dinner', sub: 'Lean Fuel for Night Shift',
-        cal: 446, p: 40, c: 40, f: 14, fib: 12,
-        opts: [
-          { id: 'A', label: 'Grilled Low-Fat Paneer', desc: 'Low-fat Paneer tikka 200g + mixed veg salad + 1 roti. High protein.' },
-          { id: 'B', label: 'Soya Chunks Curry', desc: 'Soya chunks 80g curry + small salad + 1 roti. Plant protein.' },
-          { id: 'C', label: 'Tofu Stir Fry', desc: 'Tofu 200g stir-fried with veggies + 1 roti. Light & filling.' },
+        items: [
+          'Warm water + fresh lemon juice (1 glass) + 1 pinch rock salt',
+          'Soaked almonds (6) + walnuts (2) + 1 soaked fig'
         ]
       },
 
       {
+        id: 'jsa1', time: '10:15', disp: '10:15 AM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
+        name: 'Jeera · Saunf · Ajwain Drink',
+        desc: '½ tsp each powder in 250ml lukewarm water. Sip slowly.',
+        why: 'Eliminates bloating, activates digestive enzymes, reduces water retention before breakfast.'
+      },
+
+      // ── PRE-GYM MEAL (small — gym at 1 PM) ─────────────────
+      {
+        id: 'isa1', time: '11:30', disp: '11:30 AM', type: 'supp', color: 'teal', icon: '🌾', tag: 'FIBER',
+        name: 'Isabgol — First Dose',
+        desc: '2 level tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY.',
+        why: 'Natural stomach filler. Slows digestion before the pre-gym meal. Reduces total calories absorbed.'
+      },
+
+      {
+        id: 'pregym', time: '11:45', disp: '11:45 AM', type: 'meal', color: 'green', icon: '⚡',
+        name: 'Pre-Gym Meal', sub: 'Light fuel — 1:00 PM Gym',
+        cal: 200, p: 8, c: 35, f: 4, fib: 3,
+        opts: [
+          { id: 'A', label: 'Banana + Curd', desc: '1 banana + 150g low-fat curd. Best pre-gym combo — natural sugar + protein.' },
+          { id: 'B', label: 'Poha (Light)', desc: '1 cup light poha with veggies. Easy to digest, slow-release carbs.' },
+          { id: 'C', label: 'Dates + Milk', desc: '3 soaked dates + 150ml skim milk. Quick energy for the session.' },
+        ]
+      },
+
+      {
+        id: 'fatb', time: '12:15', disp: '12:15 PM', type: 'supp', color: 'purple', icon: '💊', tag: 'PRE-WORKOUT',
+        name: 'Dr. Morepen Fat Burner',
+        desc: '1 tablet with 250ml water — 45 min before gym. GYM DAYS ONLY.',
+        why: 'Thermogenic peak hits during 1 PM workout. Boosts fat oxidation and energy during session.'
+      },
+
+      // ── GYM BLOCK ────────────────────────────────────────────
+      { id: 'gym', time: '13:00', disp: '1:00 PM', type: 'gymblock' },
+
+      // ── POST-WORKOUT WINDOW ──────────────────────────────────
+      {
+        id: 'acv1', time: '15:00', disp: '3:00 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
+        name: 'Apple Cider Vinegar — Dose 1',
+        desc: '1 tbsp ACV in 250ml warm water — 15 min before post-workout meal. Do NOT on empty stomach.',
+        why: 'Lowers blood sugar spike from post-workout meal. Boosts fat metabolism after gym. Activates enzymes.'
+      },
+
+      {
+        id: 'postw', time: '15:15', disp: '3:15 PM', type: 'meal', color: 'blue', icon: '🥛',
+        name: 'Post-Workout Recovery Meal', sub: 'Rebuild muscle — 30 min window',
+        cal: 310, p: 30, c: 30, f: 7, fib: 4,
+        opts: [
+          { id: 'A', label: 'Paneer + Roti', desc: '150g low-fat paneer bhurji (no oil) + 1 multigrain roti + salad. High protein recovery.' },
+          { id: 'B', label: 'Soya + Rice', desc: '70g soya chunks curry + 100g brown rice. Plant protein for muscle repair.' },
+          { id: 'C', label: 'Tofu Stir Fry + Roti', desc: '150g tofu stir-fried with veggies + 1 roti. Light and protein-rich.' },
+        ]
+      },
+
+      // ── AFTERNOON SUPPLEMENTS ────────────────────────────────
+      {
+        id: 'jsa2', time: '16:30', disp: '4:30 PM', type: 'supp', color: 'green', icon: '🌿', tag: 'DIGESTION',
+        name: 'Jeera · Saunf · Ajwain Drink',
+        desc: '½ tsp each in 250ml warm water.',
+        why: 'Keeps digestion active between meals. Prevents bloating before the pre-shift dinner.'
+      },
+
+      {
+        id: 'isa2', time: '16:45', disp: '4:45 PM', type: 'supp', color: 'teal', icon: '🌾', tag: 'FIBER',
+        name: 'Isabgol — Second Dose',
+        desc: '2 tsp isabgol in 300ml warm water — 15 min before dinner.',
+        why: 'Reduces appetite for dinner. Keeps you from overeating before the 6:30 PM night shift.'
+      },
+
+      {
+        id: 'acv2', time: '17:00', disp: '5:00 PM', type: 'supp', color: 'amber', icon: '🍎', tag: 'METABOLISM',
+        name: 'Apple Cider Vinegar — Dose 2',
+        desc: '1 tbsp ACV in 250ml warm water — 15 min before dinner. Do NOT take on empty stomach.',
+        why: 'Lowers blood sugar spike from dinner, suppresses appetite before night shift, activates fat-burning enzymes.'
+      },
+
+      // ── PRE-SHIFT DINNER ─────────────────────────────────────
+      {
+        id: 'dinner', time: '17:15', disp: '5:15 PM', type: 'meal', color: 'orange', icon: '🍱',
+        name: 'Pre-Shift Dinner', sub: 'Lean fuel for 6:30 PM night shift',
+        cal: 400, p: 35, c: 38, f: 10, fib: 8,
+        opts: [
+          { id: 'A', label: 'Dal + Roti + Sabzi', desc: '200ml dal + 2 multigrain roti + 150g sabzi (minimal oil). Classic balanced meal.' },
+          { id: 'B', label: 'Khichdi + Curd', desc: '200g moong dal khichdi + 150g low-fat curd. Easy to digest before shift.' },
+          { id: 'C', label: 'Paneer Wrap', desc: 'Low-fat paneer 120g + 2 multigrain rotis + salad. High protein, filling.' },
+        ]
+      },
+
+      // ── NIGHT SHIFT ──────────────────────────────────────────
+      {
         id: 'brk1', time: '21:30', disp: '9:30 PM', type: 'meal', color: 'amber', icon: '☕',
-        name: 'Office Break 1', sub: 'Keep under 50 cal',
+        name: 'Office Break — Light Snack', sub: 'Keep under 50 cal',
         cal: 50, p: 2, c: 6, f: 2, fib: 2,
         opts: [
-          { id: 'A', label: 'Makhana', desc: 'Green tea + 30g roasted makhana — extremely low calorie, crunchy.' },
-          { id: 'B', label: 'Black Coffee', desc: 'Black coffee (no sugar) + half small apple.' },
-          { id: 'C', label: '✓ Skip It', desc: 'Just hot water + green tea.' },
+          { id: 'A', label: 'Makhana + Green Tea', desc: '30g roasted makhana + 1 cup green tea. Low calorie, crunchy, filling.' },
+          { id: 'B', label: 'Black Coffee', desc: 'Black coffee (no sugar) + half a small apple. Keeps alertness up.' },
+          { id: 'C', label: '✓ Skip It', desc: 'Just hot water + green tea. Best option if not hungry.' },
         ]
       },
 
@@ -2337,204 +2566,128 @@
         id: 'gt', time: '00:00', disp: '12:00 AM', type: 'supp', color: 'teal', icon: '🍵', tag: 'NIGHT-METAB',
         name: 'Green Tea + Lemon',
         desc: '1 cup green tea with lemon — no sugar, no milk.',
-        why: 'Boosts fat oxidation over the remaining shift hours. EGCG activates thermogenesis.'
+        why: 'Boosts fat oxidation over remaining shift hours. EGCG activates thermogenesis during night.'
       },
 
       {
-        id: 'fatb', time: '03:15', disp: '3:15 AM', type: 'supp', color: 'purple', icon: '💊', tag: 'PRE-WORKOUT',
-        name: 'Dr. Morepen Fat Burner',
-        desc: '1 tablet with water — 45 min before the gym. GYM DAYS ONLY.',
-        why: 'Peak thermogenic window during the 4 AM workout for maximum fat oxidation.'
-      },
-
-      {
-        id: 'pwk', time: '03:30', disp: '3:30 AM', type: 'meal', color: 'green', icon: '⚡',
-        name: 'Pre-Workout Fuel', sub: 'Quick Energy Before 4 AM Gym',
-        cal: 116, p: 1, c: 28, f: 0, fib: 3,
+        id: 'slp', time: '02:45', disp: '2:45 AM', type: 'meal', color: 'purple', icon: '🌙',
+        name: 'Post-Shift — Sleep Prep', sub: 'Optional light snack before sleep',
+        cal: 80, p: 5, c: 8, f: 2, fib: 1,
         opts: [
-          { id: 'A', label: 'Banana + Black Coffee', desc: '1 medium banana + 1 cup black coffee. Strongest combo for 4 AM energy.' },
-          { id: 'B', label: 'Dates + Milk', desc: '3 soaked dates + 50ml skim milk. Natural sugar.' },
+          { id: 'A', label: 'Warm Turmeric Milk', desc: '150ml skim milk + ½ tsp turmeric + pinch black pepper. Anti-inflammatory, aids sleep.' },
+          { id: 'B', label: 'Skip (Best)', desc: 'If not hungry — just water. Fasted sleep = more fat burning.' },
         ]
       },
-
-      { id: 'gym', time: '04:00', disp: '4:00 AM', type: 'gymblock' }
     ];
 
     // ============================================================
-    // WORKOUTS
+    // WORKOUTS — Fit Master Gym Plan (101 Silver Harmonium 2, Gota)
     // ============================================================
     const WORKOUTS = {
       upper: {
-        name: 'Upper Body + Arms — Chest · Back · Shoulders + Biceps · Triceps · Forearms',
-        days: 'Monday & Thursday', color: 'blue', cal: 680,
-        tip: 'Chest, back, shoulder compounds FIRST. Then Biceps, Triceps, Forearms. Control the negative — 2 sec down, explode up. EXTREME volume. Progressive overload every week.',
+        name: 'Upper Body + Arms — Chest · Back · Shoulders · Biceps · Triceps',
+        days: 'Monday & Thursday', color: 'blue', cal: 550,
+        tip: 'Exact Fit Master Gym plan. Machines first — compound movements before isolation. Control the rep — 2 sec down, squeeze at top. Arms at the END after chest/back/shoulders. Stay hydrated between sets.',
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Moderate pace · HR 120–130 BPM', t: 'cardio', s: 1 },
-              { n: 'Shoulder Rotation + Arm Circles', d: '2 × 30 sec each direction', t: 'warmup', s: 1 },
-              { n: 'Band Pull-Aparts', d: '2 × 20 reps · Activates rear delts before pressing', t: 'warmup', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Moderate pace · Warm up joints before pressing', t: 'cardio', s: 1 },
             ]
           },
           {
             name: '💪 Chest', exercises: [
-              { n: 'Machine Chest Press', d: '4 sets × 15 reps · Full range · Squeeze at top · 45 sec rest', t: 'chest', s: 4 },
-              { n: 'Machine Pec Fly (Butterfly)', d: '3 sets × 15 reps · Feel stretch at open · Controlled', t: 'chest', s: 3 },
-              { n: 'Incline Chest Press (Machine)', d: '3 sets × 12 reps · Upper chest · Don\'t bounce weight', t: 'chest', s: 3 },
-              { n: 'Decline Bench Press / Machine', d: '3 sets × 12 reps · Lower chest · Full ROM · Slow neg', t: 'chest', s: 3 },
-              { n: 'Cable Crossover', d: '3 sets × 15 reps · High to low · Squeeze hard at bottom', t: 'chest', s: 3 },
-              { n: 'Dumbbell Pullover', d: '3 sets × 12 reps · Lats + lower chest · Full stretch overhead', t: 'chest', s: 3 },
+              { n: 'Machine Chest Press', d: '3 sets × 15-15-15 reps · Full range of motion · Squeeze chest at top', t: 'chest', s: 3 },
+              { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel the stretch at open position · Slow controlled motion', t: 'chest', s: 3 },
             ]
           },
           {
             name: '🏋️ Back', exercises: [
-              { n: 'Machine Lat Pulldown', d: '4 sets × 15 reps · Wide overhand grip · Pull to upper chest', t: 'back', s: 4 },
-              { n: 'Machine Seated Row', d: '3 sets × 15 reps · Elbows close · Full scapular retraction', t: 'back', s: 3 },
-              { n: 'Cable Straight-Arm Pulldown', d: '3 sets × 12 reps · Arms straight · Great lat isolation', t: 'back', s: 3 },
-              { n: 'Assisted Pull-ups', d: '3 sets × 10 reps · Build vertical pulling strength', t: 'back', s: 3 },
-              { n: 'T-Bar Row Machine', d: '3 sets × 12 reps · Core tight · Pull elbows far back', t: 'back', s: 3 },
-              { n: 'Single-Arm Dumbbell Row', d: '3 sets × 10 reps each · Full stretch at bottom', t: 'back', s: 3 },
+              { n: 'Machine Lat Pulldown', d: '3 sets × 15-15-15 reps · Wide overhand grip · Pull bar to upper chest · Elbows down', t: 'back', s: 3 },
+              { n: 'Machine Seated Row', d: '3 sets × 15-15-15 reps · Elbows close to body · Full scapular retraction · Hold 1 sec', t: 'back', s: 3 },
             ]
           },
           {
             name: '🎯 Shoulders', exercises: [
-              { n: 'Machine Shoulder Press', d: '4 sets × 15 reps · Don\'t lock elbows · Full range', t: 'shoulder', s: 4 },
-              { n: 'Dumbbell Lateral Raise', d: '3 sets × 15 reps · Lift to shoulder height only', t: 'shoulder', s: 3 },
-              { n: 'Cable Face Pulls', d: '3 sets × 15 reps · Pull to forehead · Targets rear delts', t: 'shoulder', s: 3 },
-              { n: 'EZ-Bar Upright Row', d: '3 sets × 12 reps · Pull to chest · Elbows high', t: 'shoulder', s: 3 },
-              { n: 'Dumbbell Front Raise', d: '3 sets × 12 reps · Alternate arms · Control lowering', t: 'shoulder', s: 3 },
-              { n: 'Rear Delt Fly Machine', d: '3 sets × 15 reps · Reverse pec deck · Peak squeeze', t: 'shoulder', s: 3 },
-              { n: 'Dumbbell Shrug', d: '3 sets × 20 reps · Hold at top 1 sec · Builds upper traps', t: 'shoulder', s: 3 },
+              { n: 'Machine Shoulder Press', d: '3 sets × 15-15-15 reps · Don\'t lock elbows at top · Full range · Keep core tight', t: 'shoulder', s: 3 },
             ]
           },
           {
-            name: '💪 Biceps', exercises: [
-              { n: 'Barbell / EZ-Bar Curl', d: '4 sets × 15 reps · Dead hang to full curl · No swinging', t: 'biceps', s: 4 },
-              { n: 'Dumbbell Hammer Curl', d: '3 sets × 15 reps · Neutral grip · Targets brachialis', t: 'biceps', s: 3 },
-              { n: 'Incline Dumbbell Curl', d: '3 sets × 12 reps · Deep stretch at bottom', t: 'biceps', s: 3 },
-              { n: 'Spider Curls', d: '3 sets × 12 reps · Chest on incline · Full isolation', t: 'biceps', s: 3 },
-              { n: 'Cable Bicep Curl', d: '3 sets × 15 reps · Constant tension · Elbows fixed', t: 'biceps', s: 3 },
-              { n: 'Preacher Curl', d: '3 sets × 12 reps · Upper arm locked · Full stretch', t: 'biceps', s: 3 },
-              { n: 'Concentration Curl', d: '3 sets × 12 reps each · Elbow on inner thigh · Peak contraction', t: 'biceps', s: 3 },
+            name: '💪 Arms — Biceps', exercises: [
+              { n: 'Dumbbell / Barbell Curl', d: '3 sets × 15 reps · No swinging · Full curl from dead hang · Squeeze at top', t: 'biceps', s: 3 },
+              { n: 'Hammer Curl', d: '3 sets × 12 reps · Neutral grip · Targets brachialis + brachioradialis', t: 'biceps', s: 3 },
+              { n: 'Preacher Curl / Machine Curl', d: '3 sets × 12 reps · Upper arm locked · Full stretch at bottom', t: 'biceps', s: 3 },
             ]
           },
           {
-            name: '💪 Triceps', exercises: [
-              { n: 'Cable Tricep Pushdown (Bar)', d: '4 sets × 15 reps · Elbows locked · Full extension', t: 'triceps', s: 4 },
-              { n: 'Overhead Tricep Extension', d: '3 sets × 12 reps · Full stretch behind head', t: 'triceps', s: 3 },
-              { n: 'Close-Grip Bench Press', d: '3 sets × 12 reps · Shoulder-width · Heavy compound', t: 'triceps', s: 3 },
-              { n: 'Tricep Kickbacks', d: '3 sets × 15 reps · Absolute squeeze at top', t: 'triceps', s: 3 },
-              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12 reps · Body upright · Go deep', t: 'triceps', s: 3 },
-              { n: 'Skull Crushers / Lying Tricep Extension', d: '3 sets × 12 reps · EZ-bar to forehead · Controlled', t: 'triceps', s: 3 },
-            ]
-          },
-          {
-            name: '🖐️ Forearms', exercises: [
-              { n: 'Barbell Wrist Curl (Palms Up)', d: '3 sets × 20 reps · Wrists off bench · Full curl', t: 'forearms', s: 3 },
-              { n: 'Reverse Wrist Curl (Palms Down)', d: '3 sets × 20 reps · Outer forearm + grip', t: 'forearms', s: 3 },
-              { n: 'Cable Reverse Curls', d: '3 sets × 15 reps · Great brachioradialis builder', t: 'forearms', s: 3 },
-              { n: 'Dead Hang (Grip Finisher)', d: '3 holds × 30–45 sec · Bar hang · Builds crushing grip', t: 'forearms', s: 3 },
+            name: '💪 Arms — Triceps', exercises: [
+              { n: 'Cable Tricep Pushdown', d: '3 sets × 15 reps · Elbows fixed at sides · Full extension · Squeeze at bottom', t: 'triceps', s: 3 },
+              { n: 'Overhead Tricep Extension (Dumbbell/Cable)', d: '3 sets × 12 reps · Full stretch behind head · Control lowering', t: 'triceps', s: 3 },
+              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12 reps · Body upright · Go deep · Elbows back', t: 'triceps', s: 3 },
             ]
           },
           {
             name: '🏃 Cardio Finish', exercises: [
-              { n: 'Treadmill Cooldown', d: '10 min · 5–6 km/h · Cool down HR below 100 BPM', t: 'cardio', s: 1 },
+              { n: 'Treadmill', d: '10 min · 5–6 km/h · Cool down · Bring HR below 100 BPM before leaving gym', t: 'cardio', s: 1 },
             ]
           },
         ]
       },
 
       legs: {
-        name: 'Leg Day — Quads · Hamstrings · Glutes · Calves',
-        days: 'Tuesday & Friday', color: 'green', cal: 450,
-        tip: 'Legs = largest muscle group = most calories burned. At 120kg, DEPTH matters more than weight. Protect your knees — don\'t let them cave inward. Drive hips back on every squat pattern.',
+        name: 'Leg Day — Quads · Hamstrings · Calves',
+        days: 'Tuesday & Friday', color: 'green', cal: 420,
+        tip: 'Fit Master Gym leg plan. At your weight, DEPTH matters more than load. Never let knees cave inward on squats. Drive hips back on every squat. Legs = biggest calorie burn of the week.',
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Warm up knee joints and hip flexors', t: 'cardio', s: 1 },
-              { n: 'Bodyweight Squat (Warm-up)', d: '2 × 15 reps · Full depth · No weight · Joint prep', t: 'legs', s: 1 },
-              { n: 'Leg Swings + Hip Circles', d: '2 × 30 sec each leg · Hip flexor activation', t: 'warmup', s: 1 },
-              { n: 'Glute Bridges (Warm-up)', d: '2 × 15 reps · Hip hinge activation before heavy squats', t: 'legs', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Warm up knee joints + hip flexors', t: 'cardio', s: 1 },
             ]
           },
           {
             name: '🦵 Quads', exercises: [
-              { n: 'Squat (Machine/Smith/Barbell)', d: '4 sets × 15 reps · Depth to parallel · Knees over toes', t: 'legs', s: 4 },
-              { n: 'Sumo Squat', d: '3 sets × 15 reps · Wide stance, toes 45° out', t: 'legs', s: 3 },
-              { n: 'Leg Press Machine', d: '4 sets × 15 reps · Feet shoulder-width · Don\'t lock knees', t: 'legs', s: 4 },
-              { n: 'Hack Squat Machine', d: '3 sets × 12 reps · Deep stretch for teardrop quad', t: 'legs', s: 3 },
-              { n: 'Walking Lunges', d: '3 sets × 20 steps · Core engaged · Step deep', t: 'legs', s: 3 },
-              { n: 'Leg Extension Machine', d: '3 sets × 15 reps · Full extension · 2-sec slow lower', t: 'legs', s: 3 },
-              { n: 'Single-Leg Press', d: '3 sets × 10 reps each · Fix muscle imbalances', t: 'legs', s: 3 },
+              { n: 'Squat', d: '3 sets × 15-15-15 reps · Depth to parallel · Knees over toes · Core braced', t: 'legs', s: 3 },
+              { n: 'Sumo Squat', d: '3 sets × 15-15-15 reps · Wide stance · Toes 45° out · Targets inner thigh + glutes', t: 'legs', s: 3 },
+              { n: 'Leg Press Machine', d: '3 sets × 15 reps · Feet shoulder-width · Don\'t lock knees at top · Full range', t: 'legs', s: 3 },
+              { n: 'Leg Extension Machine', d: '3 sets × 15-15-15 reps · Full extension · 2-sec slow lower · Quad isolation', t: 'legs', s: 3 },
             ]
           },
           {
-            name: '🦵 Hamstrings & Glutes', exercises: [
-              { n: 'Leg Curl Machine (Lying/Seated)', d: '4 sets × 15 reps · Full curl · Squeeze · 3-sec neg', t: 'legs', s: 4 },
-              { n: 'Romanian Deadlift (Light)', d: '3 sets × 12 reps · Hinge at hips · Back straight', t: 'legs', s: 3 },
-              { n: 'Bulgarian Split Squats', d: '3 sets × 10 reps per leg · Extreme burn · Unilateral', t: 'legs', s: 3 },
-              { n: 'Glute Kickbacks (Cable/Machine)', d: '3 sets × 15 reps per leg · Isolate glutes', t: 'legs', s: 3 },
-              { n: 'Hip Thrust (Machine/Barbell)', d: '3 sets × 15 reps · Squeeze hard at top · Full extension', t: 'legs', s: 3 },
-              { n: 'Stability Ball Leg Curl', d: '3 sets × 12 reps · Hamstring + core stability', t: 'legs', s: 3 },
+            name: '🦵 Hamstrings', exercises: [
+              { n: 'Leg Curl Machine', d: '3 sets × 15-15-15 reps · Full curl · Squeeze at top · 3-sec negative · Lying or seated', t: 'legs', s: 3 },
             ]
           },
           {
-            name: '↔️ Hip Abductors & Adductors', exercises: [
-              { n: 'Hip Abductor Machine', d: '3 sets × 20 reps · Outer thigh + glute med', t: 'legs', s: 3 },
-              { n: 'Hip Adductor Machine', d: '3 sets × 20 reps · Inner thigh · Smooth motion', t: 'legs', s: 3 },
-            ]
-          },
-          {
-            name: '🦶 Calves', exercises: [
-              { n: 'Standing Calf Raise', d: '4 sets × 20 reps · Full range · Pause at top · 3-sec lower', t: 'legs', s: 4 },
-              { n: 'Seated Calf Raise', d: '3 sets × 20 reps · Targets soleus deeper muscle', t: 'legs', s: 3 },
-              { n: 'Donkey Calf Raise (Machine)', d: '3 sets × 15 reps · Excellent calf mass builder', t: 'legs', s: 3 },
-              { n: 'Single-Leg Calf Raise', d: '3 sets × 15 reps each · Fix calf imbalances', t: 'legs', s: 3 },
-            ]
-          },
-          {
-            name: '🏃 Cardio Finish', exercises: [
-              { n: 'Incline Treadmill Walk', d: '15–20 min · 5–6 km/h at 6–8% incline · Max fat burn', t: 'cardio', s: 1 },
+            name: '🏃 Cardio Training', exercises: [
+              { n: 'Treadmill / Cross Trainer', d: '10–15 min · Moderate pace · Active cool down · Max calorie burn finish', t: 'cardio', s: 1 },
             ]
           },
         ]
       },
 
       abs: {
-        name: 'Abs & Cardio — Core · HIIT · Burn Zone',
-        days: 'Wednesday & Saturday', color: 'amber', cal: 500,
-        tip: 'Maximum calorie-burn day. Double cardio + full ab circuit. Keep HR above 130 BPM for 30+ minutes. This session burns the most fat. No phones during cardio — focus on breathing.',
+        name: 'Abs & Cardio — Core Circuit · Cardio Burn',
+        days: 'Wednesday & Saturday', color: 'amber', cal: 480,
+        tip: 'Fit Master Gym abs plan — double cardio + full core circuit. Keep heart rate up between exercises. No long rest breaks. This is the highest calorie-burn session of the week. Stay focused.',
         sections: [
           {
             name: '🔥 Warm-up + Cardio 1', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase to 70–80% effort', t: 'cardio', s: 1 },
-              { n: 'Treadmill — Brisk Walk/Jog', d: '10 min · 5.5–7 km/h · Incline 4–6%', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target', t: 'cardio', s: 1 },
+              { n: 'Treadmill', d: '10 min · Brisk walk or light jog · 5–6 km/h · Incline 4%', t: 'cardio', s: 1 },
             ]
           },
           {
             name: '🏋️ Core Circuit', exercises: [
-              { n: 'Abs Crunch (Machine/Floor)', d: '4 sets × 20 reps · Exhale at top · Don\'t pull neck', t: 'abs', s: 4 },
-              { n: 'Cable Crunches', d: '3 sets × 20 reps · Kneeling · Rope behind neck · Flex abs hard', t: 'abs', s: 3 },
-              { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · Control the lowering', t: 'abs', s: 3 },
-              { n: 'Ab Wheel Rollouts', d: '3 sets × 10 reps · Core extremely tight · No arching', t: 'abs', s: 3 },
-              { n: 'Side Bench / Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques', t: 'abs', s: 3 },
-              { n: 'Bicycle Crunch', d: '3 sets × 20 reps · Elbow to opposite knee · Slow', t: 'abs', s: 3 },
-              { n: 'Russian Twist', d: '3 sets × 20 reps · Feet raised · Use medicine ball if available', t: 'abs', s: 3 },
-              { n: 'Plank Hold', d: '3 holds × 60–90 sec · Hips neutral · Core tight · Breathe', t: 'abs', s: 3 },
-              { n: 'Mountain Climbers', d: '3 sets × 40 reps · Fast pace · Cardio + core burn', t: 'abs', s: 3 },
-              { n: 'Side Plank', d: '2 holds × 30–45 sec each side · Hip raised · Straight line', t: 'abs', s: 2 },
-              { n: 'Decline Sit-ups', d: '3 sets × 20 reps · Decline bench · Full range', t: 'abs', s: 3 },
-              { n: 'Dead Bug', d: '3 sets × 10 reps each side · Opposite arm + leg · Lumbar flat', t: 'abs', s: 3 },
-              { n: 'Hollow Body Hold', d: '3 holds × 25–30 sec · Lower back flat · Arms overhead', t: 'abs', s: 3 },
-              { n: 'Cable Woodchopper', d: '3 sets × 12 reps each side · Rotational core power', t: 'abs', s: 3 },
-              { n: 'V-Ups', d: '3 sets × 15 reps · Touch toes at top · Core + hip flexors', t: 'abs', s: 3 },
+              { n: 'Abs Crunch', d: '3 sets · Machine or floor · Exhale at top · Don\'t pull neck · 15–20 reps', t: 'abs', s: 3 },
+              { n: 'Leg Raise', d: '3 sets · Lying or hanging · Legs straight · Control the lowering · 15 reps', t: 'abs', s: 3 },
+              { n: 'Side Bench (Oblique Crunch)', d: '3 sets per side · Squeeze obliques hard · 15 reps each side', t: 'abs', s: 3 },
+              { n: 'Cycling Crunch (Bicycle Crunch)', d: '3 sets · Elbow to opposite knee · Slow and controlled · 20 reps', t: 'abs', s: 3 },
+              { n: 'Plank Hold', d: '1–2 min hold · Hips neutral · Core tight · Breathe steadily · Build up over weeks', t: 'abs', s: 3 },
             ]
           },
           {
             name: '🏃 Cardio Finish — Burn Zone', exercises: [
-              { n: 'Cross Trainer (Elliptical)', d: '10 min · Moderate-high effort · Arms active', t: 'cardio', s: 1 },
-              { n: 'Treadmill Final Sprint Intervals', d: '5 min · 30s fast + 30s slow × 5 · Afterburn', t: 'cardio', s: 1 },
-              { n: 'Jump Rope / Skipping', d: '3 rounds × 2 min · Rest 30s · Intense HIIT finisher', t: 'cardio', s: 3 },
+              { n: 'Treadmill', d: '10 min · Moderate-high effort · Push pace in last 3 min', t: 'cardio', s: 1 },
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · Arms active · Full body movement · Great calorie burn', t: 'cardio', s: 1 },
             ]
           },
         ]
@@ -2585,7 +2738,7 @@
     const DNAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const WMETA = { upper: 'Upper+Arms', legs: 'Legs', abs: 'Abs+Cardio', rest: 'Rest' };
     const WCOL = { upper: 'var(--blue)', legs: 'var(--green)', abs: 'var(--amber)', rest: 'var(--t3)' };
-    const MAC = { cal: 1186, p: 81, c: 139, f: 34, fib: 29 };
+    const MAC = { cal: 1117, p: 83, c: 122, f: 30, fib: 18 };
     const COL = { amber: 'var(--amber)', green: 'var(--green)', blue: 'var(--blue)', coral: 'var(--red)', red: 'var(--red)', purple: 'var(--purple)', teal: 'var(--teal)', orange: 'var(--orange)' };
     const BGD = { amber: 'rgba(217,119,6,.1)', green: 'rgba(5,150,105,.1)', blue: 'rgba(37,99,235,.1)', coral: 'rgba(220,38,38,.1)', red: 'rgba(220,38,38,.1)', purple: 'rgba(124,58,237,.1)', teal: 'rgba(13,148,136,.1)', orange: 'rgba(234,88,12,.1)' };
     const TBADGE = {
@@ -2649,31 +2802,6 @@
       }).join('');
     }
 
-    // WATER
-    function buildWater() {
-      const g = $('wgrid'); g.innerHTML = '';
-      for (let i = 0; i < 16; i++) {
-        const el = document.createElement('div'); el.className = 'wg';
-        el.innerHTML = '<div class="wgf"></div>'; el.title = `Glass ${i + 1} (${(i + 1) * 250}ml)`;
-        el.onclick = () => {
-          const all = g.querySelectorAll('.wg');
-          const wasFull = el.classList.contains('on');
-          all.forEach((gl, idx) => gl.classList.toggle('on', !wasFull ? idx <= i : idx < i));
-          S.water = g.querySelectorAll('.wg.on').length;
-          $('wlbl').textContent = `${S.water} / 16 glasses`;
-          $('wml').textContent = `${S.water * 250} ml`;
-        };
-        g.appendChild(el);
-      }
-    }
-
-    // ISABGOL
-    function togIsab(i) {
-      S.isab[i] = !S.isab[i];
-      const b = $('isab' + i); b.classList.toggle('done', S.isab[i]);
-      b.querySelector('.ib-l').textContent = S.isab[i] ? '✓ Done' : `Dose ${i + 1}`;
-    }
-
     // MACROS
     function updMacros() {
       const pct = (v, t) => Math.min(v / t * 100, 100).toFixed(0) + '%';
@@ -2688,21 +2816,6 @@
     }
 
     // DIET INTERACTIONS
-    function togMeal(e, id) {
-      e.stopPropagation();
-      const s = DIET.find(x => x.id === id); if (!s || s.type !== 'meal') return;
-      const btn = $('chk_' + id), card = document.querySelector(`[data-id="${id}"]`);
-      if (S.done.has(id)) {
-        S.done.delete(id); btn.classList.remove('done');
-        if (card) { card.classList.remove('ck', 'anow'); }
-        S.cal -= s.cal; S.p -= s.p; S.c -= s.c; S.f -= s.f; S.fib -= (s.fib || 0);
-      } else {
-        S.done.add(id); btn.classList.add('done');
-        if (card) { card.classList.add('ck'); card.classList.remove('anow'); }
-        S.cal += s.cal; S.p += s.p; S.c += s.c; S.f += s.f; S.fib += (s.fib || 0);
-      }
-      updMacros();
-    }
     function togCard(e, id) {
       const card = document.querySelector(`[data-id="${id}"]`); if (!card) return;
       card.classList.toggle('op');
@@ -2819,7 +2932,7 @@
       const wc = WCOL[wd.color || type] || 'var(--green)';
       return `<div class="wo-header" style="border-color:${wc}33">
     <div class="wo-day" style="color:${wc}">${wd.name}</div>
-    <div class="wo-meta">${wd.days} · Fit Master Gym, Gota · 4:00 AM – 6:00 AM</div>
+    <div class="wo-meta">${wd.days} · Fit Master Gym, Gota · 1:00 PM – 3:00 PM</div>
     <div class="wo-tip">${wd.tip}</div>
     <div class="wo-stats">
       <div><div class="ws-v" id="wod_${type}" style="color:${wc}">${done}/${allEx.length}</div><div class="ws-l">exercises done</div></div>
@@ -2832,7 +2945,342 @@
   ${secHTML}`;
     }
 
-    // SET TRACKING
+    function updWoProg(type) {
+      const exList = getAllEx(type);
+      const done = exList.filter((_, i) => EX[type] && EX[type][i] && EX[type][i].completed).length;
+      const pct = exList.length > 0 ? done / exList.length * 100 : 0;
+      const pb = document.getElementById(`pb_${type}`);
+      const wd = document.getElementById(`wod_${type}`);
+      if (pb) pb.style.width = pct + '%';
+      if (wd) wd.textContent = `${done}/${exList.length}`;
+    }
+
+    // ============================================================
+    // LOCALSTORAGE — JSON STORAGE ENGINE
+    // ============================================================
+    const LS_KEY = 'fitos_v2';
+
+    function todayStr() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function loadStore() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return { weightLog: [], dailyLog: {} };
+    }
+
+    function saveStore(store) {
+      try { localStorage.setItem(LS_KEY, JSON.stringify(store)); } catch(e) {}
+    }
+
+    function getToday(store) {
+      const t = todayStr();
+      if (!store.dailyLog[t]) {
+        store.dailyLog[t] = { meals: [], water: 0, isab: [false,false], exercises: {} };
+      }
+      return store.dailyLog[t];
+    }
+
+    // ============================================================
+    // DAILY RESET — auto resets meals/exercises each new day
+    // ============================================================
+    function checkDailyReset() {
+      const store = loadStore();
+      const today = todayStr();
+      // If no record for today, it auto-creates fresh. EX and S are in-memory only.
+      // Load today's saved state into S and EX
+      const td = getToday(store);
+      // Restore water
+      S.water = td.water || 0;
+      // Restore isab
+      S.isab = td.isab || [false,false];
+      // Restore meals done
+      S.done = new Set(td.meals || []);
+      S.cal = 0; S.p = 0; S.c = 0; S.f = 0; S.fib = 0;
+      S.done.forEach(id => {
+        const item = DIET.find(x => x.id === id);
+        if (item && item.type === 'meal') {
+          S.cal += item.cal; S.p += item.p; S.c += item.c;
+          S.f += item.f; S.fib += (item.fib||0);
+        }
+      });
+      // Restore exercises
+      const savedEx = td.exercises || {};
+      Object.assign(EX, savedEx);
+      saveStore(store);
+    }
+
+    // ============================================================
+    // SAVE HELPERS — called whenever user checks something
+    // ============================================================
+    function persistDaily() {
+      const store = loadStore();
+      const td = getToday(store);
+      td.meals = [...S.done];
+      td.water = S.water;
+      td.isab = S.isab;
+      td.exercises = JSON.parse(JSON.stringify(EX));
+      saveStore(store);
+    }
+
+    // ============================================================
+    // WEIGHT LOGGING
+    // ============================================================
+    function saveWeight() {
+      const inp = document.getElementById('wtInput');
+      const val = parseFloat(inp.value);
+      if (isNaN(val) || val < 30 || val > 300) {
+        inp.style.borderColor = 'var(--red)';
+        setTimeout(() => inp.style.borderColor = '', 1000);
+        return;
+      }
+      const store = loadStore();
+      const today = todayStr();
+      // Remove existing entry for today if any
+      store.weightLog = store.weightLog.filter(e => e.date !== today);
+      store.weightLog.push({ date: today, weight: val });
+      store.weightLog.sort((a,b) => a.date.localeCompare(b.date));
+      saveStore(store);
+      inp.value = '';
+      inp.style.borderColor = 'var(--green)';
+      setTimeout(() => inp.style.borderColor = '', 800);
+      updWeightUI();
+      if (document.getElementById('tc-progress').classList.contains('on')) buildProgressTab();
+    }
+
+    function updWeightUI() {
+      const store = loadStore();
+      const log = store.weightLog;
+      if (!log.length) return;
+      const latest = log[log.length - 1];
+      const start = 120; // starting weight
+      const target = 75;
+      document.getElementById('wtCurVal').textContent = latest.weight + ' kg';
+      const lost = +(start - latest.weight).toFixed(1);
+      document.getElementById('wtLostLbl').textContent = lost > 0 ? `▼ ${lost} kg lost 🔥` : '';
+      const rem = +(latest.weight - target).toFixed(1);
+      document.getElementById('wtRemain').textContent = rem > 0 ? `${rem} kg to go` : '🎯 Goal Reached!';
+    }
+
+    // ============================================================
+    // PROGRESS TAB — full render
+    // ============================================================
+    function buildProgressTab() {
+      const store = loadStore();
+      const log = store.weightLog;
+      const dlog = store.dailyLog;
+      const today = todayStr();
+      const start = 120, target = 75;
+
+      // Stats
+      const latest = log.length ? log[log.length-1].weight : start;
+      const lost = +(start - latest).toFixed(1);
+      const pct = Math.min(+(lost / (start - target) * 100).toFixed(1), 100);
+
+      // Streak calc
+      let streak = 0;
+      const sorted = Object.keys(dlog).sort().reverse();
+      for (const d of sorted) {
+        const dl = dlog[d];
+        const hasMeal = (dl.meals||[]).length >= 2;
+        const hasWater = (dl.water||0) >= 8;
+        if (hasMeal || hasWater) streak++; else break;
+      }
+
+      // Total workouts
+      const totalWo = Object.values(dlog).filter(d => {
+        const ex = d.exercises || {};
+        return Object.values(ex).some(wt => Object.values(wt).some(e => e.completed));
+      }).length;
+
+      // Weight chart (last 10 entries)
+      const chartLog = log.slice(-10);
+      let chartHTML = '';
+      if (chartLog.length >= 2) {
+        const minW = Math.min(...chartLog.map(e=>e.weight)) - 1;
+        const maxW = Math.max(...chartLog.map(e=>e.weight)) + 1;
+        chartHTML = `<div class="wt-chart">
+          <div class="wt-chart-title">⚖️ Weight Trend — Last ${chartLog.length} Logs</div>
+          <div class="wt-bars">
+            ${chartLog.map(e => {
+              const h = Math.max(4, Math.round(((maxW - e.weight)/(maxW-minW))*70 + 10));
+              const shortDate = e.date.slice(5).replace('-','/');
+              return `<div class="wt-bar-col">
+                <div class="wt-bar-val">${e.weight}</div>
+                <div class="wt-bar" style="height:${h}px"></div>
+                <div class="wt-bar-lbl">${shortDate}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      } else {
+        chartHTML = `<div class="wt-chart" style="text-align:center;color:var(--t3);font-size:12px;padding:24px">
+          Log weight on 2+ days to see your trend chart 📊
+        </div>`;
+      }
+
+      // Weight log list
+      const logRows = log.slice().reverse().slice(0, 20).map((e, i, arr) => {
+        const prev = arr[i+1];
+        let delta = '';
+        if (prev) {
+          const diff = +(e.weight - prev.weight).toFixed(1);
+          delta = diff < 0
+            ? `<span class="wlog-delta" style="color:var(--green)">▼ ${Math.abs(diff)}</span>`
+            : diff > 0
+            ? `<span class="wlog-delta" style="color:var(--red)">▲ ${diff}</span>`
+            : `<span class="wlog-delta" style="color:var(--t3)">—</span>`;
+        }
+        return `<div class="wlog-row">
+          <span class="wlog-date">${e.date}</span>
+          <span class="wlog-kg">${e.weight} kg</span>
+          ${delta}
+          <button class="wlog-del" onclick="deleteWeightEntry('${e.date}')" title="Delete">✕</button>
+        </div>`;
+      }).join('');
+
+      // Daily log summary (last 7 days)
+      const last7 = [];
+      for (let i=0; i<7; i++) {
+        const d = new Date(); d.setDate(d.getDate()-i);
+        const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        last7.push(ds);
+      }
+      const dailyRows = last7.map(ds => {
+        const dl = dlog[ds] || {};
+        const meals = (dl.meals||[]).length;
+        const water = dl.water||0;
+        const ex = dl.exercises||{};
+        const exDone = Object.values(ex).reduce((a,wt)=>a+Object.values(wt).filter(e=>e.completed).length,0);
+        const shortDate = ds.slice(5).replace('-','/');
+        const isToday = ds === today;
+        return `<div class="dlog-row">
+          <span class="dlog-date">${shortDate}${isToday?' <b style="color:var(--gold)">Today</b>':''}</span>
+          <div class="dlog-chips">
+            <span class="dlog-chip" style="background:${meals>=2?'rgba(16,185,129,.15)':'rgba(255,255,255,.05)'};color:${meals>=2?'var(--green)':'var(--t3)'}">${meals>=2?'✓':meals} Meals</span>
+            <span class="dlog-chip" style="background:${water>=8?'rgba(75,131,232,.15)':'rgba(255,255,255,.05)'};color:${water>=8?'var(--blue)':'var(--t3)'}">${water>=8?'💧 '+water:'💧 '+water}</span>
+            ${exDone>0?`<span class="dlog-chip" style="background:rgba(212,168,71,.15);color:var(--gold)">💪 ${exDone} Ex</span>`:''}
+          </div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('progressContent').innerHTML = `
+        <div class="prog-grid">
+          <div class="prog-stat">
+            <div class="prog-stat-l">Lost So Far</div>
+            <div class="prog-stat-v" style="color:var(--green)">${lost > 0 ? lost : 0}<span style="font-size:13px;color:var(--t3)"> kg</span></div>
+            <div class="prog-stat-s">${pct}% to goal</div>
+          </div>
+          <div class="prog-stat">
+            <div class="prog-stat-l">Current Weight</div>
+            <div class="prog-stat-v" style="color:var(--gold)">${latest}<span style="font-size:13px;color:var(--t3)"> kg</span></div>
+            <div class="prog-stat-s">${+(latest-target).toFixed(1)} kg to go</div>
+          </div>
+          <div class="prog-stat">
+            <div class="prog-stat-l">Active Streak</div>
+            <div class="prog-stat-v" style="color:var(--amber)">${streak}<span style="font-size:13px;color:var(--t3)"> days</span></div>
+            <div class="prog-stat-s">${streak>=7?'🔥 On fire!':streak>=3?'⚡ Keep going':'🌱 Build it'}</div>
+          </div>
+          <div class="prog-stat">
+            <div class="prog-stat-l">Workouts Done</div>
+            <div class="prog-stat-v" style="color:var(--blue)">${totalWo}</div>
+            <div class="prog-stat-s">Total sessions</div>
+          </div>
+        </div>
+
+        <!-- Overall Progress Bar -->
+        <div class="wt-chart" style="padding:14px 16px;margin-bottom:14px">
+          <div class="wt-chart-title">🎯 Journey Progress — ${start}kg → ${target}kg</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+            <div style="flex:1;height:10px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:5px;transition:width 1s cubic-bezier(.34,1.56,.64,1)"></div>
+            </div>
+            <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0">${pct}%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px">
+            <span>Start: ${start} kg</span><span>Goal: ${target} kg</span>
+          </div>
+        </div>
+
+        ${chartHTML}
+
+        <div class="sh" style="margin-bottom:10px">📅 Last 7 Days — Daily Log</div>
+        ${dailyRows || '<div style="color:var(--t3);font-size:12px;text-align:center;padding:16px">Start checking off meals & water to see your log!</div>'}
+
+        ${log.length ? `
+          <div class="sh" style="margin:14px 0 8px">⚖️ All Weight Entries</div>
+          <div class="wlog-list">${logRows}</div>
+        ` : ''}
+      `;
+    }
+
+    function deleteWeightEntry(date) {
+      const store = loadStore();
+      store.weightLog = store.weightLog.filter(e => e.date !== date);
+      saveStore(store);
+      updWeightUI();
+      buildProgressTab();
+    }
+
+    // ============================================================
+    // PATCHED FUNCTIONS — now also call persistDaily()
+    // ============================================================
+    let curMobTab = 'diet';
+    function togMeal(e, id) {
+      e.stopPropagation();
+      const s = DIET.find(x => x.id === id); if (!s || s.type !== 'meal') return;
+      const btn = $('chk_' + id), card = document.querySelector(`[data-id="${id}"]`);
+      if (S.done.has(id)) {
+        S.done.delete(id); btn.classList.remove('done');
+        if (card) { card.classList.remove('ck', 'anow'); }
+        S.cal -= s.cal; S.p -= s.p; S.c -= s.c; S.f -= s.f; S.fib -= (s.fib || 0);
+      } else {
+        S.done.add(id); btn.classList.add('done');
+        if (card) { card.classList.add('ck'); card.classList.remove('anow'); }
+        S.cal += s.cal; S.p += s.p; S.c += s.c; S.f += s.f; S.fib += (s.fib || 0);
+      }
+      updMacros();
+      persistDaily();
+    }
+
+    function togIsab(i) {
+      S.isab[i] = !S.isab[i];
+      const b = $('isab' + i); b.classList.toggle('done', S.isab[i]);
+      b.querySelector('.ib-l').textContent = S.isab[i] ? '✓ Done' : `Dose ${i + 1}`;
+      persistDaily();
+    }
+
+    // Patched water builder — persists on click
+    function buildWater() {
+      const g = $('wgrid'); g.innerHTML = '';
+      for (let i = 0; i < 16; i++) {
+        const el = document.createElement('div'); el.className = 'wg';
+        el.innerHTML = '<div class="wgf"></div>'; el.title = `Glass ${i + 1} (${(i + 1) * 250}ml)`;
+        el.onclick = () => {
+          const all = g.querySelectorAll('.wg');
+          const wasFull = el.classList.contains('on');
+          all.forEach((gl, idx) => gl.classList.toggle('on', !wasFull ? idx <= i : idx < i));
+          S.water = g.querySelectorAll('.wg.on').length;
+          $('wlbl').textContent = `${S.water} / 16 glasses`;
+          $('wml').textContent = `${S.water * 250} ml`;
+          persistDaily();
+        };
+        g.appendChild(el);
+      }
+      // Restore saved water state
+      if (S.water > 0) {
+        const all = g.querySelectorAll('.wg');
+        all.forEach((gl, idx) => gl.classList.toggle('on', idx < S.water));
+        $('wlbl').textContent = `${S.water} / 16 glasses`;
+        $('wml').textContent = `${S.water * 250} ml`;
+      }
+    }
+
+    // Patched set tracking — persists
     function togSet(type, ei, si) {
       if (!EX[type]) EX[type] = {};
       if (!EX[type][ei]) EX[type][ei] = { done: 0, completed: false };
@@ -2845,7 +3293,9 @@
       const card = document.getElementById(`exc_${type}_${ei}`);
       if (card) card.classList.toggle('done-ex', EX[type][ei].completed);
       updWoProg(type);
+      persistDaily();
     }
+
     function togSingle(type, ei) {
       if (!EX[type]) EX[type] = {};
       if (!EX[type][ei]) EX[type][ei] = { done: 0, completed: false };
@@ -2856,24 +3306,13 @@
       const card = document.getElementById(`exc_${type}_${ei}`);
       if (card) card.classList.toggle('done-ex', EX[type][ei].completed);
       updWoProg(type);
-    }
-    function updWoProg(type) {
-      const exList = getAllEx(type);
-      const done = exList.filter((_, i) => EX[type] && EX[type][i] && EX[type][i].completed).length;
-      const pct = exList.length > 0 ? done / exList.length * 100 : 0;
-      const pb = document.getElementById(`pb_${type}`);
-      const wd = document.getElementById(`wod_${type}`);
-      if (pb) pb.style.width = pct + '%';
-      if (wd) wd.textContent = `${done}/${exList.length}`;
+      persistDaily();
     }
 
     // ============================================================
-    // TAB SWITCHING — handles both desktop tabs + mobile bottom nav
+    // TAB SWITCHING — updated to handle progress tab
     // ============================================================
-    let curMobTab = 'diet';
-
     function showTab(id, btn) {
-      // Desktop tabs (inside main area)
       document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
       document.querySelectorAll('#desktopTabbar .tab').forEach(b => b.classList.remove('on'));
       const tc = document.getElementById('tc-' + id);
@@ -2884,14 +3323,13 @@
           if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('on');
         });
       }
-      // Hide stats panel if visible on desktop
       $('sidebarPanel').classList.remove('mob-visible');
       if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
       if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+      if (id === 'progress') buildProgressTab();
     }
 
     function mobTab(id, btn) {
-      // Sync bottom nav highlight
       document.querySelectorAll('.bntab').forEach(b => b.classList.remove('on'));
       if (btn) btn.classList.add('on');
       curMobTab = id;
@@ -2900,18 +3338,15 @@
       const mainArea = $('mainArea');
 
       if (id === 'stats') {
-        // Show stats panel, hide main content tabs
         panel.classList.add('mob-visible');
         mainArea.style.display = 'none';
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
-      // Show main area, hide stats panel
       panel.classList.remove('mob-visible');
       mainArea.style.display = '';
 
-      // Switch content tabs
       document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
       document.querySelectorAll('#desktopTabbar .tab').forEach(b => b.classList.remove('on'));
       const tc = document.getElementById('tc-' + id);
@@ -2921,16 +3356,35 @@
       });
       if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
       if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+      if (id === 'progress') buildProgressTab();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ============================================================
     // INIT
     // ============================================================
+    checkDailyReset();   // load today's saved state first
     buildWeek();
     buildWater();
     renderDiet();
+    // Re-render done states on meal cards after diet rendered
+    setTimeout(() => {
+      S.done.forEach(id => {
+        const btn = $('chk_' + id);
+        const card = document.querySelector(`[data-id="${id}"]`);
+        if (btn) btn.classList.add('done');
+        if (card) card.classList.add('ck');
+      });
+      // Restore isabgol buttons
+      [0,1].forEach(i => {
+        if (S.isab[i]) {
+          const b = $('isab' + i);
+          if (b) { b.classList.add('done'); b.querySelector('.ib-l').textContent = '✓ Done'; }
+        }
+      });
+    }, 50);
     updDay();
+    updWeightUI();
     tick(); setInterval(tick, 1000);
     hlSlot(); setInterval(hlSlot, 60000);
     setTimeout(updMacros, 300);
