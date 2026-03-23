@@ -2443,7 +2443,9 @@
       -webkit-backdrop-filter: blur(12px);
     }
 
-    .day-strip::before { content: none; }
+    .day-strip::before {
+      content: none;
+    }
 
     .day-strip::-webkit-scrollbar {
       display: none;
@@ -3424,7 +3426,7 @@
           <div class="cbar-wrap">
             <div class="cbar-fill" id="topBar" style="width:0"></div>
           </div>
-          <span class="cv" id="topVal">0/1117</span>
+          <span class="cv" id="topVal">0/1107</span>
         </div>
         <div class="bmi-b">
           <div class="pulse"></div><span>BMI</span><span class="bmi-v">40.1</span>
@@ -3474,7 +3476,7 @@
       </div>
 
       <div>
-        <div class="sh">Daily Calories — 1200 kcal Target</div>
+        <div class="sh">Daily Calories — 1107 kcal Target</div>
         <div class="ring-c">
           <div class="rb-wrap">
             <svg viewBox="0 0 110 110">
@@ -3484,7 +3486,7 @@
             </svg>
             <div class="ri">
               <div class="ri-n" id="calVal">0</div>
-              <div class="ri-l">of 1117 kcal</div>
+              <div class="ri-l">of 1107 kcal</div>
             </div>
           </div>
         </div>
@@ -3609,56 +3611,56 @@
       <div class="tabbar" id="desktopTabbar">
         <button class="tab on" onclick="showTab('diet',this)">🍱 Diet Plan</button>
         <button class="tab" onclick="showTab('workout',this)">💪 Today's Workout</button>
-        <button class="tab" onclick="showTab('rest',this)">🏠 Rest Day</button>
+        <button class="tab" onclick="showTab('allworkouts',this)">📋 All Workouts</button>
         <button class="tab" onclick="showTab('progress',this)">📈 My Progress</button>
       </div>
 
       <div class="tc on" id="tc-diet">
         <!-- Day Schedule Strip -->
         <div class="day-strip-wrap">
-        <div class="day-strip">
-          <div class="ds-node n-job">
-            <div class="ds-ico">💼</div>
-            <div class="ds-time">2:30 AM</div>
-            <div class="ds-lbl">Job Ends</div>
+          <div class="day-strip">
+            <div class="ds-node n-job">
+              <div class="ds-ico">💼</div>
+              <div class="ds-time">2:30 AM</div>
+              <div class="ds-lbl">Job Ends</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-gym">
+              <div class="ds-ico">🌅</div>
+              <div class="ds-time">4–6 AM</div>
+              <div class="ds-lbl">GYM</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-sleep">
+              <div class="ds-ico">😴</div>
+              <div class="ds-time">6:15 AM–12 PM</div>
+              <div class="ds-lbl">SLEEP</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-meal">
+              <div class="ds-ico">🍱</div>
+              <div class="ds-time">1–4 PM</div>
+              <div class="ds-lbl">Meals</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-dinner">
+              <div class="ds-ico">🍽️</div>
+              <div class="ds-time">5:00 PM</div>
+              <div class="ds-lbl">Dinner</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-job">
+              <div class="ds-ico">💼</div>
+              <div class="ds-time">6:30 PM</div>
+              <div class="ds-lbl">Job</div>
+            </div>
+            <div class="ds-conn"></div>
+            <div class="ds-node n-job">
+              <div class="ds-ico">🌙</div>
+              <div class="ds-time">9:30 PM‒12 AM</div>
+              <div class="ds-lbl">Breaks</div>
+            </div>
           </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-gym">
-            <div class="ds-ico">🌅</div>
-            <div class="ds-time">4–6 AM</div>
-            <div class="ds-lbl">GYM</div>
-          </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-sleep">
-            <div class="ds-ico">😴</div>
-            <div class="ds-time">6:15 AM–12 PM</div>
-            <div class="ds-lbl">SLEEP</div>
-          </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-meal">
-            <div class="ds-ico">🍱</div>
-            <div class="ds-time">1–4 PM</div>
-            <div class="ds-lbl">Meals</div>
-          </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-dinner">
-            <div class="ds-ico">🍽️</div>
-            <div class="ds-time">5:00 PM</div>
-            <div class="ds-lbl">Dinner</div>
-          </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-job">
-            <div class="ds-ico">💼</div>
-            <div class="ds-time">6:30 PM</div>
-            <div class="ds-lbl">Job</div>
-          </div>
-          <div class="ds-conn"></div>
-          <div class="ds-node n-job">
-            <div class="ds-ico">🌙</div>
-            <div class="ds-time">9:30 PM‒12 AM</div>
-            <div class="ds-lbl">Breaks</div>
-          </div>
-        </div>
         </div>
 
         <div class="tl" id="dietTL"></div>
@@ -3680,6 +3682,10 @@
         <div id="restcontent"></div>
       </div>
 
+      <div class="tc" id="tc-allworkouts">
+        <div id="allworkoutscontent"></div>
+      </div>
+
       <div class="tc" id="tc-progress">
         <div id="progressContent"></div>
       </div>
@@ -3699,9 +3705,9 @@
       <span class="bnico">💪</span>
       <span class="bnlbl">Workout</span>
     </button>
-    <button class="bntab" id="bn-rest" onclick="mobTab('rest',this)">
-      <span class="bnico">🏠</span>
-      <span class="bnlbl">Rest Day</span>
+    <button class="bntab" id="bn-allworkouts" onclick="mobTab('allworkouts',this)">
+      <span class="bnico">📋</span>
+      <span class="bnlbl">All Plans</span>
     </button>
     <button class="bntab" id="bn-progress" onclick="mobTab('progress',this)">
       <span class="bnico">📈</span>
@@ -3721,12 +3727,12 @@
       // ── POST-SHIFT: PRE-GYM (after returning home 2:30 AM) ──
       {
         id: 'pregym', time: '03:00', disp: '3:00 AM', type: 'meal', color: 'green', icon: '⚡',
-        name: 'Pre-Gym Meal', sub: '🏋️ Gym at 4:00 AM — Light fuel',
-        cal: 200, p: 8, c: 35, f: 4, fib: 3,
-        opts: [
-          { id: 'A', label: 'Banana + Curd', desc: '1 banana + 150g low-fat curd. Best pre-gym combo — natural sugar + protein.' },
-          { id: 'B', label: 'Poha (Light)', desc: '1 cup light poha with veggies. Easy to digest, slow-release carbs.' },
-          { id: 'C', label: 'Dates + Milk', desc: '3 soaked dates + 150ml skim milk. Quick energy for the session.' },
+        name: 'Pre-Gym Meal', sub: '🏋️ Gym at 4:00 AM — 1 Banana + 1 Glass Milk',
+        cal: 190, p: 8, c: 33, f: 4, fib: 3,
+        items: [
+          '1 medium banana — fast carbs for energy, natural sugars for workout fuel',
+          '200ml toned milk (warm) — protein for muscle, calcium, keeps you full during session',
+          'Eat exactly at 3:00 AM — gives 1 hour to digest before gym starts'
         ]
       },
 
@@ -3845,80 +3851,106 @@
     // ============================================================
     const WORKOUTS = {
       upper: {
-        name: 'Upper Body + Arms — Chest · Back · Shoulders · Biceps · Triceps',
-        days: 'Monday & Thursday', color: 'blue', cal: 550,
-        tip: 'Exact Fit Master Gym plan. Machines first — compound movements before isolation. Control the rep — 2 sec down, squeeze at top. Arms at the END after chest/back/shoulders. Stay hydrated between sets.',
+        name: 'Upper Body + Arms — Chest · Back · Shoulders · Biceps · Triceps · Forearms',
+        days: 'Monday & Thursday', color: 'blue', cal: 620,
+        tip: '⚡ STRICT PLAN — No skipping, no chatting between sets. Rest max 60 sec between sets, 90 sec between exercises. Machines first for warm activation, then Dumbbell/Barbell for strength. 2 sec down, 1 sec squeeze, 1 sec up. Arms AFTER chest/back/shoulders ALWAYS.',
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Moderate pace · Warm up joints before pressing', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Target HR 100–120 BPM · Warm joints before pressing', t: 'cardio', s: 1 },
             ]
           },
           {
             name: '💪 Chest', exercises: [
-              { n: 'Machine Chest Press', d: '3 sets × 15-15-15 reps · Full range of motion · Squeeze chest at top', t: 'chest', s: 3 },
-              { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel the stretch at open position · Slow controlled motion', t: 'chest', s: 3 },
+              { n: 'Machine Chest Press', d: '4 sets × 15-12-10-10 reps · Full ROM · Squeeze chest hard at top · 60 sec rest', t: 'chest', s: 4 },
+              { n: 'Incline Dumbbell Press', d: '3 sets × 12-12-10 reps · 30–45° incline · Dumbbells touch at top · Upper chest focus', t: 'chest', s: 3 },
+              { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel full stretch at open position · Slow controlled motion · Exhale on close', t: 'chest', s: 3 },
+              { n: 'Dumbbell Flat Fly', d: '3 sets × 12 reps · Arms slightly bent · Wide arc · Deep stretch · Great chest activation', t: 'chest', s: 3 },
             ]
           },
           {
             name: '🏋️ Back', exercises: [
-              { n: 'Machine Lat Pulldown', d: '3 sets × 15-15-15 reps · Wide overhand grip · Pull bar to upper chest · Elbows down', t: 'back', s: 3 },
-              { n: 'Machine Seated Row', d: '3 sets × 15-15-15 reps · Elbows close to body · Full scapular retraction · Hold 1 sec', t: 'back', s: 3 },
+              { n: 'Machine Lat Pulldown', d: '4 sets × 15-12-12-10 reps · Wide overhand grip · Pull to upper chest · Elbows drive down', t: 'back', s: 4 },
+              { n: 'Barbell / Dumbbell Bent-Over Row', d: '3 sets × 12-12-10 reps · Hinge at hips 45° · Pull to lower chest · Squeeze shoulder blades', t: 'back', s: 3 },
+              { n: 'Machine Seated Row', d: '3 sets × 15-12-12 reps · Elbows close to body · Full scapular retraction · 1 sec pause at peak', t: 'back', s: 3 },
+              { n: 'Machine Reverse Fly (Rear Delt)', d: '3 sets × 15 reps · Arms wide · Rear delt squeeze · Slow 3-sec negative', t: 'back', s: 3 },
             ]
           },
           {
             name: '🎯 Shoulders', exercises: [
-              { n: 'Machine Shoulder Press', d: '3 sets × 15-15-15 reps · Don\'t lock elbows at top · Full range · Keep core tight', t: 'shoulder', s: 3 },
+              { n: 'Machine Shoulder Press', d: '4 sets × 15-12-10-10 reps · Don\'t lock elbows at top · Full ROM · Core braced tight', t: 'shoulder', s: 4 },
+              { n: 'Dumbbell Lateral Raise', d: '3 sets × 15-15-12 reps · Slight forward lean · Raise to shoulder height · Slow lower 3 sec', t: 'shoulder', s: 3 },
+              { n: 'Barbell / Dumbbell Front Raise', d: '3 sets × 12 reps · Alternate arms or together · Raise to eye level · Control the descent', t: 'shoulder', s: 3 },
             ]
           },
           {
             name: '💪 Arms — Biceps', exercises: [
-              { n: 'Dumbbell / Barbell Curl', d: '3 sets × 15 reps · No swinging · Full curl from dead hang · Squeeze at top', t: 'biceps', s: 3 },
-              { n: 'Hammer Curl', d: '3 sets × 12 reps · Neutral grip · Targets brachialis + brachioradialis', t: 'biceps', s: 3 },
-              { n: 'Preacher Curl / Machine Curl', d: '3 sets × 12 reps · Upper arm locked · Full stretch at bottom', t: 'biceps', s: 3 },
+              { n: 'Barbell Curl', d: '4 sets × 15-12-10-10 reps · No swinging · Full curl from dead hang · Squeeze hard at top', t: 'biceps', s: 4 },
+              { n: 'Dumbbell Hammer Curl', d: '3 sets × 12 reps · Neutral grip · Alternating arms · Targets brachialis + forearm', t: 'biceps', s: 3 },
+              { n: 'Preacher Curl / Machine Curl', d: '3 sets × 12-12-10 reps · Upper arm locked on pad · Full stretch at bottom · Slow negative', t: 'biceps', s: 3 },
+              { n: 'Concentration Curl (Dumbbell)', d: '2 sets × 12 reps each arm · Elbow on inner thigh · Peak squeeze · Maximum isolation', t: 'biceps', s: 2 },
             ]
           },
           {
             name: '💪 Arms — Triceps', exercises: [
-              { n: 'Cable Tricep Pushdown', d: '3 sets × 15 reps · Elbows fixed at sides · Full extension · Squeeze at bottom', t: 'triceps', s: 3 },
-              { n: 'Overhead Tricep Extension (Dumbbell/Cable)', d: '3 sets × 12 reps · Full stretch behind head · Control lowering', t: 'triceps', s: 3 },
-              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12 reps · Body upright · Go deep · Elbows back', t: 'triceps', s: 3 },
+              { n: 'Cable Tricep Pushdown (Straight Bar)', d: '4 sets × 15-12-12-10 reps · Elbows pinned at sides · Full extension · Squeeze at bottom', t: 'triceps', s: 4 },
+              { n: 'Overhead Tricep Extension (Dumbbell)', d: '3 sets × 12-12-10 reps · Both hands one dumbbell · Full stretch behind head · Slow lower', t: 'triceps', s: 3 },
+              { n: 'Barbell Skull Crusher', d: '3 sets × 12 reps · Bar to forehead · Elbows up · Controlled descent · Great long head stretch', t: 'triceps', s: 3 },
+              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12-10-10 reps · Body upright · Go deep · Elbows straight back · Lock at top', t: 'triceps', s: 3 },
             ]
           },
           {
-            name: '🏃 Cardio Finish', exercises: [
-              { n: 'Treadmill', d: '10 min · 5–6 km/h · Cool down · Bring HR below 100 BPM before leaving gym', t: 'cardio', s: 1 },
+            name: '💪 Forearms', exercises: [
+              { n: 'Barbell Wrist Curl', d: '3 sets × 20 reps · Seated, wrists over knees · Full ROM · Slow squeeze at top', t: 'forearms', s: 3 },
+              { n: 'Reverse Wrist Curl (Barbell)', d: '3 sets × 15 reps · Overhand grip · Works extensors · Important for grip balance', t: 'forearms', s: 3 },
+            ]
+          },
+          {
+            name: '🏃 Cardio Finish — Burn Zone', exercises: [
+              { n: 'Treadmill', d: '15 min · Start 5 km/h → build to 6.5 km/h · Incline 3–5% · Burn final calories', t: 'cardio', s: 1 },
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Arms FULLY active · Push & pull handles · Full body calorie burn', t: 'cardio', s: 1 },
             ]
           },
         ]
       },
 
       legs: {
-        name: 'Leg Day — Quads · Hamstrings · Calves',
-        days: 'Tuesday & Friday', color: 'green', cal: 420,
-        tip: 'Fit Master Gym leg plan. At your weight, DEPTH matters more than load. Never let knees cave inward on squats. Drive hips back on every squat. Legs = biggest calorie burn of the week.',
+        name: 'Leg Day — Quads · Hamstrings · Glutes · Calves',
+        days: 'Tuesday & Friday', color: 'green', cal: 520,
+        tip: '⚡ STRICT PLAN — Legs = the biggest calorie-burning muscle group. At 120kg, depth matters more than weight. Never let knees cave inward. Drive through heels on squats. 90 sec rest max between sets. Calves at the very end. PUSH HARD.',
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Warm up knee joints + hip flexors', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase resistance · Warm knee joints + hip flexors · Target HR 110 BPM', t: 'cardio', s: 1 },
             ]
           },
           {
             name: '🦵 Quads', exercises: [
-              { n: 'Squat', d: '3 sets × 15-15-15 reps · Depth to parallel · Knees over toes · Core braced', t: 'legs', s: 3 },
-              { n: 'Sumo Squat', d: '3 sets × 15-15-15 reps · Wide stance · Toes 45° out · Targets inner thigh + glutes', t: 'legs', s: 3 },
-              { n: 'Leg Press Machine', d: '3 sets × 15 reps · Feet shoulder-width · Don\'t lock knees at top · Full range', t: 'legs', s: 3 },
-              { n: 'Leg Extension Machine', d: '3 sets × 15-15-15 reps · Full extension · 2-sec slow lower · Quad isolation', t: 'legs', s: 3 },
+              { n: 'Barbell Back Squat / Smith Machine Squat', d: '4 sets × 15-12-10-10 reps · Depth to parallel or below · Core braced · Drive through heels', t: 'legs', s: 4 },
+              { n: 'Sumo Squat (Barbell/Dumbbell)', d: '3 sets × 15 reps · Wide stance · Toes 45° out · Targets inner thigh + glutes deeply', t: 'legs', s: 3 },
+              { n: 'Leg Press Machine', d: '4 sets × 15-15-12-12 reps · Feet shoulder-width · Don\'t lock knees at top · Full deep range', t: 'legs', s: 4 },
+              { n: 'Hack Squat Machine', d: '3 sets × 12 reps · Feet low on plate · Maximum quad stretch · Slow 3-sec descent', t: 'legs', s: 3 },
+              { n: 'Leg Extension Machine', d: '4 sets × 15-15-12-12 reps · Full extension · 2-sec slow lower · Pure quad isolation · Don\'t slam', t: 'legs', s: 4 },
+              { n: 'Dumbbell Lunges', d: '3 sets × 12 reps each leg · Step forward · Knee to 90° · Push back with heel · Glutes + quads', t: 'legs', s: 3 },
             ]
           },
           {
-            name: '🦵 Hamstrings', exercises: [
-              { n: 'Leg Curl Machine', d: '3 sets × 15-15-15 reps · Full curl · Squeeze at top · 3-sec negative · Lying or seated', t: 'legs', s: 3 },
+            name: '🦵 Hamstrings + Glutes', exercises: [
+              { n: 'Leg Curl Machine (Lying/Seated)', d: '4 sets × 15-12-12-10 reps · Full curl · Squeeze at top · 3-sec slow negative · Don\'t cheat', t: 'legs', s: 4 },
+              { n: 'Romanian Deadlift (Barbell/Dumbbell)', d: '3 sets × 12 reps · Soft knees · Hinge hips back · Feel hamstring stretch · Bar close to shins', t: 'legs', s: 3 },
+              { n: 'Good Mornings (Barbell)', d: '3 sets × 12 reps · Light weight · Bar on upper back · Hip hinge · Deep hamstring stretch', t: 'legs', s: 3 },
             ]
           },
           {
-            name: '🏃 Cardio Training', exercises: [
-              { n: 'Treadmill / Cross Trainer', d: '10–15 min · Moderate pace · Active cool down · Max calorie burn finish', t: 'cardio', s: 1 },
+            name: '🦶 Calves', exercises: [
+              { n: 'Standing Calf Raise (Machine/Barbell)', d: '4 sets × 20-20-20-20 reps · Full ROM · Pause 1 sec at top · Slow 3-sec lower · Burn!', t: 'legs', s: 4 },
+              { n: 'Seated Calf Raise Machine', d: '3 sets × 20 reps · Different angle — soleus focus · Slow and controlled · Full stretch at bottom', t: 'legs', s: 3 },
+            ]
+          },
+          {
+            name: '🏃 Cardio Finish — Burn Zone', exercises: [
+              { n: 'Treadmill', d: '15 min · Incline 4–6% · Speed 5–6 km/h · Legs already tired = max fat burn', t: 'cardio', s: 1 },
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Push through fatigue · Arms active · Full body finish', t: 'cardio', s: 1 },
             ]
           },
         ]
@@ -3926,28 +3958,32 @@
 
       abs: {
         name: 'Abs & Cardio — Core Circuit · Cardio Burn',
-        days: 'Wednesday & Saturday', color: 'amber', cal: 480,
-        tip: 'Fit Master Gym abs plan — double cardio + full core circuit. Keep heart rate up between exercises. No long rest breaks. This is the highest calorie-burn session of the week. Stay focused.',
+        days: 'Wednesday & Saturday', color: 'amber', cal: 550,
+        tip: '⚡ STRICT PLAN — Maximum calorie session. No rest longer than 45 sec between core exercises. Heart rate STAYS elevated throughout. Double cardio — treadmill AND cross trainer both mandatory. This is the #1 fat-burning day. ZERO excuses.',
         sections: [
           {
             name: '🔥 Warm-up + Cardio 1', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target', t: 'cardio', s: 1 },
-              { n: 'Treadmill', d: '10 min · Brisk walk or light jog · 5–6 km/h · Incline 4%', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target · Get the blood moving', t: 'cardio', s: 1 },
+              { n: 'Treadmill — Warm Cardio', d: '10 min · Brisk walk 5.5 km/h · Incline 4% · Start melting fat early', t: 'cardio', s: 1 },
             ]
           },
           {
-            name: '🏋️ Core Circuit', exercises: [
-              { n: 'Abs Crunch', d: '3 sets · Machine or floor · Exhale at top · Don\'t pull neck · 15–20 reps', t: 'abs', s: 3 },
-              { n: 'Leg Raise', d: '3 sets · Lying or hanging · Legs straight · Control the lowering · 15 reps', t: 'abs', s: 3 },
-              { n: 'Side Bench (Oblique Crunch)', d: '3 sets per side · Squeeze obliques hard · 15 reps each side', t: 'abs', s: 3 },
-              { n: 'Cycling Crunch (Bicycle Crunch)', d: '3 sets · Elbow to opposite knee · Slow and controlled · 20 reps', t: 'abs', s: 3 },
-              { n: 'Plank Hold', d: '1–2 min hold · Hips neutral · Core tight · Breathe steadily · Build up over weeks', t: 'abs', s: 3 },
+            name: '🏋️ Core Circuit — Machine + Floor', exercises: [
+              { n: 'Cable Crunch (Machine)', d: '4 sets × 15-15-12-12 reps · Rope attachment · Round spine forward · Exhale fully · Squeeze hard', t: 'abs', s: 4 },
+              { n: 'Abs Crunch (Floor/Bench)', d: '3 sets × 20 reps · Exhale at top · Don\'t pull neck · Slow controlled · Feel the burn', t: 'abs', s: 3 },
+              { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · Hang from bar · Legs up controlled · No swinging · Lower slowly', t: 'abs', s: 3 },
+              { n: 'Lying Leg Raise (Flat Bench)', d: '3 sets × 15 reps · Lower back pressed down · Legs straight · 3-sec slow lower · Lower abs', t: 'abs', s: 3 },
+              { n: 'Russian Twist (Dumbbell)', d: '3 sets × 20 reps (10 each side) · Light dumbbell · Feet up · Full rotation · Oblique fire', t: 'abs', s: 3 },
+              { n: 'Side Bench Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques hard · Controlled · Side of waist', t: 'abs', s: 3 },
+              { n: 'Bicycle Crunch (Cycling Crunch)', d: '3 sets × 20 reps · Elbow to opposite knee · SLOW pace · Full rotation · No rushing', t: 'abs', s: 3 },
+              { n: 'Ab Wheel Rollout', d: '3 sets × 10-12 reps · From knees if needed · Full extension · Core TIGHT · Don\'t let back sag', t: 'abs', s: 3 },
+              { n: 'Plank Hold', d: '3 holds × 60–90 sec · Hips neutral · Core like steel · Breathe steadily · Build to 2 min', t: 'abs', s: 3 },
             ]
           },
           {
-            name: '🏃 Cardio Finish — Burn Zone', exercises: [
-              { n: 'Treadmill', d: '10 min · Moderate-high effort · Push pace in last 3 min', t: 'cardio', s: 1 },
-              { n: 'Cross Trainer (Elliptical)', d: '10 min · Arms active · Full body movement · Great calorie burn', t: 'cardio', s: 1 },
+            name: '🏃 Cardio Finish — BOTH Mandatory', exercises: [
+              { n: 'Treadmill', d: '15 min · 5.5–7 km/h · Incline 3–5% · Push pace in last 5 min · Maximum fat burn', t: 'cardio', s: 1 },
+              { n: 'Cross Trainer (Elliptical)', d: '15 min · High resistance · Arms FULLY active · Push & pull · Great calorie burn to finish', t: 'cardio', s: 1 },
             ]
           },
         ]
@@ -3996,9 +4032,9 @@
     // CONFIG
     const DAYMAP = { 0: 'rest', 1: 'upper', 2: 'legs', 3: 'abs', 4: 'upper', 5: 'legs', 6: 'abs' };
     const DNAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const WMETA = { upper: 'Upper+Arms', legs: 'Legs', abs: 'Abs+Cardio', rest: 'Rest' };
+    const WMETA = { upper: 'Upper+Arms', legs: 'Legs+Calves', abs: 'Abs+Cardio', rest: 'Rest Day 🌙' };
     const WCOL = { upper: 'var(--blue)', legs: 'var(--green)', abs: 'var(--amber)', rest: 'var(--t3)' };
-    const MAC = { cal: 1117, p: 73, c: 122, f: 30, fib: 19 };
+    const MAC = { cal: 1107, p: 73, c: 120, f: 30, fib: 19 };
     const COL = { amber: 'var(--amber)', green: 'var(--green)', blue: 'var(--blue)', coral: 'var(--red)', red: 'var(--red)', purple: 'var(--purple)', teal: 'var(--teal)', orange: 'var(--orange)' };
     const BGD = { amber: 'rgba(217,119,6,.1)', green: 'rgba(5,150,105,.1)', blue: 'rgba(37,99,235,.1)', coral: 'rgba(220,38,38,.1)', red: 'rgba(220,38,38,.1)', purple: 'rgba(124,58,237,.1)', teal: 'rgba(13,148,136,.1)', orange: 'rgba(234,88,12,.1)' };
     const TBADGE = {
@@ -4215,6 +4251,66 @@
       const pct = allEx.length > 0 ? done / allEx.length * 100 : 0;
       const totalSets = allEx.reduce((a, e) => a + (e.s || 1), 0);
       const wc = WCOL[wd.color || type] || 'var(--green)';
+
+      // Build breakdown for gym days
+      let breakdownHTML = '';
+      if (!isRest) {
+        const typeColors = {
+          cardio: { c: 'var(--teal)', bg: 'rgba(13,148,136,.12)', icon: '🏃' },
+          chest: { c: 'var(--blue)', bg: 'rgba(37,99,235,.12)', icon: '💪' },
+          back: { c: 'var(--blue)', bg: 'rgba(37,99,235,.12)', icon: '🏋️' },
+          shoulder: { c: 'var(--purple)', bg: 'rgba(124,58,237,.12)', icon: '🎯' },
+          biceps: { c: 'var(--orange)', bg: 'rgba(234,88,12,.12)', icon: '💪' },
+          triceps: { c: 'var(--red)', bg: 'rgba(220,38,38,.12)', icon: '💪' },
+          forearms: { c: 'var(--amber)', bg: 'rgba(217,119,6,.12)', icon: '✊' },
+          legs: { c: 'var(--green)', bg: 'rgba(5,150,105,.12)', icon: '🦵' },
+          abs: { c: 'var(--amber)', bg: 'rgba(217,119,6,.12)', icon: '🎯' },
+        };
+        const typeLabels = {
+          cardio: 'Cardio', chest: 'Chest', back: 'Back', shoulder: 'Shoulders',
+          biceps: 'Biceps', triceps: 'Triceps', forearms: 'Forearms',
+          legs: 'Legs/Glutes', abs: 'Abs/Core'
+        };
+        const counts = {}, setCounts = {};
+        allEx.forEach(ex => {
+          const t = ex.t || 'other';
+          counts[t] = (counts[t] || 0) + 1;
+          setCounts[t] = (setCounts[t] || 0) + (ex.s || 1);
+        });
+        const machines = allEx.filter(e => e.n.includes('Machine') || e.n.includes('Cable') || e.n.includes('Treadmill') || e.n.includes('Cross Trainer') || e.n.includes('Cycling') || e.n.includes('Elliptical')).length;
+        const dumbbells = allEx.filter(e => e.n.toLowerCase().includes('dumbbell') || e.n.toLowerCase().includes('hammer curl')).length;
+        const barbells = allEx.filter(e => e.n.toLowerCase().includes('barbell')).length;
+        const bodyweight = allEx.filter(e => ['Plank','Bicycle Crunch','Hanging','Lying Leg','Russian Twist','Good Morning','Ab Wheel'].some(kw => e.n.includes(kw))).length;
+        const chips = Object.entries(counts).map(([t, cnt]) => {
+          const tc = typeColors[t] || { c: 'var(--t2)', bg: 'rgba(255,255,255,.06)', icon: '⚡' };
+          const lbl = typeLabels[t] || t;
+          return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;flex:1;min-width:130px">
+            <div style="font-size:18px">${tc.icon}</div>
+            <div><div style="font-size:12px;font-weight:800;color:${tc.c}">${lbl}</div>
+            <div style="font-size:10.5px;color:var(--t3);margin-top:1px">${cnt} ex · <span style="color:${tc.c};font-weight:700">${setCounts[t]} sets</span></div></div>
+          </div>`;
+        }).join('');
+        breakdownHTML = `
+        <div style="border-top:1px solid rgba(255,255,255,.06);margin-top:14px;padding-top:14px">
+          <div style="font-size:10px;font-weight:800;letter-spacing:.09em;color:${wc};text-transform:uppercase;margin-bottom:10px">📊 Exercise Breakdown</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(75,131,232,.1);border:1px solid rgba(75,131,232,.25);border-radius:20px;padding:5px 11px">
+              <span>🏋️</span><span style="font-size:11px;font-weight:700;color:var(--blue)">Machines</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--blue);margin-left:3px">${machines}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:20px;padding:5px 11px">
+              <span>🔵</span><span style="font-size:11px;font-weight:700;color:var(--purple)">Dumbbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--purple);margin-left:3px">${dumbbells}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.25);border-radius:20px;padding:5px 11px">
+              <span>🔴</span><span style="font-size:11px;font-weight:700;color:var(--red)">Barbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--red);margin-left:3px">${barbells}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:20px;padding:5px 11px">
+              <span>🤸</span><span style="font-size:11px;font-weight:700;color:var(--green)">Bodyweight</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--green);margin-left:3px">${bodyweight}</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px">${chips}</div>
+        </div>`;
+      }
+
       return `<div class="wo-header" style="border-color:${wc}33;background:linear-gradient(135deg,rgba(7,15,30,.95),${wc}08)">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
       <div class="wo-day" style="color:${wc};flex:1">${wd.name}</div>
@@ -4228,6 +4324,7 @@
       <div><div class="ws-v" style="color:var(--red)">~${wd.cal}</div><div class="ws-l">cal burned</div></div>
       <div><div class="ws-v" style="color:var(--t2)">${Math.round(pct)}%</div><div class="ws-l">complete</div></div>
     </div>
+    ${breakdownHTML}
   </div>
   <div class="progbar"><div class="progfill" id="pb_${type}" style="width:${pct}%;background:linear-gradient(90deg,${wc},${wc}99)"></div></div>
   ${secHTML}`;
@@ -4244,8 +4341,146 @@
     }
 
     // ============================================================
-    // LOCALSTORAGE — JSON STORAGE ENGINE
+    // ALL WORKOUTS OVERVIEW
     // ============================================================
+    function buildAllWorkouts() {
+      const days = [
+        { day: 'Monday', type: 'upper' }, { day: 'Tuesday', type: 'legs' },
+        { day: 'Wednesday', type: 'abs' }, { day: 'Thursday', type: 'upper' },
+        { day: 'Friday', type: 'legs' }, { day: 'Saturday', type: 'abs' },
+        { day: 'Sunday', type: 'rest' }
+      ];
+      const todayIdx = new Date().getDay(); // 0=Sun
+      const dayOrder = [1,2,3,4,5,6,0]; // Mon-Sun
+      const todayDayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][todayIdx];
+
+      // Grand totals across all unique workout types
+      const types = ['upper','legs','abs'];
+      let grandEx = 0, grandSets = 0, grandCal = 0;
+      types.forEach(t => {
+        const ex = getAllEx(t);
+        grandEx += ex.length;
+        grandSets += ex.reduce((a,e) => a + (e.s||1), 0);
+        grandCal += WORKOUTS[t].cal;
+      });
+      const weekCal = WORKOUTS.upper.cal * 2 + WORKOUTS.legs.cal * 2 + WORKOUTS.abs.cal * 2;
+
+      let html = `
+      <div style="padding:0 0 16px">
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg,rgba(212,168,71,.1),rgba(7,15,30,.95));border:1px solid rgba(212,168,71,.25);border-radius:16px;padding:18px;margin-bottom:16px">
+          <div style="font-family:'Raleway',sans-serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:-.3px;margin-bottom:4px">📋 Full Workout Plan</div>
+          <div style="font-size:12px;color:var(--t2);margin-bottom:14px">Fit Master Gym, Gota · 4:00 AM – 6:00 AM · 6 days/week</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+              <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--gold)">6</div>
+              <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">GYM DAYS</div>
+            </div>
+            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+              <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--blue)">${grandEx}</div>
+              <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">UNIQUE EX</div>
+            </div>
+            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+              <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--amber)">${grandSets}</div>
+              <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">SETS/PLAN</div>
+            </div>
+            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+              <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--red)">~${weekCal}</div>
+              <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">CAL/WEEK</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Schedule Strip -->
+        <div style="font-size:10px;font-weight:800;letter-spacing:.09em;color:var(--t3);text-transform:uppercase;margin-bottom:8px">📅 Weekly Schedule</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px">
+          ${dayOrder.map(di => {
+            const dname = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][di];
+            const dtype = {1:'upper',2:'legs',3:'abs',4:'upper',5:'legs',6:'abs',0:'rest'}[di];
+            const wc = WCOL[dtype] || 'var(--t3)';
+            const isToday = di === todayIdx;
+            const icons = {upper:'💪',legs:'🦵',abs:'🎯',rest:'😴'};
+            return `<div style="text-align:center;padding:8px 4px;background:${isToday ? wc+'22' : 'rgba(255,255,255,.03)'};border:1px solid ${isToday ? wc+'66' : 'rgba(255,255,255,.06)'};border-radius:10px${isToday ? ';box-shadow:0 0 12px '+wc+'33' : ''}">
+              <div style="font-size:16px;margin-bottom:2px">${icons[dtype]}</div>
+              <div style="font-size:10px;font-weight:800;color:${isToday ? wc : 'var(--t2)'}">${dname}</div>
+              <div style="font-size:9px;color:${isToday ? wc : 'var(--t3)'};margin-top:1px;font-weight:700">${dtype === 'rest' ? 'Rest' : dtype === 'upper' ? 'Upper' : dtype === 'legs' ? 'Legs' : 'Abs'}</div>
+              ${isToday ? `<div style="width:4px;height:4px;background:${wc};border-radius:50%;margin:4px auto 0"></div>` : ''}
+            </div>`;
+          }).join('')}
+        </div>
+
+        <!-- Each workout type card -->
+        ${types.map(type => {
+          const wd = WORKOUTS[type];
+          const wc = WCOL[type];
+          const allEx = getAllEx(type);
+          const totalSets = allEx.reduce((a,e) => a+(e.s||1), 0);
+          const counts = {}, setCounts = {};
+          allEx.forEach(ex => {
+            const t = ex.t || 'other';
+            counts[t] = (counts[t]||0)+1;
+            setCounts[t] = (setCounts[t]||0)+(ex.s||1);
+          });
+          const typeIcons = {cardio:'🏃',chest:'💪',back:'🏋️',shoulder:'🎯',biceps:'💪',triceps:'💪',forearms:'✊',legs:'🦵',abs:'🎯'};
+          const typeLabels = {cardio:'Cardio',chest:'Chest',back:'Back',shoulder:'Shoulders',biceps:'Biceps',triceps:'Triceps',forearms:'Forearms',legs:'Legs',abs:'Abs'};
+          const typeTextColors = {cardio:'var(--teal)',chest:'var(--blue)',back:'var(--blue)',shoulder:'var(--purple)',biceps:'var(--orange)',triceps:'var(--red)',forearms:'var(--amber)',legs:'var(--green)',abs:'var(--amber)'};
+
+          const exRows = wd.sections.map(sec => {
+            const exList = sec.exercises.map(ex => {
+              const tb = TBADGE[ex.t] || 'color:var(--t2);background:rgba(0,0,0,.06)';
+              return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="font-family:var(--mono);font-size:10px;color:var(--t3);padding-top:2px;flex-shrink:0;width:16px">${allEx.indexOf(ex)+1 >= 0 ? '' : ''}</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:12.5px;font-weight:700;color:var(--t)">${ex.n}</div>
+                  <div style="font-size:11px;color:var(--t3);margin-top:1px;line-height:1.45">${ex.d}</div>
+                </div>
+                <div style="flex-shrink:0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;${tb};white-space:nowrap">${ex.t}</div>
+              </div>`;
+            }).join('');
+            return `<div style="margin-bottom:6px">
+              <div style="font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--t2);text-transform:uppercase;padding:8px 12px 4px;background:rgba(255,255,255,.02)">${sec.name}</div>
+              ${exList}
+            </div>`;
+          }).join('');
+
+          const muscleChips = Object.entries(counts).map(([t,cnt]) => {
+            const tc = typeTextColors[t] || 'var(--t2)';
+            const ico = typeIcons[t] || '⚡';
+            const lbl = typeLabels[t] || t;
+            return `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:700;color:${tc}">${ico} ${lbl} <span style="color:var(--t3);font-weight:600">×${cnt}</span></div>`;
+          }).join('');
+
+          return `<div style="background:linear-gradient(135deg,rgba(7,15,30,.97),${wc}09);border:1px solid ${wc}30;border-radius:16px;margin-bottom:14px;overflow:hidden">
+            <!-- Card Header -->
+            <div style="padding:14px 16px;border-bottom:1px solid ${wc}20">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                <div style="font-size:16px;font-weight:900;color:${wc};flex:1;line-height:1.3">${wd.name}</div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t2);margin-bottom:10px">${wd.days} · ⏰ 4:00 AM – 6:00 AM · 🔥 ~${wd.cal} cal</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${muscleChips}</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                  <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:${wc}">${allEx.length}</div>
+                  <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">EXERCISES</div>
+                </div>
+                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                  <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:var(--amber)">${totalSets}</div>
+                  <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">TOTAL SETS</div>
+                </div>
+                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                  <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:var(--red)">~${wd.cal}</div>
+                  <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">CAL BURN</div>
+                </div>
+              </div>
+            </div>
+            <!-- Exercise List -->
+            <div>${exRows}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+
+      document.getElementById('allworkoutscontent').innerHTML = html;
+    }
     const LS_KEY = 'fitos_v2';
 
     function todayStr() {
@@ -4612,8 +4847,12 @@
         });
       }
       $('sidebarPanel').classList.remove('mob-visible');
-      if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
+      if (id === 'workout') {
+        const wt = todayWT();
+        $('wocontent').innerHTML = wt === 'rest' ? buildWorkoutHTML('rest') : buildWorkoutHTML(wt);
+      }
       if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+      if (id === 'allworkouts') buildAllWorkouts();
       if (id === 'progress') buildProgressTab();
     }
 
@@ -4642,8 +4881,12 @@
       document.querySelectorAll('#desktopTabbar .tab').forEach(b => {
         if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('on');
       });
-      if (id === 'workout') $('wocontent').innerHTML = buildWorkoutHTML(todayWT());
+      if (id === 'workout') {
+        const wt = todayWT();
+        $('wocontent').innerHTML = wt === 'rest' ? buildWorkoutHTML('rest') : buildWorkoutHTML(wt);
+      }
       if (id === 'rest') $('restcontent').innerHTML = buildWorkoutHTML('rest');
+      if (id === 'allworkouts') buildAllWorkouts();
       if (id === 'progress') buildProgressTab();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
