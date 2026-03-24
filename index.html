@@ -23,8 +23,6 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
     }
     
     /* Global transition settings */
@@ -86,19 +84,19 @@
       --r-xl: 24px;
 
       /* Shadows */
-      --shadow-card: 0 1px 3px rgba(180,140,20,.06), 0 4px 16px rgba(120,90,10,.07);
-      --shadow-card-hover: 0 6px 28px rgba(180,140,20,.13), 0 2px 8px rgba(120,90,10,.08);
-      --shadow-topbar: 0 1px 0 rgba(180,140,20,.1), 0 2px 20px rgba(120,90,10,.06);
+      --shadow-card: 0 2px 8px rgba(180,140,20,.04), 0 8px 24px rgba(120,90,10,.06);
+      --shadow-card-hover: 0 8px 32px rgba(180,140,20,.12), 0 4px 12px rgba(120,90,10,.08);
+      --shadow-topbar: 0 1px 0 rgba(180,140,20,.06), 0 4px 24px rgba(120,90,10,.05);
 
-      /* Fluid type scale */
-      --fs-2xs: clamp(9px,   1.6vw, 10.5px);
-      --fs-xs:  clamp(10.5px,1.9vw, 12px);
-      --fs-sm:  clamp(12px,  2.2vw, 13.5px);
-      --fs-md:  clamp(13.5px,2.5vw, 15px);
-      --fs-lg:  clamp(15px,  2.9vw, 17px);
-      --fs-xl:  clamp(18px,  3.5vw, 21px);
-      --fs-2xl: clamp(22px,  4.2vw, 27px);
-      --fs-3xl: clamp(26px,  5vw,   32px);
+      /* Fluid type scale — bumped mins for ultimate premium legibility */
+      --fs-2xs: clamp(11.5px, 2vw, 12.5px);
+      --fs-xs:  clamp(13px,   2.2vw, 14.5px);
+      --fs-sm:  clamp(14.5px, 2.5vw, 16px);
+      --fs-md:  clamp(16px,   2.8vw, 18px);
+      --fs-lg:  clamp(18px,   3.2vw, 21px);
+      --fs-xl:  clamp(21px,   3.8vw, 24px);
+      --fs-2xl: clamp(26px,   4.6vw, 32px);
+      --fs-3xl: clamp(30px,   5.5vw, 38px);
     }
 
     html {
@@ -113,8 +111,8 @@
       background: var(--bg);
       color: var(--t);
       min-height: 100vh;
-      font-size: clamp(14px, 1.8vw, 16px);
-      line-height: 1.7;
+      font-size: clamp(16px, 2vw, 18px); /* slightly larger base for premium feel */
+      line-height: 1.75;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -312,13 +310,13 @@
     }
 
     .tab {
-      padding: 14px 13px;
-      font-size: 12px;
-      font-weight: 700;
+      padding: 16px 14px;
+      font-size: 14px;
+      font-weight: 800;
       color: var(--t2);
       cursor: pointer;
       border: none;
-      border-bottom: 2.5px solid transparent;
+      border-bottom: 3px solid transparent;
       background: none;
       font-family: var(--font);
       transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -374,28 +372,28 @@
     }
 
     .xbadge {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 800;
       letter-spacing: .08em;
       text-transform: uppercase;
       background: var(--rdd);
       color: var(--red);
       border: 1px solid rgba(220, 38, 38, .25);
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 20px;
       flex-shrink: 0;
       animation: badgePulse 2s infinite ease-in-out;
     }
 
     .vbadge {
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 800;
       letter-spacing: .06em;
       text-transform: uppercase;
       background: var(--gd);
       color: var(--green);
       border: 1px solid rgba(5, 150, 105, .25);
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 20px;
       flex-shrink: 0;
     }
@@ -531,12 +529,12 @@
     }
 
     .sh {
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(12px, 2vw, 13.5px);
       letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--t3);
       font-weight: 800;
-      margin-bottom: 7px;
+      margin-bottom: 10px;
     }
 
     /* PROFILE */
@@ -580,7 +578,7 @@
     }
 
     .pc-l {
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(10px, 1.8vw, 11.5px);
       color: var(--t3);
       font-weight: 800;
       letter-spacing: .06em;
@@ -590,13 +588,13 @@
 
     .pc-v {
       font-family: var(--mono);
-      font-size: clamp(16px, 3.5vw, 20px);
-      font-weight: 700;
+      font-size: clamp(18px, 4vw, 24px);
+      font-weight: 800;
       line-height: 1
     }
 
     .pc-s {
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(10px, 1.8vw, 11.5px);
       color: var(--t3);
       margin-top: 2px
     }
@@ -675,14 +673,14 @@
 
     .ri-n {
       font-family: var(--mono);
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--gold);
       line-height: 1
     }
 
     .ri-l {
-      font-size: 9px;
+      font-size: 11px;
       color: var(--t3);
       margin-top: 2px
     }
@@ -704,9 +702,9 @@
     }
 
     .ml2 {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
-      width: 42px;
+      width: 44px;
       flex-shrink: 0
     }
 
@@ -726,9 +724,9 @@
 
     .mv2 {
       font-family: var(--mono);
-      font-size: 9.5px;
+      font-size: 11px;
       color: var(--t2);
-      width: 46px;
+      width: 48px;
       text-align: right;
       flex-shrink: 0
     }
@@ -788,14 +786,14 @@
     .wrow2 {
       display: flex;
       justify-content: space-between;
-      font-size: 10px;
+      font-size: 12px;
       color: var(--t3);
       margin-top: 5px
     }
 
     .wcnt {
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--blue)
     }
@@ -850,7 +848,7 @@
     }
 
     .ib-l {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--t2);
       transition: color .2s
@@ -861,13 +859,13 @@
     }
 
     .ib-t {
-      font-size: 9px;
+      font-size: 11px;
       color: var(--t3);
       margin-top: 1px
     }
 
     .isab-note {
-      font-size: 9.5px;
+      font-size: 12px;
       color: var(--t2);
       font-style: italic;
       line-height: 1.5;
@@ -948,7 +946,7 @@
     }
 
     .wdn {
-      font-size: 7.5px;
+      font-size: 10px;
       color: var(--t3);
       font-weight: 800;
       text-transform: uppercase;
@@ -956,7 +954,7 @@
     }
 
     .wdt {
-      font-size: 7.5px;
+      font-size: 10px;
       font-weight: 700;
       line-height: 1.4
     }
@@ -1589,7 +1587,7 @@
     }
 
     .sctag {
-      font-size: clamp(7.5px, 1.7vw, 8.5px);
+      font-size: clamp(9px, 1.7vw, 10.5px);
       font-weight: 800;
       letter-spacing: .06em;
       text-transform: uppercase;
@@ -1973,9 +1971,9 @@
     }
 
     .sec-lbl {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: .1em;
+      letter-spacing: .08em;
       text-transform: uppercase;
       padding: 3px 9px;
       border-radius: 20px;
@@ -2550,7 +2548,7 @@
     }
 
     .wt-current-lbl {
-      font-size: clamp(10px, 2.2vw, 11px);
+      font-size: clamp(12px, 2.2vw, 13px);
       color: var(--t3);
     }
 
@@ -2563,7 +2561,7 @@
     }
 
     .wt-lost {
-      font-size: clamp(9px, 2vw, 11px);
+      font-size: clamp(11px, 2vw, 13px);
       color: var(--green);
       font-weight: 700;
       margin-top: 2px;
@@ -2640,7 +2638,7 @@
     }
 
     .prog-stat-l {
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(10px, 1.8vw, 11.5px);
       color: var(--t3);
       font-weight: 800;
       text-transform: uppercase;
@@ -2650,13 +2648,13 @@
 
     .prog-stat-v {
       font-family: var(--mono);
-      font-size: clamp(19px, 4.5vw, 25px);
+      font-size: clamp(20px, 4.5vw, 26px);
       font-weight: 700;
       line-height: 1;
     }
 
     .prog-stat-s {
-      font-size: clamp(8px, 1.8vw, 10px);
+      font-size: clamp(10px, 1.8vw, 11.5px);
       color: var(--t3);
       margin-top: 3px;
     }
@@ -2676,7 +2674,7 @@
     }
 
     .wt-chart-title {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--t3);
       font-weight: 800;
       text-transform: uppercase;
@@ -2710,7 +2708,7 @@
     }
 
     .wt-bar-lbl {
-      font-size: 8px;
+      font-size: 10px;
       color: var(--t3);
       font-weight: 600;
       text-align: center;
@@ -2720,7 +2718,7 @@
     }
 
     .wt-bar-val {
-      font-size: 9px;
+      font-size: 11px;
       font-family: var(--mono);
       color: var(--gold);
       font-weight: 700;
@@ -2741,7 +2739,7 @@
     }
 
     .dlog-date {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--t3);
       width: 72px;
       flex-shrink: 0;
@@ -2755,7 +2753,7 @@
     }
 
     .dlog-chip {
-      font-size: 10px;
+      font-size: 11.5px;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 10px;
@@ -2912,7 +2910,7 @@
 
     .ds-time {
       font-family: var(--mono);
-      font-size: 9.5px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: .02em;
       text-align: center;
@@ -2920,7 +2918,7 @@
     }
 
     .ds-lbl {
-      font-size: 8.5px;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .07em;
@@ -5953,6 +5951,104 @@
       .sn { font-size: clamp(11px, 3vw, 12px) !important; }
       .pc { padding: clamp(7px, 1.8vw, 9px) clamp(7px, 1.8vw, 10px) !important; }
     }
+    /* ════════════════════════════════════════════════════════════
+       FINAL COMFORT FIX — Ensures nothing drops below readable
+       minimum on any device. Overrides all previous layers.
+       ════════════════════════════════════════════════════════════ */
+
+    /* Base readability floor */
+    body { font-size: clamp(14.5px, 2vw, 16px) !important; line-height: 1.65 !important; }
+
+    /* Section headings — never below 11px */
+    .sh { font-size: clamp(11px, 2vw, 12.5px) !important; letter-spacing: .12em !important; }
+
+    /* Profile card labels */
+    .pc-l { font-size: clamp(10px, 1.9vw, 11px) !important; }
+    .pc-s { font-size: clamp(10px, 1.9vw, 11px) !important; }
+
+    /* Week grid — never below 10px */
+    .wdn { font-size: clamp(10px, 2vw, 11px) !important; }
+    .wdt { font-size: clamp(10px, 2vw, 11.5px) !important; }
+
+    /* Timeline times */
+    .tt { font-size: clamp(10px, 2vw, 11px) !important; }
+
+    /* Section divider pills */
+    .sdiv-t, .sec-lbl { font-size: clamp(10.5px, 2vw, 11.5px) !important; }
+
+    /* Supplement sidebar */
+    .sn { font-size: clamp(12.5px, 2.5vw, 13.5px) !important; }
+    .st { font-size: clamp(10.5px, 2vw, 11.5px) !important; }
+
+    /* Progress stat labels */
+    .prog-stat-l { font-size: clamp(10.5px, 2vw, 11.5px) !important; }
+    .prog-stat-s { font-size: clamp(10.5px, 2vw, 11.5px) !important; }
+
+    /* xbadge / vbadge — kept compact but readable */
+    .xbadge, .vbadge { font-size: clamp(9.5px, 1.8vw, 10.5px) !important; }
+
+    /* Day strip */
+    .ds-time { font-size: clamp(10.5px, 2vw, 12px) !important; }
+    .ds-lbl  { font-size: clamp(10px, 1.8vw, 11px) !important; }
+
+    /* Bottom nav */
+    .bnlbl { font-size: clamp(10px, 2.2vw, 11.5px) !important; }
+
+    /* Calendar / date badge */
+    .datelbl { font-size: clamp(10px, 1.8vw, 11px) !important; }
+
+    /* Tablet (769-1024px) comfort bump */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      body { font-size: 15px !important; }
+      .layout { grid-template-columns: 256px 1fr !important; }
+      .sh    { font-size: 11.5px !important; }
+      .pc-v  { font-size: 20px !important; }
+      .tab   { font-size: 12.5px !important; }
+      .wo-day { font-size: 20px !important; }
+      .mcnm  { font-size: 14px !important; }
+      .gymb-title { font-size: 15px !important; }
+      .exnm  { font-size: 13.5px !important; }
+      .scn   { font-size: 14.5px !important; }
+      .prog-stat-v { font-size: 26px !important; }
+    }
+
+    /* Mobile (≤768px) — comfort floor */
+    @media (max-width: 768px) {
+      body { font-size: clamp(14px, 2.5vw, 15px) !important; }
+      .sh  { font-size: clamp(11px, 2.2vw, 12px) !important; }
+      .tab { font-size: clamp(11.5px, 3vw, 13px) !important; min-height: 46px !important; }
+      .tt  { font-size: clamp(10px, 2vw, 11px) !important; }
+      .prog-stat-l { font-size: clamp(10.5px, 2.2vw, 11px) !important; }
+      .sdiv-t, .sec-lbl { font-size: clamp(10.5px, 2.2vw, 11px) !important; }
+      .wdn, .wdt { font-size: clamp(10px, 2.2vw, 11px) !important; }
+      .sn { font-size: clamp(12px, 3vw, 13px) !important; }
+      .st { font-size: clamp(10px, 2.2vw, 11px) !important; }
+      .pc-l, .pc-s { font-size: clamp(10px, 2vw, 11px) !important; }
+    }
+
+    /* Small phone (≤480px) */
+    @media (max-width: 480px) {
+      body { font-size: 14px !important; }
+      .sh  { font-size: 11px !important; }
+      .tab { font-size: clamp(11px, 3.2vw, 12px) !important; padding: 0 7px !important; }
+      .bnlbl { font-size: clamp(10px, 2.5vw, 11px) !important; }
+      .tt  { font-size: 10px !important; }
+      .wdn, .wdt { font-size: 10px !important; }
+      .sdiv-t, .sec-lbl { font-size: 10.5px !important; }
+    }
+
+    /* Tiny phone (≤390px) */
+    @media (max-width: 390px) {
+      body { font-size: 13.5px !important; }
+      .sh  { font-size: 10.5px !important; }
+      .tab { font-size: clamp(10.5px, 3.5vw, 11.5px) !important; padding: 0 6px !important; }
+      .bnlbl { font-size: 10px !important; }
+      .wdn, .wdt { font-size: 10px !important; }
+      .sn { font-size: 12px !important; }
+      .tt { font-size: 10px !important; }
+      .pc-l, .pc-s { font-size: 10px !important; }
+    }
+
   </style>
 </head>
 
@@ -6411,58 +6507,58 @@
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Target HR 100–120 BPM · Warm joints before pressing', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Target HR 100–120 BPM · Warm joints before pressing', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
             ]
           },
           {
             name: '💪 Chest', exercises: [
-              { n: 'Machine Chest Press', d: '4 sets × 15-12-10-10 reps · Full ROM · Squeeze chest hard at top · 60 sec rest', t: 'chest', s: 4 },
-              { n: 'Incline Dumbbell Press', d: '3 sets × 12-12-10 reps · 30–45° incline · Dumbbells touch at top · Upper chest focus', t: 'chest', s: 3 },
-              { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel full stretch at open position · Slow controlled motion · Exhale on close', t: 'chest', s: 3 },
-              { n: 'Dumbbell Flat Fly', d: '3 sets × 12 reps · Arms slightly bent · Wide arc · Deep stretch · Great chest activation', t: 'chest', s: 3 },
+              { n: 'Machine Chest Press', d: '4 sets × 15-12-10-10 reps · Full ROM · Squeeze chest hard at top · 60 sec rest', t: 'chest', s: 4, img: 'Image/Machine Chest Press.jpeg' },
+              { n: 'Incline Dumbbell Press', d: '3 sets × 12-12-10 reps · 30–45° incline · Dumbbells touch at top · Upper chest focus', t: 'chest', s: 3, img: 'Image/Incline Dumbbell Press.webp' },
+              { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel full stretch at open position · Slow controlled motion · Exhale on close', t: 'chest', s: 3, img: 'Image/Machine Pec Fly.webp' },
+              { n: 'Dumbbell Flat Fly', d: '3 sets × 12 reps · Arms slightly bent · Wide arc · Deep stretch · Great chest activation', t: 'chest', s: 3, img: 'Image/Dumbbell Flat Fly.jfif' },
             ]
           },
           {
             name: '🏋️ Back', exercises: [
-              { n: 'Machine Lat Pulldown', d: '4 sets × 15-12-12-10 reps · Wide overhand grip · Pull to upper chest · Elbows drive down', t: 'back', s: 4 },
-              { n: 'Barbell / Dumbbell Bent-Over Row', d: '3 sets × 12-12-10 reps · Hinge at hips 45° · Pull to lower chest · Squeeze shoulder blades', t: 'back', s: 3 },
-              { n: 'Machine Seated Row', d: '3 sets × 15-12-12 reps · Elbows close to body · Full scapular retraction · 1 sec pause at peak', t: 'back', s: 3 },
-              { n: 'Machine Reverse Fly (Rear Delt)', d: '3 sets × 15 reps · Arms wide · Rear delt squeeze · Slow 3-sec negative', t: 'back', s: 3 },
+              { n: 'Machine Lat Pulldown', d: '4 sets × 15-12-12-10 reps · Wide overhand grip · Pull to upper chest · Elbows drive down', t: 'back', s: 4, img: 'Image/Machine Lat Pulldown.png' },
+              { n: 'Barbell / Dumbbell Bent-Over Row', d: '3 sets × 12-12-10 reps · Hinge at hips 45° · Pull to lower chest · Squeeze shoulder blades', t: 'back', s: 3, img: 'Image/Barbell  Dumbbell Bent-Over Row.webp' },
+              { n: 'Machine Seated Row', d: '3 sets × 15-12-12 reps · Elbows close to body · Full scapular retraction · 1 sec pause at peak', t: 'back', s: 3, img: 'Image/Machine Seated Row.webp' },
+              { n: 'Machine Reverse Fly (Rear Delt)', d: '3 sets × 15 reps · Arms wide · Rear delt squeeze · Slow 3-sec negative', t: 'back', s: 3, img: 'Image/Machine Reverse Fly (Rear Delt).webp' },
             ]
           },
           {
             name: '🎯 Shoulders', exercises: [
-              { n: 'Machine Shoulder Press', d: '4 sets × 15-12-10-10 reps · Don\'t lock elbows at top · Full ROM · Core braced tight', t: 'shoulder', s: 4 },
-              { n: 'Dumbbell Lateral Raise', d: '3 sets × 15-15-12 reps · Slight forward lean · Raise to shoulder height · Slow lower 3 sec', t: 'shoulder', s: 3 },
-              { n: 'Barbell / Dumbbell Front Raise', d: '3 sets × 12 reps · Alternate arms or together · Raise to eye level · Control the descent', t: 'shoulder', s: 3 },
+              { n: 'Machine Shoulder Press', d: '4 sets × 15-12-10-10 reps · Don\'t lock elbows at top · Full ROM · Core braced tight', t: 'shoulder', s: 4, img: 'Image/Machine Shoulder Press.webp' },
+              { n: 'Dumbbell Lateral Raise', d: '3 sets × 15-15-12 reps · Slight forward lean · Raise to shoulder height · Slow lower 3 sec', t: 'shoulder', s: 3, img: 'Image/Dumbbell Lateral Raise.jfif' },
+              { n: 'Barbell / Dumbbell Front Raise', d: '3 sets × 12 reps · Alternate arms or together · Raise to eye level · Control the descent', t: 'shoulder', s: 3, img: 'Image/Barbell  Dumbbell Front Raise.jfif' },
             ]
           },
           {
             name: '💪 Arms — Biceps', exercises: [
-              { n: 'Barbell Curl', d: '4 sets × 15-12-10-10 reps · No swinging · Full curl from dead hang · Squeeze hard at top', t: 'biceps', s: 4 },
-              { n: 'Dumbbell Hammer Curl', d: '3 sets × 12 reps · Neutral grip · Alternating arms · Targets brachialis + forearm', t: 'biceps', s: 3 },
-              { n: 'Preacher Curl / Machine Curl', d: '3 sets × 12-12-10 reps · Upper arm locked on pad · Full stretch at bottom · Slow negative', t: 'biceps', s: 3 },
-              { n: 'Concentration Curl (Dumbbell)', d: '2 sets × 12 reps each arm · Elbow on inner thigh · Peak squeeze · Maximum isolation', t: 'biceps', s: 2 },
+              { n: 'Barbell Curl', d: '4 sets × 15-12-10-10 reps · No swinging · Full curl from dead hang · Squeeze hard at top', t: 'biceps', s: 4, img: 'Image/Barbell Curl.webp' },
+              { n: 'Dumbbell Hammer Curl', d: '3 sets × 12 reps · Neutral grip · Alternating arms · Targets brachialis + forearm', t: 'biceps', s: 3, img: 'Image/Dumbbell Hammer Curl.jfif' },
+              { n: 'Preacher Curl / Machine Curl', d: '3 sets × 12-12-10 reps · Upper arm locked on pad · Full stretch at bottom · Slow negative', t: 'biceps', s: 3, img: 'Image/Preacher Curl  Machine Curl.webp' },
+              { n: 'Concentration Curl (Dumbbell)', d: '2 sets × 12 reps each arm · Elbow on inner thigh · Peak squeeze · Maximum isolation', t: 'biceps', s: 2, img: 'Image/Concentration Curl (Dumbbell).webp' },
             ]
           },
           {
             name: '💪 Arms — Triceps', exercises: [
-              { n: 'Cable Tricep Pushdown (Straight Bar)', d: '4 sets × 15-12-12-10 reps · Elbows pinned at sides · Full extension · Squeeze at bottom', t: 'triceps', s: 4 },
-              { n: 'Overhead Tricep Extension (Dumbbell)', d: '3 sets × 12-12-10 reps · Both hands one dumbbell · Full stretch behind head · Slow lower', t: 'triceps', s: 3 },
-              { n: 'Barbell Skull Crusher', d: '3 sets × 12 reps · Bar to forehead · Elbows up · Controlled descent · Great long head stretch', t: 'triceps', s: 3 },
-              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12-10-10 reps · Body upright · Go deep · Elbows straight back · Lock at top', t: 'triceps', s: 3 },
+              { n: 'Cable Tricep Pushdown (Straight Bar)', d: '4 sets × 15-12-12-10 reps · Elbows pinned at sides · Full extension · Squeeze at bottom', t: 'triceps', s: 4, img: 'Image/Cable Tricep Pushdown (Straight Bar).webp' },
+              { n: 'Overhead Tricep Extension (Dumbbell)', d: '3 sets × 12-12-10 reps · Both hands one dumbbell · Full stretch behind head · Slow lower', t: 'triceps', s: 3, img: 'Image/Overhead Tricep Extension (Dumbbell).jfif' },
+              { n: 'Barbell Skull Crusher', d: '3 sets × 12 reps · Bar to forehead · Elbows up · Controlled descent · Great long head stretch', t: 'triceps', s: 3, img: 'Image/Barbell Skull Crusher.webp' },
+              { n: 'Tricep Dips (Machine / Bench)', d: '3 sets × 12-10-10 reps · Body upright · Go deep · Elbows straight back · Lock at top', t: 'triceps', s: 3, img: 'Image/Tricep Dips (Machine Bench).jpeg' },
             ]
           },
           {
             name: '💪 Forearms', exercises: [
-              { n: 'Barbell Wrist Curl', d: '3 sets × 20 reps · Seated, wrists over knees · Full ROM · Slow squeeze at top', t: 'forearms', s: 3 },
-              { n: 'Reverse Wrist Curl (Barbell)', d: '3 sets × 15 reps · Overhand grip · Works extensors · Important for grip balance', t: 'forearms', s: 3 },
+              { n: 'Barbell Wrist Curl', d: '3 sets × 20 reps · Seated, wrists over knees · Full ROM · Slow squeeze at top', t: 'forearms', s: 3, img: 'Image/Barbell Wrist Curl.webp' },
+              { n: 'Reverse Wrist Curl (Barbell)', d: '3 sets × 15 reps · Overhand grip · Works extensors · Important for grip balance', t: 'forearms', s: 3, img: 'Image/Reverse Wrist Curl (Barbell).jfif' },
             ]
           },
           {
             name: '🏃 Cardio Finish — Burn Zone', exercises: [
-              { n: 'Treadmill', d: '15 min · Start 5 km/h → build to 6.5 km/h · Incline 3–5% · Burn final calories', t: 'cardio', s: 1 },
-              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Arms FULLY active · Push & pull handles · Full body calorie burn', t: 'cardio', s: 1 },
+              { n: 'Treadmill', d: '15 min · Start 5 km/h → build to 6.5 km/h · Incline 3–5% · Burn final calories', t: 'cardio', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Arms FULLY active · Push & pull handles · Full body calorie burn', t: 'cardio', s: 1, img: 'Image/Cross Trainer (Elliptical).webp' },
             ]
           },
         ]
@@ -6475,36 +6571,36 @@
         sections: [
           {
             name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase resistance · Warm knee joints + hip flexors · Target HR 110 BPM', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Gradually increase resistance · Warm knee joints + hip flexors · Target HR 110 BPM', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
             ]
           },
           {
             name: '🦵 Quads', exercises: [
-              { n: 'Barbell Back Squat / Smith Machine Squat', d: '4 sets × 15-12-10-10 reps · Depth to parallel or below · Core braced · Drive through heels', t: 'legs', s: 4 },
-              { n: 'Sumo Squat (Barbell/Dumbbell)', d: '3 sets × 15 reps · Wide stance · Toes 45° out · Targets inner thigh + glutes deeply', t: 'legs', s: 3 },
-              { n: 'Leg Press Machine', d: '4 sets × 15-15-12-12 reps · Feet shoulder-width · Don\'t lock knees at top · Full deep range', t: 'legs', s: 4 },
-              { n: 'Hack Squat Machine', d: '3 sets × 12 reps · Feet low on plate · Maximum quad stretch · Slow 3-sec descent', t: 'legs', s: 3 },
-              { n: 'Leg Extension Machine', d: '4 sets × 15-15-12-12 reps · Full extension · 2-sec slow lower · Pure quad isolation · Don\'t slam', t: 'legs', s: 4 },
-              { n: 'Dumbbell Lunges', d: '3 sets × 12 reps each leg · Step forward · Knee to 90° · Push back with heel · Glutes + quads', t: 'legs', s: 3 },
+              { n: 'Barbell Back Squat / Smith Machine Squat', d: '4 sets × 15-12-10-10 reps · Depth to parallel or below · Core braced · Drive through heels', t: 'legs', s: 4, img: 'Image/Barbell Back Squat Smith Machine Squat.webp' },
+              { n: 'Sumo Squat (Barbell/Dumbbell)', d: '3 sets × 15 reps · Wide stance · Toes 45° out · Targets inner thigh + glutes deeply', t: 'legs', s: 3, img: 'Image/Sumo Squat Barbell Dumbbell.webp' },
+              { n: 'Leg Press Machine', d: '4 sets × 15-15-12-12 reps · Feet shoulder-width · Don\'t lock knees at top · Full deep range', t: 'legs', s: 4, img: 'Image/Leg Press Machine.jpeg' },
+              { n: 'Hack Squat Machine', d: '3 sets × 12 reps · Feet low on plate · Maximum quad stretch · Slow 3-sec descent', t: 'legs', s: 3, img: 'Image/Hack Squat Machine.webp' },
+              { n: 'Leg Extension Machine', d: '4 sets × 15-15-12-12 reps · Full extension · 2-sec slow lower · Pure quad isolation · Don\'t slam', t: 'legs', s: 4, img: 'Image/Leg Extension Machine.jfif' },
+              { n: 'Dumbbell Lunges', d: '3 sets × 12 reps each leg · Step forward · Knee to 90° · Push back with heel · Glutes + quads', t: 'legs', s: 3, img: 'Image/Dumbbell Lunges.jfif' },
             ]
           },
           {
             name: '🦵 Hamstrings + Glutes', exercises: [
-              { n: 'Leg Curl Machine (Lying/Seated)', d: '4 sets × 15-12-12-10 reps · Full curl · Squeeze at top · 3-sec slow negative · Don\'t cheat', t: 'legs', s: 4 },
-              { n: 'Romanian Deadlift (Barbell/Dumbbell)', d: '3 sets × 12 reps · Soft knees · Hinge hips back · Feel hamstring stretch · Bar close to shins', t: 'legs', s: 3 },
-              { n: 'Good Mornings (Barbell)', d: '3 sets × 12 reps · Light weight · Bar on upper back · Hip hinge · Deep hamstring stretch', t: 'legs', s: 3 },
+              { n: 'Leg Curl Machine (Lying/Seated)', d: '4 sets × 15-12-12-10 reps · Full curl · Squeeze at top · 3-sec slow negative · Don\'t cheat', t: 'legs', s: 4, img: 'Image/Leg Curl Machine Lying Seated.jfif' },
+              { n: 'Romanian Deadlift (Barbell/Dumbbell)', d: '3 sets × 12 reps · Soft knees · Hinge hips back · Feel hamstring stretch · Bar close to shins', t: 'legs', s: 3, img: 'Image/Romanian Deadlift Barbell Dumbbell.webp' },
+              { n: 'Good Mornings (Barbell)', d: '3 sets × 12 reps · Light weight · Bar on upper back · Hip hinge · Deep hamstring stretch', t: 'legs', s: 3, img: 'Image/Good Mornings (Barbell).webp' },
             ]
           },
           {
             name: '🦶 Calves', exercises: [
-              { n: 'Standing Calf Raise (Machine/Barbell)', d: '4 sets × 20-20-20-20 reps · Full ROM · Pause 1 sec at top · Slow 3-sec lower · Burn!', t: 'legs', s: 4 },
-              { n: 'Seated Calf Raise Machine', d: '3 sets × 20 reps · Different angle — soleus focus · Slow and controlled · Full stretch at bottom', t: 'legs', s: 3 },
+              { n: 'Standing Calf Raise (Machine/Barbell)', d: '4 sets × 20-20-20-20 reps · Full ROM · Pause 1 sec at top · Slow 3-sec lower · Burn!', t: 'legs', s: 4, img: 'Image/Standing Calf Raise (Machine Barbell).jfif' },
+              { n: 'Seated Calf Raise Machine', d: '3 sets × 20 reps · Different angle — soleus focus · Slow and controlled · Full stretch at bottom', t: 'legs', s: 3, img: 'Image/Seated Calf Raise Machine.jpg' },
             ]
           },
           {
             name: '🏃 Cardio Finish — Burn Zone', exercises: [
-              { n: 'Treadmill', d: '15 min · Incline 4–6% · Speed 5–6 km/h · Legs already tired = max fat burn', t: 'cardio', s: 1 },
-              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Push through fatigue · Arms active · Full body finish', t: 'cardio', s: 1 },
+              { n: 'Treadmill', d: '15 min · Incline 4–6% · Speed 5–6 km/h · Legs already tired = max fat burn', t: 'cardio', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Cross Trainer (Elliptical)', d: '10 min · High resistance · Push through fatigue · Arms active · Full body finish', t: 'cardio', s: 1, img: 'Image/Cross Trainer (Elliptical).webp' },
             ]
           },
         ]
@@ -6517,27 +6613,27 @@
         sections: [
           {
             name: '🔥 Warm-up + Cardio 1', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target · Get the blood moving', t: 'cardio', s: 1 },
-              { n: 'Treadmill — Warm Cardio', d: '10 min · Brisk walk 5.5 km/h · Incline 4% · Start melting fat early', t: 'cardio', s: 1 },
+              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target · Get the blood moving', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
+              { n: 'Treadmill — Warm Cardio', d: '10 min · Brisk walk 5.5 km/h · Incline 4% · Start melting fat early', t: 'cardio', s: 1, img: 'Image/Treadmill.webp' },
             ]
           },
           {
             name: '🏋️ Core Circuit — Machine + Floor', exercises: [
-              { n: 'Cable Crunch (Machine)', d: '4 sets × 15-15-12-12 reps · Rope attachment · Round spine forward · Exhale fully · Squeeze hard', t: 'abs', s: 4 },
-              { n: 'Abs Crunch (Floor/Bench)', d: '3 sets × 20 reps · Exhale at top · Don\'t pull neck · Slow controlled · Feel the burn', t: 'abs', s: 3 },
-              { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · Hang from bar · Legs up controlled · No swinging · Lower slowly', t: 'abs', s: 3 },
-              { n: 'Lying Leg Raise (Flat Bench)', d: '3 sets × 15 reps · Lower back pressed down · Legs straight · 3-sec slow lower · Lower abs', t: 'abs', s: 3 },
-              { n: 'Russian Twist (Dumbbell)', d: '3 sets × 20 reps (10 each side) · Light dumbbell · Feet up · Full rotation · Oblique fire', t: 'abs', s: 3 },
-              { n: 'Side Bench Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques hard · Controlled · Side of waist', t: 'abs', s: 3 },
-              { n: 'Bicycle Crunch (Cycling Crunch)', d: '3 sets × 20 reps · Elbow to opposite knee · SLOW pace · Full rotation · No rushing', t: 'abs', s: 3 },
-              { n: 'Ab Wheel Rollout', d: '3 sets × 10-12 reps · From knees if needed · Full extension · Core TIGHT · Don\'t let back sag', t: 'abs', s: 3 },
-              { n: 'Plank Hold', d: '3 holds × 60–90 sec · Hips neutral · Core like steel · Breathe steadily · Build to 2 min', t: 'abs', s: 3 },
+              { n: 'Cable Crunch (Machine)', d: '4 sets × 15-15-12-12 reps · Rope attachment · Round spine forward · Exhale fully · Squeeze hard', t: 'abs', s: 4, img: 'Image/Cable Crunch (Machine).jfif' },
+              { n: 'Abs Crunch (Floor/Bench)', d: '3 sets × 20 reps · Exhale at top · Don\'t pull neck · Slow controlled · Feel the burn', t: 'abs', s: 3, img: 'Image/Abs Crunch (Floor Bench).png' },
+              { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · Hang from bar · Legs up controlled · No swinging · Lower slowly', t: 'abs', s: 3, img: 'Image/Hanging Knee Raise Leg Raise.jfif' },
+              { n: 'Lying Leg Raise (Flat Bench)', d: '3 sets × 15 reps · Lower back pressed down · Legs straight · 3-sec slow lower · Lower abs', t: 'abs', s: 3, img: 'Image/Lying Leg Raise (Flat Bench).jfif' },
+              { n: 'Russian Twist (Dumbbell)', d: '3 sets × 20 reps (10 each side) · Light dumbbell · Feet up · Full rotation · Oblique fire', t: 'abs', s: 3, img: 'Image/Russian Twist (Dumbbell).webp' },
+              { n: 'Side Bench Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques hard · Controlled · Side of waist', t: 'abs', s: 3, img: 'Image/Side Bench Oblique Crunch.webp' },
+              { n: 'Bicycle Crunch (Cycling Crunch)', d: '3 sets × 20 reps · Elbow to opposite knee · SLOW pace · Full rotation · No rushing', t: 'abs', s: 3, img: 'Image/Bicycle Crunch (Cycling Crunch).webp' },
+              { n: 'Ab Wheel Rollout', d: '3 sets × 10-12 reps · From knees if needed · Full extension · Core TIGHT · Don\'t let back sag', t: 'abs', s: 3, img: 'Image/Ab Wheel Rollout.webp' },
+              { n: 'Plank Hold', d: '3 holds × 60–90 sec · Hips neutral · Core like steel · Breathe steadily · Build to 2 min', t: 'abs', s: 3, img: 'Image/Plank Hold.webp' },
             ]
           },
           {
             name: '🏃 Cardio Finish — BOTH Mandatory', exercises: [
-              { n: 'Treadmill', d: '15 min · 5.5–7 km/h · Incline 3–5% · Push pace in last 5 min · Maximum fat burn', t: 'cardio', s: 1 },
-              { n: 'Cross Trainer (Elliptical)', d: '15 min · High resistance · Arms FULLY active · Push & pull · Great calorie burn to finish', t: 'cardio', s: 1 },
+              { n: 'Treadmill', d: '15 min · 5.5–7 km/h · Incline 3–5% · Push pace in last 5 min · Maximum fat burn', t: 'cardio', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Cross Trainer (Elliptical)', d: '15 min · High resistance · Arms FULLY active · Push & pull · Great calorie burn to finish', t: 'cardio', s: 1, img: 'Image/Cross Trainer (Elliptical).webp' },
             ]
           },
         ]
@@ -6792,11 +6888,23 @@
           const setDots = ex.s > 1 ? `<div class="setrow" id="sr_${type}_${i}">${Array.from({ length: ex.s }, (_, si) =>
             `<div class="sdot${EX[type][i].done > si ? ' dn' : ''}" onclick="togSet('${type}',${i},${si})">${si + 1}</div>`).join('')}</div>` : '';
           const ck = ex.s === 1 ? `<button class="exck${EX[type][i].completed ? ' dn' : ''}" id="ek_${type}_${i}" onclick="togSingle('${type}',${i})">✓</button>` : '';
-          secHTML += `<div class="excard${EX[type][i].completed ? ' done-ex' : ''}" id="exc_${type}_${i}">
-        <div class="exnum">${i + 1}</div>
-        <div class="exinfo"><div class="exnm">${ex.n}</div><div class="exdt">${ex.d}</div></div>
-        <div class="extbadge" style="${tb}">${ex.t}</div>
-        ${setDots}${ck}
+                    const imgSrc = ex.img ? `<img src="${ex.img}" loading="lazy" style="width:85px;min-width:85px;height:85px;border-radius:8px;object-fit:contain;background:var(--bg);border:1px solid var(--bd);padding:2px;">` : '';
+
+          secHTML += `<div class="excard${EX[type][i].completed ? ' done-ex' : ''}" id="exc_${type}_${i}" style="display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between; gap:16px; padding:18px 16px;">
+        <div style="display:flex; align-items:center; gap:16px; flex:1; min-width:260px;">
+          ${imgSrc}
+          <div style="display:flex; flex-direction:column; flex:1;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <div class="exnum">${i + 1}</div>
+              <div class="exnm">${ex.n}</div>
+            </div>
+            <div class="exdt">${ex.d}</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="extbadge" style="${tb}">${ex.t}</div>
+          ${setDots}${ck}
+        </div>
       </div>`;
         });
         secHTML += `</div>`;
@@ -6926,19 +7034,19 @@
           <div style="font-family:'Raleway',sans-serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:-.3px;margin-bottom:4px">📋 Full Workout Plan</div>
           <div style="font-size:12px;color:var(--t2);margin-bottom:14px">Fit Master Gym, Gota · 4:00 AM – 6:00 AM · 6 days/week</div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+            <div style="text-align:center;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px 6px">
               <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--gold)">6</div>
               <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">GYM DAYS</div>
             </div>
-            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+            <div style="text-align:center;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px 6px">
               <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--blue)">${grandEx}</div>
               <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">UNIQUE EX</div>
             </div>
-            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+            <div style="text-align:center;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px 6px">
               <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--amber)">${grandSets}</div>
               <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">SETS/PLAN</div>
             </div>
-            <div style="text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px">
+            <div style="text-align:center;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px 6px">
               <div style="font-family:var(--mono);font-size:20px;font-weight:800;color:var(--red)">~${weekCal}</div>
               <div style="font-size:9.5px;color:var(--t3);margin-top:2px;font-weight:700;letter-spacing:.04em">CAL/WEEK</div>
             </div>
@@ -6954,7 +7062,7 @@
             const wc = WCOL[dtype] || 'var(--t3)';
             const isToday = di === todayIdx;
             const icons = {upper:'💪',legs:'🦵',abs:'🎯',rest:'😴'};
-            return `<div style="text-align:center;padding:8px 4px;background:${isToday ? wc+'22' : 'rgba(255,255,255,.03)'};border:1px solid ${isToday ? wc+'66' : 'rgba(255,255,255,.06)'};border-radius:10px${isToday ? ';box-shadow:0 0 12px '+wc+'33' : ''}">
+            return `<div style="text-align:center;padding:8px 4px;background:${isToday ? wc+'22' : 'var(--bg)'};border:1px solid ${isToday ? wc+'66' : 'var(--bd)'};border-radius:10px${isToday ? ';box-shadow:0 0 12px '+wc+'33' : ''}">
               <div style="font-size:16px;margin-bottom:2px">${icons[dtype]}</div>
               <div style="font-size:10px;font-weight:800;color:${isToday ? wc : 'var(--t2)'}">${dname}</div>
               <div style="font-size:9px;color:${isToday ? wc : 'var(--t3)'};margin-top:1px;font-weight:700">${dtype === 'rest' ? 'Rest' : dtype === 'upper' ? 'Upper' : dtype === 'legs' ? 'Legs' : 'Abs'}</div>
@@ -6982,7 +7090,7 @@
           const exRows = wd.sections.map(sec => {
             const exList = sec.exercises.map(ex => {
               const tb = TBADGE[ex.t] || 'color:var(--t2);background:rgba(0,0,0,.06)';
-              return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+              return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid var(--bg)">
                 <div style="font-family:var(--mono);font-size:10px;color:var(--t3);padding-top:2px;flex-shrink:0;width:16px">${allEx.indexOf(ex)+1 >= 0 ? '' : ''}</div>
                 <div style="flex:1;min-width:0">
                   <div style="font-size:12.5px;font-weight:700;color:var(--t)">${ex.n}</div>
@@ -6992,7 +7100,7 @@
               </div>`;
             }).join('');
             return `<div style="margin-bottom:6px">
-              <div style="font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--t2);text-transform:uppercase;padding:8px 12px 4px;background:rgba(255,255,255,.02)">${sec.name}</div>
+              <div style="font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--t2);text-transform:uppercase;padding:8px 12px 4px;background:transparent">${sec.name}</div>
               ${exList}
             </div>`;
           }).join('');
@@ -7001,10 +7109,10 @@
             const tc = typeTextColors[t] || 'var(--t2)';
             const ico = typeIcons[t] || '⚡';
             const lbl = typeLabels[t] || t;
-            return `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:700;color:${tc}">${ico} ${lbl} <span style="color:var(--t3);font-weight:600">×${cnt}</span></div>`;
+            return `<div style="display:inline-flex;align-items:center;gap:4px;background:var(--bg);border:1px solid var(--bd);border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:700;color:${tc}">${ico} ${lbl} <span style="color:var(--t3);font-weight:600">×${cnt}</span></div>`;
           }).join('');
 
-          return `<div style="background:linear-gradient(135deg,rgba(7,15,30,.97),${wc}09);border:1px solid ${wc}30;border-radius:16px;margin-bottom:14px;overflow:hidden">
+          return `<div style="background:linear-gradient(135deg,var(--bg2),${wc}09);border:1px solid ${wc}30;border-radius:16px;margin-bottom:14px;overflow:hidden">
             <!-- Card Header -->
             <div style="padding:14px 16px;border-bottom:1px solid ${wc}20">
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
@@ -7013,15 +7121,15 @@
               <div style="font-size:11.5px;color:var(--t2);margin-bottom:10px">${wd.days} · ⏰ 4:00 AM – 6:00 AM · 🔥 ~${wd.cal} cal</div>
               <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${muscleChips}</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                <div style="text-align:center;background:var(--bg);border-radius:10px;padding:7px 4px">
                   <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:${wc}">${allEx.length}</div>
                   <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">EXERCISES</div>
                 </div>
-                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                <div style="text-align:center;background:var(--bg);border-radius:10px;padding:7px 4px">
                   <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:var(--amber)">${totalSets}</div>
                   <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">TOTAL SETS</div>
                 </div>
-                <div style="text-align:center;background:rgba(255,255,255,.04);border-radius:10px;padding:7px 4px">
+                <div style="text-align:center;background:var(--bg);border-radius:10px;padding:7px 4px">
                   <div style="font-family:var(--mono);font-size:17px;font-weight:800;color:var(--red)">~${wd.cal}</div>
                   <div style="font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.04em;margin-top:1px">CAL BURN</div>
                 </div>
@@ -7238,8 +7346,8 @@
         return `<div class="dlog-row">
           <span class="dlog-date">${shortDate}${isToday ? ' <b style="color:var(--gold)">Today</b>' : ''}</span>
           <div class="dlog-chips">
-            <span class="dlog-chip" style="background:${meals >= 2 ? 'rgba(16,185,129,.15)' : 'rgba(255,255,255,.05)'};color:${meals >= 2 ? 'var(--green)' : 'var(--t3)'}">${meals >= 2 ? '✓' : meals} Meals</span>
-            <span class="dlog-chip" style="background:${water >= 8 ? 'rgba(75,131,232,.15)' : 'rgba(255,255,255,.05)'};color:${water >= 8 ? 'var(--blue)' : 'var(--t3)'}">${water >= 8 ? '💧 ' + water : '💧 ' + water}</span>
+            <span class="dlog-chip" style="background:${meals >= 2 ? 'rgba(16,185,129,.15)' : 'var(--bg)'};color:${meals >= 2 ? 'var(--green)' : 'var(--t3)'}">${meals >= 2 ? '✓' : meals} Meals</span>
+            <span class="dlog-chip" style="background:${water >= 8 ? 'rgba(75,131,232,.15)' : 'var(--bg)'};color:${water >= 8 ? 'var(--blue)' : 'var(--t3)'}">${water >= 8 ? '💧 ' + water : '💧 ' + water}</span>
             ${exDone > 0 ? `<span class="dlog-chip" style="background:rgba(212,168,71,.15);color:var(--gold)">💪 ${exDone} Ex</span>` : ''}
           </div>
         </div>`;
@@ -7273,7 +7381,7 @@
         <div class="wt-chart" style="padding:14px 16px;margin-bottom:14px">
           <div class="wt-chart-title">🎯 Journey Progress — ${start}kg → ${target}kg</div>
           <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-            <div style="flex:1;height:10px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden">
+            <div style="flex:1;height:10px;background:var(--bd);border-radius:5px;overflow:hidden">
               <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:5px;transition:width 1s cubic-bezier(.34,1.56,.64,1)"></div>
             </div>
             <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0">${pct}%</span>
