@@ -1044,7 +1044,7 @@
     .tab.on {
       border-bottom-color: var(--gold);
       color: var(--gold);
-      text-shadow: 0 0 12px rgba(198, 146, 10, .25);
+      font-weight: 800;
       transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -1217,16 +1217,13 @@
 
     /* MORNING WORKOUT SPECIAL GLOW */
     @keyframes morningGlow {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 0 rgba(251, 146, 60, 0);
-        border-color: rgba(212, 168, 71, .3);
+      0%, 100% {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .1);
+        border-color: rgba(212, 168, 71, .2);
       }
-
       50% {
-        box-shadow: 0 0 20px 4px rgba(251, 146, 60, .18), 0 0 40px 8px rgba(212, 168, 71, .08);
-        border-color: rgba(251, 146, 60, .55);
+        box-shadow: 0 4px 20px rgba(212, 168, 71, .15);
+        border-color: rgba(212, 168, 71, .4);
       }
     }
 
@@ -1758,7 +1755,7 @@
       transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
       background-size: 200% 100% !important;
       animation: gradientShift 3s ease infinite;
-      box-shadow: 0 0 12px rgba(212, 168, 71, .5), inset 0 1px 2px rgba(255, 255, 255, .3);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2);
     }
 
     /* ════════════════════════════════════════════════════════════
@@ -6635,7 +6632,6 @@
       color: var(--gold) !important;
       background: none !important;
       -webkit-text-fill-color: var(--gold) !important;
-      text-shadow: 0 0 16px rgba(198, 146, 10, .3) !important;
     }
 
     .ri-l {
@@ -6973,13 +6969,14 @@
 
     /* ── MEAL CARDS ─────────────────────────────────────────────── */
     .mc {
-      background: #FFFFFF !important;
-      border: 1px solid rgba(198, 146, 10, .1) !important;
-      border-top: 1px solid rgba(198, 146, 10, .18) !important;
-      box-shadow: var(--shadow-card) !important;
-      border-radius: var(--r-lg) !important;
-      backdrop-filter: none !important;
-      transition: all .28s cubic-bezier(.34, 1.56, .64, 1) !important;
+      background: rgba(255, 255, 255, .8) !important;
+      border: 1px solid rgba(198, 146, 10, .12) !important;
+      border-top: 1px solid rgba(198, 146, 10, .22) !important;
+      box-shadow: 0 4px 15px rgba(120, 90, 10, .05) !important;
+      border-radius: 18px !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      transition: all .3s cubic-bezier(.34, 1.56, .64, 1) !important;
     }
 
     .mc:hover {
@@ -7152,20 +7149,21 @@
 
     /* ── EXERCISE CARDS ────────────────────────────────────────── */
     .excard {
-      background: #FFFFFF !important;
+      background: rgba(255, 255, 255, .9) !important;
       border: 1px solid rgba(198, 146, 10, .1) !important;
-      border-left: 3px solid rgba(198, 146, 10, .25) !important;
-      box-shadow: var(--shadow-card) !important;
-      border-radius: var(--r-md) !important;
-      padding: clamp(11px, 2vw, 14px) clamp(12px, 2.2vw, 15px) !important;
-      backdrop-filter: none !important;
-      transition: all .22s ease !important;
+      border-left: 4px solid rgba(198, 146, 10, .2) !important;
+      box-shadow: 0 2px 10px rgba(120, 90, 10, .04) !important;
+      border-radius: 14px !important;
+      padding: clamp(12px, 2.5vw, 18px) clamp(14px, 3vw, 20px) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      transition: all .25s ease !important;
     }
 
     .excard:hover {
-      transform: translateX(5px) !important;
+      transform: translateX(6px) !important;
       border-left-color: var(--gold) !important;
-      box-shadow: -4px 0 0 rgba(198, 146, 10, .15), var(--shadow-card-hover) !important;
+      box-shadow: -6px 0 20px rgba(198, 146, 10, .1), 0 8px 25px rgba(120, 90, 10, .08) !important;
     }
 
     .excard.done-ex {
@@ -7249,11 +7247,9 @@
     }
 
     .wo-day {
-      font-size: clamp(18px, 3.8vw, 24px) !important;
       font-weight: 900 !important;
       letter-spacing: -.5px !important;
-      text-shadow: 0 0 18px currentColor;
-      opacity: .85 !important;
+      opacity: .9 !important;
     }
 
     .wo-meta {
@@ -7460,8 +7456,7 @@
       font-size: clamp(22px, 4.5vw, 30px) !important;
       font-weight: 800 !important;
       letter-spacing: -.5px !important;
-      text-shadow: 0 0 14px currentColor !important;
-      opacity: .85 !important;
+      opacity: .9 !important;
     }
 
     .prog-stat-s {
@@ -7545,7 +7540,6 @@
       font-size: clamp(26px, 5vw, 32px) !important;
       color: var(--gold) !important;
       font-weight: 800 !important;
-      text-shadow: 0 0 20px rgba(198, 146, 10, .2) !important;
     }
 
     .wt-lost {
@@ -7674,56 +7668,9 @@
       filter: drop-shadow(0 2px 6px rgba(198, 146, 10, .3)) !important;
     }
 
-    /* ── GLOW TEXT ACCENTS — my signature choices ────────────────── */
-    /* Calorie ring center number — warm amber glow */
-    .ri-n {
-      text-shadow: 0 0 20px rgba(198, 146, 10, .3), 0 2px 8px rgba(198, 146, 10, .15) !important;
-    }
-
-    /* Weight current — subtle warm halo */
-    .wt-current-val {
-      text-shadow: 0 0 24px rgba(198, 146, 10, .22), 0 2px 6px rgba(198, 146, 10, .12) !important;
-    }
-
-    /* Progress numbers — their own color glow */
-    .prog-stat-v {
-      text-shadow: 0 0 16px currentColor !important;
-    }
-
-    /* Workout day — power heading */
-    .wo-day {
-      text-shadow: 0 0 20px currentColor !important;
-    }
-
-    /* Water count — ocean blue */
-    .wcnt {
-      text-shadow: 0 0 14px rgba(29, 78, 216, .28) !important;
-    }
-
-    /* Active tab */
-    .tab.on {
-      text-shadow: 0 0 14px rgba(198, 146, 10, .28) !important;
-    }
-
-    /* Profile card values — their own accent */
-    .pc-v {
-      text-shadow: 0 0 12px currentColor !important;
-      opacity: .88 !important;
-    }
-
-    /* Logo glow */
-    .lm {
-      box-shadow: 0 2px 12px rgba(198, 146, 10, .32), 0 1px 0 rgba(255, 255, 255, .5) inset !important;
-    }
-
-    /* Macro bar fills */
-    .mf {
-      box-shadow: 0 0 9px currentColor !important;
-    }
-
-    /* Gym title */
-    .gymb-title {
-      text-shadow: 0 0 14px rgba(198, 146, 10, .22) !important;
+    /* Standardized text accents — no glow, just clean hierarchy */
+    .ri-n, .wt-current-val, .prog-stat-v, .wo-day, .wcnt, .tab.on, .pc-v, .gymb-title {
+      text-shadow: none !important;
     }
 
     /* ── RESPONSIVE BREAKPOINTS ─────────────────────────────────── */
@@ -8331,6 +8278,7 @@
         <div class="bmi-b">
           <div class="pulse"></div><span>BMI</span><span class="bmi-v">40.1</span>
         </div>
+        <button class="xbadge" style="cursor:pointer;background:var(--gold);color:white;border:none;margin-left:8px" onclick="requestNotificationPermission()">🔔 REMINDERS</button>
       </div>
       <div class="clkwrap">
         <div class="clk" id="clk">--:--:-- --</div>
@@ -8566,12 +8514,11 @@
         <div class="tl" id="dietTL"></div>
         <div class="foot">
           <strong>120kg Extreme Vegetarian Protocol —</strong>
-          <span class="highlight">No eggs, no meat — maximum fat loss through food timing and discipline.</span><br>
-          📋 Daily Flow: Job ends 2:30 AM → Pre-gym 3 AM → Gym 4–6 AM → Post-workout 6:15 AM → <strong>Sleep 6:15 AM–12
-            PM</strong>.<br>
-          Wake 12 PM → Lunch 1:15 PM → Dinner 5 PM → Job 6:30 PM → Breaks 9:30 PM & 12 AM.<br>
-          Fat burner 3:15 AM (gym days only) · 🏋️ Fit Master Gym, Gota.
-          <span class="highlight">Expected: 5–8 kg fat loss per month</span> on this plan.
+          <span class="highlight">Proprietary high-intensity plan — maximum fat loss through metabolic timing.</span><br>
+          📋 Daily Cycle: Job finishes 2:30 AM → Pre-workout activation 3 AM → Gym Training 4–6 AM → Post-workout nutrition 6:15 AM → <strong>Deep Recovery 6:15 AM–12:00 PM</strong>.<br>
+          Wake Up 12 PM → Nutrient-Dense Lunch 1:15 PM → High-Protein Dinner 5:00 PM → Professional Shift 6:30 PM → Nutritional Breaks at 9:30 PM & 12:00 AM.<br>
+          Fat Burner Optimization 3:15 AM (Gym Days Only) · 🏋️ Fit Master Gym, Gota.<br>
+          <span class="highlight" style="font-weight:900">Projected Outcome: 5–8 kg sustainable fat loss per month.</span>
         </div>
       </div>
 
@@ -8618,8 +8565,41 @@
       <span class="bnlbl">Stats</span>
     </button>
   </nav>
-
   <script>
+    // ============================================================
+    // SERVICE WORKER & NOTIFICATIONS
+    // ============================================================
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered'))
+          .catch(err => console.log('SW Registration Failed', err));
+      });
+    }
+
+    async function requestNotificationPermission() {
+      if (!('Notification' in window)) return;
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        alert('Reminders Enabled! You will now receive diet and water notifications.');
+      }
+    }
+
+    function sendLocalNotification(title, body) {
+      if (Notification.permission === 'granted') {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({
+            type: 'SCHEDULE_NOTIFICATION',
+            title: title,
+            body: body,
+            delay: 100
+          });
+        } else {
+          new Notification(title, { body: body });
+        }
+      }
+    }
+
     // ============================================================
     // DATA
     // ============================================================
@@ -8756,35 +8736,30 @@
         tip: '⚡ PRO PLAN — Alternate between chest and back for maximum intensity. Stick to the "Big-to-Small" rule: Heavy compounds first, then isolation. Rest exactly as timed. No skipping forearms.',
         sections: [
           {
-            name: '🔥 Daily Warm-up — Get Moving', exercises: [
-              { n: 'Jumping Jacks', d: '2 sets × 20 reps · Full range · Light on toes · Gap: 15 sec', t: 'warmup', s: 2, img: 'Image/Jumping Jacks.jfif' },
-              { n: 'Arm Circles', d: '2 sets × 15 reps · Large slow circles · Both ways · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Arm Circles.webp' },
-              { n: 'Torso Twists', d: '2 sets × 15 reps · Slow and controlled · Warm up the spine · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Torso Twists.avif' },
+            name: '🔥 Mandatory Warm-up (Full Body)', exercises: [
+              { n: 'Treadmill / Cross Trainer (Low Speed)', d: '5 min · Steady pace · Heart rate slightly elevated · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Jumping Jacks', d: '3 sets × 30 reps · Explosive but controlled · Gap: 15 sec', t: 'warmup', s: 3, img: 'Image/Jumping Jacks.jfif' },
+              { n: 'Torso Twists', d: '2 min · Core mobility focus · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Torso Twists.avif' },
             ]
           },
           {
-            name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase pace · Target HR 100–120 BPM · Warm joints before pressing', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
-            ]
-          },
-          {
-            name: '💪 Chest', exercises: [
+            name: '💪 Chest (Compound First)', exercises: [
               { n: 'Machine Chest Press', d: '4 sets × 15-12-10-10 reps · Full ROM · Squeeze chest hard at top · 60 sec rest', t: 'chest', s: 4, img: 'Image/Machine Chest Press.jpeg' },
               { n: 'Incline Dumbbell Press', d: '3 sets × 12-12-10 reps · 30–45° incline · Dumbbells touch at top · Upper chest focus', t: 'chest', s: 3, img: 'Image/Incline Dumbbell Press.webp' },
+              { n: 'Machine Decline Press', d: '3 sets × 12 reps · Lower chest focus · Squeeze hard at top · Controlled negative', t: 'chest', s: 3, img: 'Image/Machine Decline Press.gif' },
               { n: 'Machine Pec Fly', d: '3 sets × 15-15-15 reps · Feel full stretch at open position · Slow controlled motion · Exhale on close', t: 'chest', s: 3, img: 'Image/Machine Pec Fly.webp' },
               { n: 'Dumbbell Flat Fly', d: '3 sets × 12 reps · Arms slightly bent · Wide arc · Deep stretch · Great chest activation', t: 'chest', s: 3, img: 'Image/Dumbbell Flat Fly.jfif' },
               { n: 'Cable Crossover (High-to-Low)', d: '3 sets × 15 reps · Lean forward · Squeeze at bottom · Chest focus · Feel the contraction', t: 'chest', s: 3, img: 'Image/Cable Crossover (High-to-Low).jpg' },
-              { n: 'Machine Decline Press', d: '3 sets × 12 reps · Lower chest focus · Squeeze hard at top · Controlled negative', t: 'chest', s: 3, img: 'Image/Machine Decline Press.gif' },
             ]
           },
           {
-            name: '🏋️ Back', exercises: [
+            name: '🏋️ Back (Heavy Pulls First)', exercises: [
               { n: 'Machine Lat Pulldown', d: '4 sets × 15-12-12-10 reps · Wide overhand grip · Pull to upper chest · Elbows drive down', t: 'back', s: 4, img: 'Image/Machine Lat Pulldown.png' },
               { n: 'Barbell / Dumbbell Bent-Over Row', d: '3 sets × 12-12-10 reps · Hinge at hips 45° · Pull to lower chest · Squeeze shoulder blades', t: 'back', s: 3, img: 'Image/Barbell  Dumbbell Bent-Over Row.webp' },
               { n: 'Machine Seated Row', d: '3 sets × 15-12-12 reps · Elbows close to body · Full scapular retraction · 1 sec pause at peak', t: 'back', s: 3, img: 'Image/Machine Seated Row.webp' },
-              { n: 'Machine Reverse Fly (Rear Delt)', d: '3 sets × 15 reps · Arms wide · Rear delt squeeze · Slow 3-sec negative', t: 'back', s: 3, img: 'Image/Machine Reverse Fly (Rear Delt).webp' },
-              { n: 'Straight Arm Pulldown (Cable)', d: '3 sets × 15 reps · Arms straight · Pull to thighs · Lats focus · Pause at bottom', t: 'back', s: 3, img: 'Image/traight Arm Pulldown (Cable).webp' },
               { n: 'Single Arm Cable Row', d: '3 sets × 12 reps each side · Full stretch forward · Pull to waist · Squeeze back', t: 'back', s: 3, img: 'Image/Single Arm Cable Row.jpg' },
+              { n: 'Straight Arm Pulldown (Cable)', d: '3 sets × 15 reps · Arms straight · Pull to thighs · Lats focus · Pause at bottom', t: 'back', s: 3, img: 'Image/Straight Arm Pulldown (Cable).webp' },
+              { n: 'Machine Reverse Fly (Rear Delt)', d: '3 sets × 15 reps · Arms wide · Rear delt squeeze · Slow 3-sec negative', t: 'back', s: 3, img: 'Image/Machine Reverse Fly (Rear Delt).webp' },
             ]
           },
           {
@@ -8834,15 +8809,11 @@
         tip: '⚡ PRO PLAN — Heaviest day of the week. Focus on depth for all movements. Use the "Big Power" logic: Squats and Presses before isolation and calves. Finish with maximum grit on cardio.',
         sections: [
           {
-            name: '🔥 Daily Warm-up — Ready for Power', exercises: [
-              { n: 'Jumping Jacks', d: '2 sets × 20 reps · Wake up the legs · Gap: 15 sec', t: 'warmup', s: 2, img: 'Image/Jumping Jacks.jfif' },
-              { n: 'Arm Circles', d: '2 sets × 15 reps · Ready the upper balance · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Arm Circles.webp' },
-              { n: 'Torso Twists', d: '2 sets × 15 reps · Loosen the core · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Torso Twists.avif' },
-            ]
-          },
-          {
-            name: '🔥 Warm-up', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Gradually increase resistance · Warm knee joints + hip flexors · Target HR 110 BPM', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
+            name: '🔥 Mandatory Warm-up (Lower Body Focus)', exercises: [
+              { n: 'Treadmill / Cross Trainer (Low Speed)', d: '5 min · Steady pace · Heart rate slightly elevated · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Cycling Warm-up', d: '5 min · Focus on leg mobility · Gradually increase resistance · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Cycling Warm-up.jpg' },
+              { n: 'Jumping Jacks', d: '2 sets × 30 reps · Full leg extension · Gap: 15 sec', t: 'warmup', s: 2, img: 'Image/Jumping Jacks.jfif' },
+              { n: 'Arm Circles + Torso Twists', d: '2 min · Joint mobility · Prepare for balance · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Arm Circles.webp' },
             ]
           },
           {
@@ -8886,30 +8857,25 @@
         tip: '⚡ STRICT PLAN — Maximum calorie session. No rest longer than 45 sec between core exercises. Heart rate STAYS elevated throughout. Double cardio — treadmill AND cross trainer both mandatory. This is the #1 fat-burning day. ZERO excuses.',
         sections: [
           {
-            name: '🔥 Daily Warm-up — Heart Rate High', exercises: [
-              { n: 'Jumping Jacks', d: '2 sets × 20 reps · Fast pace · Gap: 15 sec', t: 'warmup', s: 2, img: 'Image/Jumping Jacks.jfif' },
-              { n: 'Arm Circles', d: '2 sets × 15 reps · Full ROM · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Arm Circles.webp' },
-              { n: 'Torso Twists', d: '2 sets × 15 reps · Prep for rotation · Gap: 10 sec', t: 'warmup', s: 2, img: 'Image/Torso Twists.avif' },
+            name: '🔥 Mandatory Warm-up (Meta-Burn Focus)', exercises: [
+              { n: 'Cycling Warm-up', d: '8 min · Fast pace · Get HR to 120-130 BPM · Prepare core', t: 'warmup', s: 1, img: 'Image/Cycling Warm-up.jpg' },
+              { n: 'Treadmill — Brisk Walk', d: '5 min · 5.5 km/h · 4% Incline · Activate fat burn · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Treadmill.webp' },
+              { n: 'Jumping Jacks', d: '3 sets × 30 reps · High intensity · Gap: 15 sec', t: 'warmup', s: 3, img: 'Image/Jumping Jacks.jfif' },
+              { n: 'Torso Twists', d: '2 min · Full core mobility · Prepare for intense circuit · Gap: 0 sec', t: 'warmup', s: 1, img: 'Image/Torso Twists.avif' },
             ]
           },
           {
-            name: '🔥 Warm-up + Cardio 1', exercises: [
-              { n: 'Cycling Warm-up', d: '10 min · Moderate to high pace · HR 120–140 BPM target · Get the blood moving', t: 'cardio', s: 1, img: 'Image/Cycling Warm-up.jpg' },
-              { n: 'Treadmill — Warm Cardio', d: '10 min · Brisk walk 5.5 km/h · Incline 4% · Start melting fat early', t: 'cardio', s: 1, img: 'Image/Treadmill.webp' },
-            ]
-          },
-          {
-            name: '🏋️ Core Circuit — Machine + Floor', exercises: [
+            name: '🏋️ Core Circuit — Power & Stability', exercises: [
               { n: 'Cable Crunch (Machine)', d: '4 sets × 15-15-12-12 reps · Squeeze core hard · Gap: 45 sec', t: 'abs', s: 4, img: 'Image/Cable Crunch (Machine).jfif' },
-              { n: 'Abs Crunch (Floor/Bench)', d: '3 sets × 20 reps · Exhale at top · Slow controlled · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Abs Crunch (Floor Bench).png' },
               { n: 'Hanging Knee Raise / Leg Raise', d: '3 sets × 15 reps · No swinging · Lower slowly · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Hanging Knee Raise Leg Raise.jfif' },
-              { n: 'Lying Leg Raise (Flat Bench)', d: '3 sets × 15 reps · Lower back pressed down · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Lying Leg Raise (Flat Bench).jfif' },
-              { n: 'Russian Twist (Dumbbell)', d: '3 sets × 20 reps · Full rotation · Oblique fire · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Russian Twist (Dumbbell).webp' },
-              { n: 'Side Bench Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Side Bench Oblique Crunch.webp' },
-              { n: 'Bicycle Crunch (Cycling Crunch)', d: '3 sets × 20 reps · Elbow to alternate knee · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Bicycle Crunch (Cycling Crunch).webp' },
               { n: 'Ab Wheel Rollout', d: '3 sets × 10-12 reps · Core TIGHT · Don\'t let back sag · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Ab Wheel Rollout.webp' },
               { n: 'Plank Hold', d: '3 holds × 60–90 sec · Core like steel · Breathe · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Plank Hold.webp' },
               { n: 'Side Plank', d: '3 holds × 45–60 sec each side · Hips up · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Side Plank.webp' },
+              { n: 'Abs Crunch (Floor/Bench)', d: '3 sets × 20 reps · Exhale at top · Slow controlled · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Abs Crunch (Floor Bench).png' },
+              { n: 'Lying Leg Raise (Flat Bench)', d: '3 sets × 15 reps · Lower back pressed down · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Lying Leg Raise (Flat Bench).jfif' },
+              { n: 'Russian Twist (Dumbbell)', d: '3 sets × 20 reps · Full rotation · Oblique fire · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Russian Twist (Dumbbell).webp' },
+              { n: 'Bicycle Crunch (Cycling Crunch)', d: '3 sets × 20 reps · Elbow to alternate knee · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Bicycle Crunch (Cycling Crunch).webp' },
+              { n: 'Side Bench Oblique Crunch', d: '3 sets × 15 reps each side · Squeeze obliques · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Side Bench Oblique Crunch.webp' },
               { n: 'Deadbug (Core Stability)', d: '3 sets × 12 reps · Back flat · Slow controlled · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Deadbug.jpg' },
               { n: 'Standing Cable Crunch', d: '3 sets × 15 reps · Crunch forward · Upper abs focus · Gap: 30 sec', t: 'abs', s: 3, img: 'Image/Standing Cable Crunch.jfif' },
             ]
