@@ -2640,6 +2640,7 @@ button:focus-visible,
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding-top: 56px; /* Space for fixed topbar */
     padding-bottom: calc(var(--botnav) + var(--safe-b) + var(--space-md));
   }
 
@@ -2685,17 +2686,34 @@ button:focus-visible,
 
   /* Topbar slimmer on mobile, using native sticky */
   .topbar {
-    height: calc(var(--topbar) * 0.9);
-    padding: 0 var(--space-md);
-    gap: var(--space-sm);
-    position: sticky;
-    top: 0;
-    z-index: 500;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    height: 56px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    padding: 0 12px;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
 
   .topright {
-    display: none;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Hide daily stats in topbar on mobile to save space */
+  .topright .dc,
+  .topright .cstrip,
+  .topright .bmi-b {
+    display: none !important;
   }
 
   .lm {
@@ -2708,17 +2726,24 @@ button:focus-visible,
     font-size: var(--fs-lg);
   }
 
-  .xbadge,
+  .logo .xbadge,
   .vbadge {
-    display: none;
+    display: none !important;
+  }
+
+  .btn-reminders {
+    display: flex !important;
+    font-size: 9px !important;
+    padding: 4px 8px !important;
+    margin: 0 !important;
   }
 
   .clk {
-    font-size: var(--fs-xs);
+    font-size: 11px !important;
   }
 
   .datelbl {
-    font-size: var(--fs-3xs);
+    display: none !important; /* Hide date on mobile topbar for space */
   }
 
   /* Sidebar becomes a tab panel, hidden by default */
@@ -2888,10 +2913,10 @@ button:focus-visible,
      ============================================================ */
   .botnav {
     display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     height: calc(var(--botnav) + var(--safe-b));
     padding-bottom: var(--safe-b);
     background: var(--bg2);
