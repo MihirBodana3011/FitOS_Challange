@@ -1,383 +1,653 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="theme-color" content="#C6920A" />
+    <title>FitOS — Hyper-Advanced Weight Loss</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="manifest" href="manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#C6920A">
-  <title>FitOS — Hyper-Advanced Weight Loss</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-  <!-- Ambient Glow Orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="layout">
-
-    <!-- ============================================================
+  <body>
+    <!-- Ambient Glow Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="layout">
+      <!-- ============================================================
      TOPBAR
      ============================================================ -->
-    <header class="topbar">
-      <div class="logo">
-        <div class="lm">F</div>
-        <div class="lt">Fit<em>OS</em></div>
-        <div class="xbadge">EXTREME</div>
-        <div id="aiGreeting"
-          style="font-size:11px;font-weight:700;color:var(--gold);margin-left:12px;opacity:0.9;white-space:nowrap;">
-          Hello Champ!</div>
-      </div>
-      <div class="topright">
-        <div class="dc" id="dayChip">Loading...</div>
-        <div class="cstrip">
-          <span>Cal</span>
-          <div class="cbar-wrap">
-            <div class="cbar-fill" id="topBar" style="width:0"></div>
+      <header class="topbar">
+        <div class="logo">
+          <div class="lm">F</div>
+          <div class="lt">Fit<em>OS</em></div>
+          <div class="xbadge">EXTREME</div>
+          <div id="aiGreeting" class="ai-greeting">Hello Champ!</div>
+        </div>
+        <div class="topright">
+          <div class="dc" id="dayChip">Loading...</div>
+          <div class="cstrip">
+            <span>Cal</span>
+            <div class="cbar-wrap">
+              <div class="cbar-fill" id="topBar" style="width: 0"></div>
+            </div>
+            <span class="cv" id="topVal">0/950</span>
           </div>
-          <span class="cv" id="topVal">0/950</span>
+          <div class="bmi-b">
+            <div class="pulse"></div>
+            <span>BMI</span><span class="bmi-v">40.1</span>
+          </div>
+          <button
+            class="xbadge btn-reminders"
+            onclick="requestNotificationPermission()"
+          >
+            🔔 REMINDERS
+          </button>
         </div>
-        <div class="bmi-b">
-          <div class="pulse"></div><span>BMI</span><span class="bmi-v">40.1</span>
+        <div class="clkwrap">
+          <div class="clk" id="clk">--:--:-- --</div>
+          <div class="datelbl" id="dateLbl">--/---/----</div>
         </div>
-        <button class="xbadge" style="cursor:pointer;background:var(--gold);color:white;border:none;margin-left:8px"
-          onclick="requestNotificationPermission()">🔔 REMINDERS</button>
-      </div>
-      <div class="clkwrap">
-        <div class="clk" id="clk">--:--:-- --</div>
-        <div class="datelbl" id="dateLbl">--/---/----</div>
-      </div>
-    </header>
+      </header>
 
-    <!-- ============================================================
+      <!-- ============================================================
      SIDEBAR (desktop) / Stats Panel (mobile)
      ============================================================ -->
-    <aside class="sidebar" id="sidebarPanel">
-
-      <div>
-        <div class="sh">Your Extreme Profile</div>
-        <div class="pgrid">
-          <div class="pc">
-            <div class="pc-l">Current</div>
-            <div class="pc-v" style="color:var(--red)">120<span style="font-size:11px;color:var(--t3)">kg</span></div>
-            <div class="pc-s">Starting weight</div>
-          </div>
-          <div class="pc">
-            <div class="pc-l">Target</div>
-            <div class="pc-v" style="color:var(--green)">75<span style="font-size:11px;color:var(--t3)">kg</span></div>
-            <div class="pc-s">Goal weight</div>
-          </div>
-          <div class="pc">
-            <div class="pc-l">BMI</div>
-            <div class="pc-v" style="color:var(--red)">40.1</div>
-            <div class="pc-s">Obese III</div>
-            <div class="bmibar">
-              <div class="bmif" style="width:80%"></div>
-            </div>
-          </div>
-          <div class="pc">
-            <div class="pc-l">Lose</div>
-            <div class="pc-v" style="color:var(--amber)">45<span style="font-size:11px;color:var(--t3)">kg</span></div>
-            <div class="pc-s">~10–12 months</div>
-          </div>
-        </div>
-        <div class="premark">Age 26 · Night Shift 6:30 PM–2:30 AM · 🏋️ Gym <span>4:00–6:00 AM</span> · <span>Pure
-            Vegetarian</span><br>😴 Sleep 6:15 AM–12 PM · Wake 12 PM · Dinner 5 PM · <span>Extreme Protocol: 5–8 kg
-            loss/month 🔥</span></div>
-      </div>
-
-      <div>
-        <div class="sh">Daily Calories — 950 kcal Target</div>
-        <div class="ring-c" style="margin-bottom:24px;">
-          <div class="rb-wrap" style="width:180px; height:180px;">
-            <svg viewBox="0 0 120 120" style="transform: rotate(-90deg);">
-              <!-- Background Circles -->
-              <circle cx="60" cy="60" r="54" fill="none" stroke="var(--bd)" stroke-width="8" opacity="0.3" />
-              <circle cx="60" cy="60" r="44" fill="none" stroke="var(--bd)" stroke-width="8" opacity="0.3" />
-              <circle cx="60" cy="60" r="34" fill="none" stroke="var(--bd)" stroke-width="8" opacity="0.3" />
-              <circle cx="60" cy="60" r="24" fill="none" stroke="var(--bd)" stroke-width="8" opacity="0.3" />
-              
-              <!-- Progress Rings (2*PI*R) -->
-              <circle id="ringP" cx="60" cy="60" r="54" fill="none" stroke="var(--blue)" stroke-width="8" stroke-dasharray="339.3" stroke-dashoffset="339.3" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;" />
-              <circle id="ringC" cx="60" cy="60" r="44" fill="none" stroke="var(--green)" stroke-width="8" stroke-dasharray="276.5" stroke-dashoffset="276.5" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;" />
-              <circle id="ringF" cx="60" cy="60" r="34" fill="none" stroke="var(--amber)" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;" />
-              <circle id="ringFib" cx="60" cy="60" r="24" fill="none" stroke="var(--teal)" stroke-width="8" stroke-dasharray="150.8" stroke-dashoffset="150.8" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;" />
-            </svg>
-            <div class="ri" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
-              <div class="ri-n" id="calVal" style="font-size:28px; font-weight:900;">0</div>
-              <div class="ri-l" style="font-size:10px; font-weight:700; text-transform:uppercase; color:var(--t3);">kcal</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="macro-grid-alpha">
-          <div class="m-chip" style="border-left:4px solid var(--blue)">
-            <span class="m-val" id="vP">0/80g</span>
-            <span class="m-lbl">Protein</span>
-          </div>
-          <div class="m-chip" style="border-left:4px solid var(--green)">
-            <span class="m-val" id="vC">0/100g</span>
-            <span class="m-lbl">Carbs</span>
-          </div>
-          <div class="m-chip" style="border-left:4px solid var(--amber)">
-            <span class="m-val" id="vF">0/25g</span>
-            <span class="m-lbl">Fat</span>
-          </div>
-          <div class="m-chip" style="border-left:4px solid var(--teal)">
-            <span class="m-val" id="vFib">0/25g</span>
-            <span class="m-lbl">Fiber</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="sh">Water Tracker — Target 4L (16 Glasses)</div>
-        <div class="wgrid" id="wgrid"></div>
-        <div class="wrow2"><span id="wlbl">0 / 16 glasses</span><span class="wcnt" id="wml">0 ml</span></div>
-      </div>
-
-      <div>
-        <div class="sh">Isabgol (Psyllium Husk) — 2× Daily</div>
-        <div class="irow">
-          <button class="ib" onclick="togIsab(0)" id="isab0"><span class="ib-ico">🌾</span>
-            <div class="ib-l">Dose 1</div>
-            <div class="ib-t">1:00 PM</div>
-          </button>
-          <button class="ib" onclick="togIsab(1)" id="isab1"><span class="ib-ico">🌾</span>
-            <div class="ib-l">Dose 2</div>
-            <div class="ib-t">4:00 PM</div>
-          </button>
-        </div>
-        <div class="isab-note">2 tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY. Reduces hunger by
-          30–40%.</div>
-      </div>
-
-      <div>
-        <div class="sh">Supplements Schedule</div>
-        <div class="sql">
-          <div class="sq">
-            <div class="sd" style="background:var(--green)"></div>
-            <div class="sn">Jeera · Saunf · Ajwain</div>
-            <div class="st">12:15 PM · 3:30 PM</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--teal)"></div>
-            <div class="sn">Isabgol (2×)</div>
-            <div class="st">1:00 PM · 4:00 PM</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--amber)"></div>
-            <div class="sn">Apple Cider Vinegar (2×)</div>
-            <div class="st">6:00 AM (post-gym) · 4:15 PM</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--purple)"></div>
-            <div class="sn">Fat Burner Tablet</div>
-            <div class="st">3:15 AM (gym days only)</div>
-          </div>
-          <div class="sq">
-            <div class="sd" style="background:var(--teal)"></div>
-            <div class="sn">Green Tea</div>
-            <div class="st">12:00 AM (night shift)</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="padding-bottom:8px">
-        <div class="sh">Weekly Workout Split</div>
-        <div class="wk" id="weekGrid"></div>
-      </div>
-
-      <div style="padding-bottom:16px">
-        <div class="sh">⚖️ Today's Weight — Log It</div>
-        <div class="p-card wt-entry-box" style="padding:18px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div>
-              <div class="wt-current-lbl"
-                style="font-size:10px; text-transform:uppercase; letter-spacing:1px; opacity:0.7;">Current Weight</div>
-              <div class="wt-current-val" id="wtCurVal" style="font-size:28px; font-weight:900; color:var(--gold);">—
+      <aside class="sidebar" id="sidebarPanel">
+        <div>
+          <div class="sh">Your Extreme Profile</div>
+          <div class="pgrid">
+            <div class="pc">
+              <div class="pc-l">Current</div>
+              <div class="pc-v" style="color: var(--red)">
+                120<span style="font-size: var(--fs-xs); color: var(--t3)"
+                  >kg</span
+                >
               </div>
-              <div class="wt-lost" id="wtLostLbl" style="font-size:12px; font-weight:700;"></div>
+              <div class="pc-s">Starting weight</div>
             </div>
-            <div style="text-align:right">
-              <div class="wt-current-lbl"
-                style="font-size:10px; text-transform:uppercase; letter-spacing:1px; opacity:0.7;">Target</div>
-              <div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--green)">75.0 kg</div>
-              <div class="wt-current-lbl" id="wtRemain" style="font-size:11px;"></div>
+            <div class="pc">
+              <div class="pc-l">Target</div>
+              <div class="pc-v" style="color: var(--green)">
+                75<span style="font-size: var(--fs-xs); color: var(--t3)"
+                  >kg</span
+                >
+              </div>
+              <div class="pc-s">Goal weight</div>
+            </div>
+            <div class="pc">
+              <div class="pc-l">BMI</div>
+              <div class="pc-v" style="color: var(--red)">40.1</div>
+              <div class="pc-s">Obese III</div>
+              <div class="bmibar">
+                <div class="bmif" style="width: 80%"></div>
+              </div>
+            </div>
+            <div class="pc">
+              <div class="pc-l">Lose</div>
+              <div class="pc-v" style="color: var(--amber)">
+                45<span style="font-size: var(--fs-xs); color: var(--t3)"
+                  >kg</span
+                >
+              </div>
+              <div class="pc-s">~10–12 months</div>
             </div>
           </div>
-          <div class="wt-entry-row" style="margin-top:16px; display:flex; gap:10px;">
-            <input class="wt-input" type="number" id="wtInput" placeholder="119.5" step="0.1" min="50" max="200"
-              style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--bd); background:var(--bg3); font-weight:700;">
-            <button class="wt-save-btn" onclick="saveWeight()"
-              style="padding:0 20px; border-radius:12px; background:var(--gold); color:white; border:none; font-weight:800; cursor:pointer;">Log
-              ✓</button>
+          <div class="premark">
+            Age 26 · Night Shift 6:30 PM–2:30 AM · 🏋️ Gym
+            <span>4:00–6:00 AM</span> · <span>Pure Vegetarian</span><br />😴
+            Sleep 6:15 AM–12 PM · Wake 12 PM · Dinner 5 PM ·
+            <span>Extreme Protocol: 5–8 kg loss/month 🔥</span>
           </div>
         </div>
-      </div>
 
-      <div style="padding-bottom:16px">
-        <div class="sh">⚙️ App Settings & Data</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <button class="wt-save-btn" style="background:var(--bg3);color:var(--t2);border-color:var(--bd)"
-            onclick="exportData()">💾 Backup</button>
-          <button class="wt-save-btn" style="background:var(--bg3);color:var(--t2);border-color:var(--bd)"
-            onclick="document.getElementById('importInp').click()">📂 Restore</button>
-          <input type="file" id="importInp" style="display:none" onchange="importData(event)" accept=".json">
+        <div>
+          <div class="sh">Daily Calories — 950 kcal Target</div>
+          <div class="ring-c" style="margin-bottom: var(--space-lg)">
+            <div class="rb-wrap">
+              <svg viewBox="0 0 120 120" style="transform: rotate(-90deg)">
+                <!-- Background Circles -->
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  fill="none"
+                  stroke="var(--bd)"
+                  stroke-width="8"
+                  opacity="0.3"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="44"
+                  fill="none"
+                  stroke="var(--bd)"
+                  stroke-width="8"
+                  opacity="0.3"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="34"
+                  fill="none"
+                  stroke="var(--bd)"
+                  stroke-width="8"
+                  opacity="0.3"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="24"
+                  fill="none"
+                  stroke="var(--bd)"
+                  stroke-width="8"
+                  opacity="0.3"
+                />
+
+                <!-- Progress Rings (2*PI*R) -->
+                <circle
+                  id="ringP"
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  fill="none"
+                  stroke="var(--blue)"
+                  stroke-width="8"
+                  stroke-dasharray="339.3"
+                  stroke-dashoffset="339.3"
+                  stroke-linecap="round"
+                  style="transition: stroke-dashoffset 1s ease"
+                />
+                <circle
+                  id="ringC"
+                  cx="60"
+                  cy="60"
+                  r="44"
+                  fill="none"
+                  stroke="var(--green)"
+                  stroke-width="8"
+                  stroke-dasharray="276.5"
+                  stroke-dashoffset="276.5"
+                  stroke-linecap="round"
+                  style="transition: stroke-dashoffset 1s ease"
+                />
+                <circle
+                  id="ringF"
+                  cx="60"
+                  cy="60"
+                  r="34"
+                  fill="none"
+                  stroke="var(--amber)"
+                  stroke-width="8"
+                  stroke-dasharray="213.6"
+                  stroke-dashoffset="213.6"
+                  stroke-linecap="round"
+                  style="transition: stroke-dashoffset 1s ease"
+                />
+                <circle
+                  id="ringFib"
+                  cx="60"
+                  cy="60"
+                  r="24"
+                  fill="none"
+                  stroke="var(--teal)"
+                  stroke-width="8"
+                  stroke-dasharray="150.8"
+                  stroke-dashoffset="150.8"
+                  stroke-linecap="round"
+                  style="transition: stroke-dashoffset 1s ease"
+                />
+              </svg>
+              <div
+                class="ri"
+                style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  text-align: center;
+                "
+              >
+                <div
+                  class="ri-n"
+                  id="calVal"
+                  style="font-size: var(--fs-2xl); font-weight: 900"
+                >
+                  0
+                </div>
+                <div
+                  class="ri-l"
+                  style="
+                    font-size: var(--fs-3xs);
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    color: var(--t3);
+                  "
+                >
+                  kcal
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="macro-grid-alpha">
+            <div class="m-chip protein">
+              <span class="m-val" id="vP">0/80g</span>
+              <span class="m-lbl">Protein</span>
+            </div>
+            <div class="m-chip carbs">
+              <span class="m-val" id="vC">0/100g</span>
+              <span class="m-lbl">Carbs</span>
+            </div>
+            <div class="m-chip fat">
+              <span class="m-val" id="vF">0/25g</span>
+              <span class="m-lbl">Fat</span>
+            </div>
+            <div class="m-chip fiber">
+              <span class="m-val" id="vFib">0/25g</span>
+              <span class="m-lbl">Fiber</span>
+            </div>
+          </div>
         </div>
-      </div>
 
-    </aside>
+        <div>
+          <div class="sh">Water Tracker — Target 4L (16 Glasses)</div>
+          <div class="wgrid" id="wgrid"></div>
+          <div class="wrow2">
+            <span id="wlbl">0 / 16 glasses</span
+            ><span class="wcnt" id="wml">0 ml</span>
+          </div>
+        </div>
 
-    <!-- ============================================================
+        <div>
+          <div class="sh">Isabgol (Psyllium Husk) — 2× Daily</div>
+          <div class="irow">
+            <button class="ib" onclick="togIsab(0)" id="isab0">
+              <span class="ib-ico">🌾</span>
+              <div class="ib-l">Dose 1</div>
+              <div class="ib-t">1:00 PM</div>
+            </button>
+            <button class="ib" onclick="togIsab(1)" id="isab1">
+              <span class="ib-ico">🌾</span>
+              <div class="ib-l">Dose 2</div>
+              <div class="ib-t">4:00 PM</div>
+            </button>
+          </div>
+          <div class="isab-note">
+            2 tsp isabgol in 300ml warm water — stir fast, drink IMMEDIATELY.
+            Reduces hunger by 30–40%.
+          </div>
+        </div>
+
+        <div>
+          <div class="sh">Supplements Schedule</div>
+          <div class="sql">
+            <div class="sq">
+              <div class="sd" style="background: var(--green)"></div>
+              <div class="sn">Jeera · Saunf · Ajwain</div>
+              <div class="st">12:15 PM · 3:30 PM</div>
+            </div>
+            <div class="sq">
+              <div class="sd" style="background: var(--teal)"></div>
+              <div class="sn">Isabgol (2×)</div>
+              <div class="st">1:00 PM · 4:00 PM</div>
+            </div>
+            <div class="sq">
+              <div class="sd" style="background: var(--amber)"></div>
+              <div class="sn">Apple Cider Vinegar (2×)</div>
+              <div class="st">6:00 AM (post-gym) · 4:15 PM</div>
+            </div>
+            <div class="sq">
+              <div class="sd" style="background: var(--purple)"></div>
+              <div class="sn">Fat Burner Tablet</div>
+              <div class="st">3:15 AM (gym days only)</div>
+            </div>
+            <div class="sq">
+              <div class="sd" style="background: var(--teal)"></div>
+              <div class="sn">Green Tea</div>
+              <div class="st">12:00 AM (night shift)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-bottom: 8px">
+          <div class="sh">Weekly Workout Split</div>
+          <div class="wk" id="weekGrid"></div>
+        </div>
+
+        <div style="padding-bottom: 16px">
+          <div class="sh">⚖️ Today's Weight — Log It</div>
+          <div class="p-card wt-entry-box" style="padding: var(--space-lg)">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+              "
+            >
+              <div>
+                <div class="wt-current-lbl">Current Weight</div>
+                <div
+                  class="wt-current-val"
+                  id="wtCurVal"
+                  style="
+                    font-size: var(--fs-2xl);
+                    font-weight: 900;
+                    color: var(--gold);
+                  "
+                >
+                  —
+                </div>
+                <div
+                  class="wt-lost"
+                  id="wtLostLbl"
+                  style="font-size: var(--fs-sm); font-weight: 700"
+                ></div>
+              </div>
+              <div style="text-align: right">
+                <div class="wt-current-lbl">Target</div>
+                <div
+                  style="
+                    font-family: var(--mono);
+                    font-size: var(--fs-xl);
+                    font-weight: 900;
+                    color: var(--green);
+                  "
+                >
+                  75.0 kg
+                </div>
+                <div
+                  class="wt-current-lbl"
+                  id="wtRemain"
+                  style="font-size: var(--fs-xs)"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="wt-entry-row"
+              style="
+                margin-top: var(--space-lg);
+                display: flex;
+                gap: var(--space-sm);
+              "
+            >
+              <input
+                class="wt-input"
+                type="number"
+                id="wtInput"
+                placeholder="119.5"
+                step="0.1"
+                min="50"
+                max="200"
+                style="
+                  flex: 1;
+                  padding: var(--space-sm);
+                  border-radius: var(--r-md);
+                  border: 1px solid var(--bd);
+                  background: var(--bg3);
+                  font-weight: 700;
+                "
+              />
+              <button
+                class="wt-save-btn"
+                onclick="saveWeight()"
+                style="
+                  padding: 0 var(--space-lg);
+                  border-radius: var(--r-md);
+                  background: var(--gold);
+                  color: white;
+                  border: none;
+                  font-weight: 800;
+                  cursor: pointer;
+                "
+              >
+                Log ✓
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-bottom: 16px">
+          <div class="sh">⚙️ App Settings & Data</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+            <button
+              class="wt-save-btn"
+              style="
+                background: var(--bg3);
+                color: var(--t2);
+                border-color: var(--bd);
+              "
+              onclick="exportData()"
+            >
+              💾 Backup
+            </button>
+            <button
+              class="wt-save-btn"
+              style="
+                background: var(--bg3);
+                color: var(--t2);
+                border-color: var(--bd);
+              "
+              onclick="document.getElementById('importInp').click()"
+            >
+              📂 Restore
+            </button>
+            <input
+              type="file"
+              id="importInp"
+              style="display: none"
+              onchange="importData(event)"
+              accept=".json"
+            />
+          </div>
+        </div>
+      </aside>
+
+      <!-- ============================================================
      MAIN CONTENT
      ============================================================ -->
-    <main class="main" id="mainArea">
-      <div class="tabbar" id="desktopTabbar">
-        <button class="tab on" onclick="showTab('diet',this)">🍱 Diet Plan</button>
-        <button class="tab" onclick="showTab('workout',this)">💪 Today's Workout</button>
-        <button class="tab" onclick="showTab('allworkouts',this)">📋 All Workouts</button>
-        <button class="tab" onclick="showTab('progress',this)">📈 My Progress</button>
-      </div>
+      <main class="main" id="mainArea">
+        <div class="tabbar" id="desktopTabbar">
+          <button class="tab on" onclick="showTab('diet', this)">
+            🍱 Diet Plan
+          </button>
+          <button class="tab" onclick="showTab('workout', this)">
+            💪 Today's Workout
+          </button>
+          <button class="tab" onclick="showTab('allworkouts', this)">
+            📋 All Workouts
+          </button>
+          <button class="tab" onclick="showTab('progress', this)">
+            📈 My Progress
+          </button>
+        </div>
 
-      <div class="tc on" id="tc-diet">
-        <!-- Day Schedule Strip -->
-        <div class="day-strip-wrap">
-          <div class="day-strip">
-            <div class="ds-node n-job">
-              <div class="ds-ico">💼</div>
-              <div class="ds-time">2:30 AM</div>
-              <div class="ds-lbl">Job Ends</div>
+        <div class="tc on" id="tc-diet">
+          <!-- Day Schedule Strip -->
+          <div class="day-strip-wrap">
+            <div class="day-strip">
+              <div class="ds-node n-job">
+                <div class="ds-ico">💼</div>
+                <div class="ds-time">2:30 AM</div>
+                <div class="ds-lbl">Job Ends</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-gym">
+                <div class="ds-ico">🌅</div>
+                <div class="ds-time">4–6 AM</div>
+                <div class="ds-lbl">GYM</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-sleep">
+                <div class="ds-ico">😴</div>
+                <div class="ds-time">6:15 AM–12 PM</div>
+                <div class="ds-lbl">SLEEP</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-meal">
+                <div class="ds-ico">🍱</div>
+                <div class="ds-time">1–4 PM</div>
+                <div class="ds-lbl">Meals</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-dinner">
+                <div class="ds-ico">🍽️</div>
+                <div class="ds-time">5:00 PM</div>
+                <div class="ds-lbl">Dinner</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-job">
+                <div class="ds-ico">💼</div>
+                <div class="ds-time">6:30 PM</div>
+                <div class="ds-lbl">Job</div>
+              </div>
+              <div class="ds-conn"></div>
+              <div class="ds-node n-job">
+                <div class="ds-ico">🌙</div>
+                <div class="ds-time">9:30 PM‒12 AM</div>
+                <div class="ds-lbl">Breaks</div>
+              </div>
             </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-gym">
-              <div class="ds-ico">🌅</div>
-              <div class="ds-time">4–6 AM</div>
-              <div class="ds-lbl">GYM</div>
-            </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-sleep">
-              <div class="ds-ico">😴</div>
-              <div class="ds-time">6:15 AM–12 PM</div>
-              <div class="ds-lbl">SLEEP</div>
-            </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-meal">
-              <div class="ds-ico">🍱</div>
-              <div class="ds-time">1–4 PM</div>
-              <div class="ds-lbl">Meals</div>
-            </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-dinner">
-              <div class="ds-ico">🍽️</div>
-              <div class="ds-time">5:00 PM</div>
-              <div class="ds-lbl">Dinner</div>
-            </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-job">
-              <div class="ds-ico">💼</div>
-              <div class="ds-time">6:30 PM</div>
-              <div class="ds-lbl">Job</div>
-            </div>
-            <div class="ds-conn"></div>
-            <div class="ds-node n-job">
-              <div class="ds-ico">🌙</div>
-              <div class="ds-time">9:30 PM‒12 AM</div>
-              <div class="ds-lbl">Breaks</div>
-            </div>
+          </div>
+
+          <div class="tl" id="dietTL"></div>
+          <div class="foot">
+            <strong>120kg Extreme Vegetarian Protocol —</strong>
+            <span class="highlight"
+              >Proprietary high-intensity plan — maximum fat loss through
+              metabolic timing.</span
+            ><br />
+            📋 Daily Cycle: Job finishes 2:30 AM → Pre-workout activation 3 AM →
+            Gym Training 4–6 AM → Post-workout nutrition 6:15 AM →
+            <strong>Deep Recovery 6:15 AM–12:00 PM</strong>.<br />
+            Wake Up 12 PM → Nutrient-Dense Lunch 1:15 PM → High-Protein Dinner
+            5:00 PM → Professional Shift 6:30 PM → Nutritional Breaks at 9:30 PM
+            & 12:00 AM.<br />
+            Fat Burner Optimization 3:15 AM (Gym Days Only) · 🏋️ Fit Master Gym,
+            Gota.<br />
+            <span class="highlight" style="font-weight: 900"
+              >Projected Outcome: 5–8 kg sustainable fat loss per month.</span
+            >
           </div>
         </div>
 
-        <div class="tl" id="dietTL"></div>
-        <div class="foot">
-          <strong>120kg Extreme Vegetarian Protocol —</strong>
-          <span class="highlight">Proprietary high-intensity plan — maximum fat loss through metabolic
-            timing.</span><br>
-          📋 Daily Cycle: Job finishes 2:30 AM → Pre-workout activation 3 AM → Gym Training 4–6 AM → Post-workout
-          nutrition 6:15 AM → <strong>Deep Recovery 6:15 AM–12:00 PM</strong>.<br>
-          Wake Up 12 PM → Nutrient-Dense Lunch 1:15 PM → High-Protein Dinner 5:00 PM → Professional Shift 6:30 PM →
-          Nutritional Breaks at 9:30 PM & 12:00 AM.<br>
-          Fat Burner Optimization 3:15 AM (Gym Days Only) · 🏋️ Fit Master Gym, Gota.<br>
-          <span class="highlight" style="font-weight:900">Projected Outcome: 5–8 kg sustainable fat loss per
-            month.</span>
+        <div class="tc" id="tc-workout">
+          <div id="wocontent"></div>
         </div>
-      </div>
+        <div class="tc" id="tc-rest">
+          <div id="restcontent"></div>
+        </div>
 
-      <div class="tc" id="tc-workout">
-        <div id="wocontent"></div>
-      </div>
-      <div class="tc" id="tc-rest">
-        <div id="restcontent"></div>
-      </div>
+        <div class="tc" id="tc-allworkouts">
+          <div id="allworkoutscontent"></div>
+        </div>
 
-      <div class="tc" id="tc-allworkouts">
-        <div id="allworkoutscontent"></div>
-      </div>
+        <div class="tc" id="tc-progress">
+          <div id="progressContent"></div>
+        </div>
+      </main>
+    </div>
+    <!-- /.layout -->
 
-      <div class="tc" id="tc-progress">
-        <div id="progressContent"></div>
-      </div>
-    </main>
-
-  </div><!-- /.layout -->
-
-  <!-- ============================================================
+    <!-- ============================================================
      BOTTOM NAV (mobile only)
      ============================================================ -->
-  <nav class="botnav" id="botnav">
-    <button class="bntab on" id="bn-diet" onclick="mobTab('diet',this)">
-      <span class="bnico">🍱</span>
-      <span class="bnlbl">Diet</span>
-    </button>
-    <button class="bntab" id="bn-workout" onclick="mobTab('workout',this)">
-      <span class="bnico">💪</span>
-      <span class="bnlbl">Workout</span>
-    </button>
-    <button class="bntab" id="bn-allworkouts" onclick="mobTab('allworkouts',this)">
-      <span class="bnico">📋</span>
-      <span class="bnlbl">All Plans</span>
-    </button>
-    <button class="bntab" id="bn-progress" onclick="mobTab('progress',this)">
-      <span class="bnico">📈</span>
-      <span class="bnlbl">Progress</span>
-    </button>
-    <button class="bntab" id="bn-stats" onclick="mobTab('stats',this)">
-      <span class="bnico">📊</span>
-      <span class="bnlbl">Stats</span>
-    </button>
-  </nav>
+    <nav class="botnav" id="botnav">
+      <button class="bntab on" id="bn-diet" onclick="mobTab('diet', this)">
+        <span class="bnico">🍱</span>
+        <span class="bnlbl">Diet</span>
+      </button>
+      <button class="bntab" id="bn-workout" onclick="mobTab('workout', this)">
+        <span class="bnico">💪</span>
+        <span class="bnlbl">Workout</span>
+      </button>
+      <button
+        class="bntab"
+        id="bn-allworkouts"
+        onclick="mobTab('allworkouts', this)"
+      >
+        <span class="bnico">📋</span>
+        <span class="bnlbl">All Plans</span>
+      </button>
+      <button class="bntab" id="bn-progress" onclick="mobTab('progress', this)">
+        <span class="bnico">📈</span>
+        <span class="bnlbl">Progress</span>
+      </button>
+      <button class="bntab" id="bn-stats" onclick="mobTab('stats', this)">
+        <span class="bnico">📊</span>
+        <span class="bnlbl">Stats</span>
+      </button>
+    </nav>
 
-  <!-- Hyper-Advanced AI Rest Timer Overlay -->
-  <div id="restTimerOverlay"
-    style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(7,15,30,0.85);backdrop-filter:blur(10px);z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;">
-    <div
-      style="font-size:14px;font-weight:800;letter-spacing:0.1em;color:var(--gold);margin-bottom:20px;text-transform:uppercase;">
-      RESTING...</div>
-    <div style="position:relative;width:180px;height:180px;">
-      <svg width="180" height="180" viewBox="0 0 180 180" style="transform:rotate(-90deg)">
-        <circle cx="90" cy="90" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"></circle>
-        <circle id="timerRing" cx="90" cy="90" r="80" fill="none" stroke="var(--gold)" stroke-width="8"
-          stroke-dasharray="502.6" stroke-dashoffset="0" stroke-linecap="round"
-          style="transition:stroke-dashoffset 1s linear"></circle>
-      </svg>
-      <div id="timerVal"
-        style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:48px;font-weight:800;">
-        60</div>
+    <!-- Hyper-Advanced AI Rest Timer Overlay -->
+    <div id="restTimerOverlay" class="rest-timer-overlay">
+      <div
+        style="
+          font-size: var(--fs-md);
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: var(--gold);
+          margin-bottom: var(--space-xl);
+          text-transform: uppercase;
+        "
+      >
+        RESTING...
+      </div>
+      <div class="rest-timer-ring">
+        <svg
+          width="180"
+          height="180"
+          viewBox="0 0 180 180"
+          style="transform: rotate(-90deg)"
+        >
+          <circle
+            cx="90"
+            cy="90"
+            r="80"
+            fill="none"
+            stroke="rgba(255,255,255,0.1)"
+            stroke-width="8"
+          ></circle>
+          <circle
+            id="timerRing"
+            cx="90"
+            cy="90"
+            r="80"
+            fill="none"
+            stroke="var(--gold)"
+            stroke-width="8"
+            stroke-dasharray="502.6"
+            stroke-dashoffset="0"
+            stroke-linecap="round"
+            style="transition: stroke-dashoffset 1s linear"
+          ></circle>
+        </svg>
+        <div id="timerVal" class="rest-timer-val">60</div>
+      </div>
+      <div
+        style="
+          margin-top: var(--space-2xl);
+          display: flex;
+          gap: var(--space-sm);
+        "
+      >
+        <button onclick="skipRest()" class="rest-timer-btn">Skip Rest</button>
+      </div>
     </div>
-    <div style="margin-top:30px;display:flex;gap:12px;">
-      <button onclick="skipRest()"
-        style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:10px 24px;border-radius:30px;font-weight:700;font-size:14px;cursor:pointer;">Skip
-        Rest</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>
