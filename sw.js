@@ -1,7 +1,9 @@
-const CACHE_NAME = 'fitos-v1';
+const CACHE_NAME = 'fitos-v2';
 const ASSETS = [
   './',
   './index.html',
+  './style.css',
+  './script.js',
   'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap'
 ];
 
@@ -17,9 +19,12 @@ self.addEventListener('install', (e) => {
 // Fetch Event
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request);
-    })
+    fetch(e.request).then(response => {
+      return caches.open(CACHE_NAME).then(cache => {
+        cache.put(e.request, response.clone());
+        return response;
+      });
+    }).catch(() => caches.match(e.request))
   );
 });
 
