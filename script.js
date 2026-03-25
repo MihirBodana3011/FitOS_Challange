@@ -1793,11 +1793,11 @@ function buildAllWorkouts() {
             <div class="mch" style="padding:20px;">
               <div class="mcico" style="background:${wc}11; color:${wc}; width:54px; height:54px; border-radius:16px; font-size:26px; display:flex; align-items:center; justify-content:center;">${type === "back" ? "💪" : type === "chest" ? "🎯" : type === "rest" ? "😴" : "🦵"}</div>
               <div class="mcnfo" style="margin-left:14px;">
-                <div class="mcnm" style="font-weight:900; font-size:20px; color:${wc};">${wd.name}</div>
+                <div class="mcnm" style="font-weight:900; font-size:var(--fs-lg); color:${wc};">${wd.name}</div>
                 <div class="mcsb" style="font-weight:700; opacity:0.7;">Weekly Target · ${wd.days}</div>
               </div>
               <div class="mcrt" style="margin-left:auto;">
-                 <div style="font-family:var(--mono); font-weight:900; font-size:14px; color:white; background:${wc}; padding:4px 12px; border-radius:20px; box-shadow:0 4px 10px ${wc}44">~${wd.cal} kcal</div>
+                 <div style="font-family:var(--mono); font-weight:900; font-size:var(--fs-2xs); color:white; background:${wc}; padding:var(--space-xs) var(--space-md); border-radius:20px; box-shadow:0 4px 10px ${wc}44">~${wd.cal} kcal</div>
               </div>
             </div>
             <div style="padding:0 20px 20px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -2063,11 +2063,11 @@ function buildProgressTab() {
 
   document.getElementById("progressContent").innerHTML = `
         <div class="p-card pulse-glow" style="margin-bottom:24px; background:linear-gradient(135deg, var(--gold-b), transparent); border:1px solid var(--gold); padding:24px; border-radius:24px;">
-          <div style="font-size:10px; font-weight:900; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">AI Prediction Engine 🧠</div>
-          <div style="font-family:'Raleway',sans-serif; font-size:20px; font-weight:900; color:var(--t); letter-spacing:-0.5px; line-height:1.2;">
+          <div style="font-size:var(--fs-2xs); font-weight:900; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:var(--space-xs);">AI Prediction Engine 🧠</div>
+          <div style="font-family:'Raleway',sans-serif; font-size:var(--fs-lg); font-weight:900; color:var(--t); letter-spacing:-0.5px; line-height:1.2;">
             At this rate, you could lose <span style="color:var(--green)">${(totalWo * 0.15).toFixed(1)}kg</span> by next Sunday.
           </div>
-          <div style="font-size:11px; color:var(--t3); margin-top:8px; font-weight:600;">Based on your consistency: ${streak} day streak & ${totalWo} sessions.</div>
+          <div style="font-size:var(--fs-3xs); color:var(--t3); margin-top:var(--space-xs); font-weight:600;">Based on your consistency: ${streak} day streak & ${totalWo} sessions.</div>
         </div>
 
         <div class="prog-grid">

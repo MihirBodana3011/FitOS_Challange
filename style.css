@@ -42,32 +42,32 @@
   --mono: "JetBrains Mono", monospace;
 
   /* Layout - Responsive */
-  --topbar: clamp(3rem, 8vw, 4rem);
-  --botnav: clamp(3.5rem, 9vw, 4.5rem);
+  --topbar: clamp(3.2rem, 10vw, 4rem);
+  --botnav: clamp(3.8rem, 12vw, 4.8rem);
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --r-sm: clamp(0.5rem, 2vw, 0.75rem);
-  --r-md: clamp(0.75rem, 3vw, 1rem);
-  --r-lg: clamp(1rem, 4vw, 1.25rem);
-  --r-xl: clamp(1.25rem, 5vw, 1.5rem);
+  --r-sm: clamp(0.4rem, 1.5vw, 0.6rem);
+  --r-md: clamp(0.6rem, 2.5vw, 0.8rem);
+  --r-lg: clamp(0.8rem, 3.5vw, 1rem);
+  --r-xl: clamp(1rem, 4.5vw, 1.25rem);
 
-  /* Fluid type scale — Enhanced for all screens */
-  --fs-3xs: clamp(0.6rem, 1.5vw, 0.75rem);
-  --fs-2xs: clamp(0.7rem, 1.8vw, 0.875rem);
-  --fs-xs: clamp(0.8rem, 2vw, 1rem);
-  --fs-sm: clamp(0.9rem, 2.2vw, 1.125rem);
-  --fs-md: clamp(1rem, 2.5vw, 1.25rem);
-  --fs-lg: clamp(1.125rem, 2.8vw, 1.5rem);
-  --fs-xl: clamp(1.25rem, 3.2vw, 1.75rem);
-  --fs-2xl: clamp(1.5rem, 4vw, 2.25rem);
-  --fs-3xl: clamp(2rem, 5vw, 3rem);
+  /* Fluid type scale — Optimized for extreme mobile fit */
+  --fs-3xs: clamp(0.55rem, 1.4vw, 0.7rem);
+  --fs-2xs: clamp(0.65rem, 1.7vw, 0.8rem);
+  --fs-xs: clamp(0.75rem, 2.1vw, 0.95rem);
+  --fs-sm: clamp(0.85rem, 2.4vw, 1.05rem);
+  --fs-md: clamp(0.95rem, 2.8vw, 1.15rem);
+  --fs-lg: clamp(1.1rem, 3.2vw, 1.35rem);
+  --fs-xl: clamp(1.2rem, 3.8vw, 1.6rem);
+  --fs-2xl: clamp(1.4rem, 4.5vw, 2rem);
+  --fs-3xl: clamp(1.8rem, 5.5vw, 2.8rem);
 
-  /* Spacing scale */
-  --space-xs: clamp(0.25rem, 1vw, 0.5rem);
-  --space-sm: clamp(0.5rem, 2vw, 0.75rem);
-  --space-md: clamp(0.75rem, 3vw, 1rem);
-  --space-lg: clamp(1rem, 4vw, 1.5rem);
-  --space-xl: clamp(1.5rem, 6vw, 2rem);
-  --space-2xl: clamp(2rem, 8vw, 3rem);
+  /* Spacing scale — More compact on mobile */
+  --space-xs: clamp(0.2rem, 0.8vw, 0.4rem);
+  --space-sm: clamp(0.4rem, 1.5vw, 0.6rem);
+  --space-md: clamp(0.6rem, 2.5vw, 0.8rem);
+  --space-lg: clamp(0.8rem, 3.5vw, 1.2rem);
+  --space-xl: clamp(1.2rem, 5vw, 1.8rem);
+  --space-2xl: clamp(1.8rem, 7vw, 2.5rem);
 }
 
 html {
@@ -9495,4 +9495,313 @@ body.night-shift-active::after {
 }
 .rest-timer-btn:active {
   transform: translateY(0) scale(0.98);
+}
+
+/* ============================================================ 
+   UNIVERSAL MOBILE REFINEMENT (GLOBAL OVERRIDE)
+   ============================================================ */
+   
+/* Helper classes for cleaned index.html */
+.pc-red { color: var(--red) !important; }
+.pc-green { color: var(--green) !important; }
+.pc-amber { color: var(--amber) !important; }
+.fs-xs { font-size: var(--fs-xs) !important; }
+.t3 { color: var(--t3) !important; }
+
+@media (max-width: 768px) {
+  /* 1. LAYER STABILITY */
+  .layout {
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 104px !important; /* 56px header + 48px tabs */
+    padding-bottom: 74px !important; /* botnav + safe zone */
+    overflow-x: hidden !important;
+  }
+
+  /* 2. HEADER: FIXED & FITTING */
+  .topbar {
+    height: 56px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 5000 !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hide excessive info in header on mobile */
+  .topright .dc, .topright .cstrip, .topright .bmi-b, .logo .xbadge, .ai-greeting {
+    display: none !important;
+  }
+
+  .topright {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* 3. REMINDER BUTTON: ALWAYS VISIBLE */
+  .btn-reminders {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    padding: 6px 10px !important;
+    border-radius: 12px !important;
+    background: var(--gold) !important;
+    color: white !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 4px 10px rgba(198, 146, 10, 0.3) !important;
+  }
+
+  /* 4. TABS: FORCED ONE LINE SCROLLABLE */
+  .tabbar {
+    position: fixed !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 48px !important;
+    z-index: 4000 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid var(--bd) !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 0 8px !important;
+    gap: 4px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03) !important;
+  }
+
+  .tabbar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .tab {
+    flex: 0 0 auto !important;
+    min-width: 95px !important;
+    height: 100% !important;
+    padding: 0 10px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--t2) !important;
+  }
+
+  .tab.on {
+    color: var(--gold) !important;
+    border-bottom-color: var(--gold) !important;
+    background: rgba(198, 146, 10, 0.05) !important;
+  }
+
+  /* 5. BOTTOM NAV: STRICTLY FIXED */
+  .botnav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 66px !important;
+    z-index: 5000 !important;
+    background: #ffffff !important;
+    border-top: 1px solid var(--bd) !important;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.08) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  /* 6. GENERAL SIZING & POLISH */
+  .main {
+    margin-top: 0 !important;
+    width: 100% !important;
+  }
+
+  .tc {
+    padding: 16px 12px 30px !important;
+  }
+
+  .p-card {
+    padding: 16px !important;
+    border-radius: 20px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .sh {
+    font-size: var(--fs-md) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .pc-v {
+    font-size: 20px !important;
+  }
+
+  /* Exercise Cards */
+  .ex-card-new {
+    padding: 12px !important;
+    gap: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .ex-img-wrap {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 12px !important;
+  }
+
+  .ex-title-new {
+    font-size: 15px !important;
+  }
+
+  /* Water grid perfect width */
+  .wt-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .wt-glass {
+    height: 54px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Animation overrides for reliability */
+  .tc {
+    transition: none !important; /* Flash load for responsiveness speed */
+  }
+}
+
+/* ============================================================ 
+   FINAL DEFINITIVE MOBILE POLISH (FORCE OVERRIDE)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Fix Topbar Fitting & Stickiness */
+  .topbar {
+    height: 56px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 2000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 10px !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.1) !important;
+  }
+
+  .topright {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+
+  /* Ensure only reminder button shows in topright to save space */
+  .topright .dc, .topright .cstrip, .topright .bmi-b {
+    display: none !important;
+  }
+
+  .btn-reminders {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 8px !important;
+    padding: 4px 6px !important;
+    border-radius: 12px !important;
+    white-space: nowrap !important;
+    background: var(--gold) !important;
+    color: white !important;
+  }
+
+  /* Fix Tabs in One Line */
+  .tabbar {
+    position: fixed !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 44px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    background: #fff !important;
+    border-bottom: 1px solid var(--bd) !important;
+    scrollbar-width: none !important; /* Hide scrollbar Firefox */
+    padding: 0 4px !important;
+  }
+
+  .tabbar::-webkit-scrollbar {
+    display: none !important; /* Hide scrollbar Chrome/Safari */
+  }
+
+  .tab {
+    flex: 0 0 auto !important; /* Don't shrink, stay in line */
+    min-width: 80px !important;
+    font-size: 11px !important;
+    padding: 0 8px !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    border-bottom: 2px solid transparent !important;
+  }
+
+  .tab.on {
+    border-bottom-color: var(--gold) !important;
+    color: var(--gold) !important;
+    background: rgba(198, 146, 10, 0.05) !important;
+  }
+
+  /* Fix Bottom Navigation Stickiness */
+  .botnav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: calc(var(--botnav) + var(--safe-b)) !important;
+    z-index: 3000 !important; /* Highest priority */
+    background: #fff !important;
+    border-top: 1px solid var(--bd) !important;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.1) !important;
+  }
+
+  /* Adjust Layout to avoid overlap */
+  .layout {
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 100px !important; /* 56px header + 44px tabs */
+    padding-bottom: 80px !important; /* bottom nav space */
+  }
+
+  .main {
+    margin-top: 0 !important;
+  }
+
+  .tc {
+    padding: 15px 10px !important;
+  }
 }
