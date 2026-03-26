@@ -40,6 +40,8 @@ self.addEventListener("activate", (e) => {
 
 // Fetch Event - Network First with Cache Fallback
 self.addEventListener("fetch", (e) => {
+  // Only cache http/https requests (prevents chrome-extension errors)
+  if (!e.request.url.startsWith("http")) return;
   if (e.request.method !== "GET") return;
 
   e.respondWith(
@@ -61,26 +63,29 @@ self.addEventListener("fetch", (e) => {
   );
 });
 
-// Notification Logic - Enhanced
+// Notification Logic - Enhanced for Android Background Reliability
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SCHEDULE_NOTIFICATION") {
     const { title, body, delay } = event.data;
     
-    // Schedule notification after delay
-    setTimeout(() => {
-      self.registration.showNotification(title, {
-        body: body,
-        icon: "./Image/logo-new.png",
-        badge: "./Image/logo-new.png",
-        tag: "fitos-reminder", // Prevent duplicate notifications
-        requireInteraction: false,
-        vibrate: [200, 100, 200],
-        actions: [
-          { action: "open", title: "Open App" },
-          { action: "dismiss", title: "Dismiss" }
-        ]
-      }).catch(err => console.error("Notification failed:", err));
-    }, delay);
+    // Use waitUntil with a Promise to keep SW alive for the duration of the wait
+    event.waitUntil(
+      new Promise((resolve) => {
+        setTimeout(() => {
+          self.registration.showNotification(title, {
+            body: body,
+            icon: "./Image/logo-new.png",
+            badge: "./Image/logo-new.png",
+            tag: "fitos-reminder",
+            requireInteraction: true,
+            vibrate: [200, 100, 200]
+          }).then(resolve).catch((err) => {
+            console.error("Delayed Notification failed:", err);
+            resolve();
+          });
+        }, Math.max(0, delay));
+      })
+    );
   }
 });
 

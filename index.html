@@ -57,8 +57,10 @@
           <button
             class="btn-reminders"
             onclick="requestNotificationPermission()"
+            style="display:flex; align-items:center; gap:8px;"
           >
-            🔔 REMINDERS
+            <span>🔔 REMINDERS</span>
+            <span onclick="event.stopPropagation(); testNotification();" style="padding:2px 8px; background:rgba(212,160,23,0.15); border-radius:12px; font-size:9px; border:1px solid rgba(212,160,23,0.3); font-weight:800; cursor:pointer;">🧪 TEST</span>
           </button>
         </div>
         <div class="clkwrap">
@@ -114,146 +116,133 @@
 
         <div>
           <div class="sh">Daily Calories — 950 kcal Target</div>
-          <div class="ring-c" style="margin-bottom:16px">
-            <div class="rb-wrap">
-              <svg viewBox="0 0 120 120" style="transform: rotate(-90deg)">
-                <!-- Background Circles -->
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="54"
-                  fill="none"
-                  stroke="var(--bd)"
-                  stroke-width="8"
-                  opacity="0.3"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="44"
-                  fill="none"
-                  stroke="var(--bd)"
-                  stroke-width="8"
-                  opacity="0.3"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="34"
-                  fill="none"
-                  stroke="var(--bd)"
-                  stroke-width="8"
-                  opacity="0.3"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="24"
-                  fill="none"
-                  stroke="var(--bd)"
-                  stroke-width="8"
-                  opacity="0.3"
-                />
+          <div class="dash-top">
+            <div class="ring-c">
+              <div class="rb-wrap">
+                <svg viewBox="0 0 120 120" style="transform: rotate(-90deg)">
+                  <!-- Background Circles -->
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    fill="none"
+                    stroke="var(--bd)"
+                    stroke-width="8"
+                    opacity="0.3"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="44"
+                    fill="none"
+                    stroke="var(--bd)"
+                    stroke-width="8"
+                    opacity="0.3"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="34"
+                    fill="none"
+                    stroke="var(--bd)"
+                    stroke-width="8"
+                    opacity="0.3"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="24"
+                    fill="none"
+                    stroke="var(--bd)"
+                    stroke-width="8"
+                    opacity="0.3"
+                  />
 
-                <!-- Progress Rings (2*PI*R) -->
-                <circle
-                  id="ringP"
-                  cx="60"
-                  cy="60"
-                  r="54"
-                  fill="none"
-                  stroke="var(--blue)"
-                  stroke-width="8"
-                  stroke-dasharray="339.3"
-                  stroke-dashoffset="339.3"
-                  stroke-linecap="round"
-                  style="transition: stroke-dashoffset 1s ease"
-                />
-                <circle
-                  id="ringC"
-                  cx="60"
-                  cy="60"
-                  r="44"
-                  fill="none"
-                  stroke="var(--green)"
-                  stroke-width="8"
-                  stroke-dasharray="276.5"
-                  stroke-dashoffset="276.5"
-                  stroke-linecap="round"
-                  style="transition: stroke-dashoffset 1s ease"
-                />
-                <circle
-                  id="ringF"
-                  cx="60"
-                  cy="60"
-                  r="34"
-                  fill="none"
-                  stroke="var(--amber)"
-                  stroke-width="8"
-                  stroke-dasharray="213.6"
-                  stroke-dashoffset="213.6"
-                  stroke-linecap="round"
-                  style="transition: stroke-dashoffset 1s ease"
-                />
-                <circle
-                  id="ringFib"
-                  cx="60"
-                  cy="60"
-                  r="24"
-                  fill="none"
-                  stroke="var(--teal)"
-                  stroke-width="8"
-                  stroke-dasharray="150.8"
-                  stroke-dashoffset="150.8"
-                  stroke-linecap="round"
-                  style="transition: stroke-dashoffset 1s ease"
-                />
-              </svg>
-              <div class="ri">
-                <div
-                  class="ri-n"
-                  id="calVal"
-
-                >
-                  0
-                </div>
-                <div
-                  class="ri-l"
-
-                >
-                  kcal
+                  <!-- Progress Rings (2*PI*R) -->
+                  <circle
+                    id="ringP"
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    fill="none"
+                    stroke="var(--blue)"
+                    stroke-width="8"
+                    stroke-dasharray="339.3"
+                    stroke-dashoffset="339.3"
+                    stroke-linecap="round"
+                    style="transition: stroke-dashoffset 1s ease"
+                  />
+                  <circle
+                    id="ringC"
+                    cx="60"
+                    cy="60"
+                    r="44"
+                    fill="none"
+                    stroke="var(--green)"
+                    stroke-width="8"
+                    stroke-dasharray="276.5"
+                    stroke-dashoffset="276.5"
+                    stroke-linecap="round"
+                    style="transition: stroke-dashoffset 1s ease"
+                  />
+                  <circle
+                    id="ringF"
+                    cx="60"
+                    cy="60"
+                    r="34"
+                    fill="none"
+                    stroke="var(--amber)"
+                    stroke-width="8"
+                    stroke-dasharray="213.6"
+                    stroke-dashoffset="213.6"
+                    stroke-linecap="round"
+                    style="transition: stroke-dashoffset 1s ease"
+                  />
+                  <circle
+                    id="ringFib"
+                    cx="60"
+                    cy="60"
+                    r="24"
+                    fill="none"
+                    stroke="var(--teal)"
+                    stroke-width="8"
+                    stroke-dasharray="150.8"
+                    stroke-dashoffset="150.8"
+                    stroke-linecap="round"
+                    style="transition: stroke-dashoffset 1s ease"
+                  />
+                </svg>
+                <div class="ri">
+                  <div class="ri-n" id="calVal">0</div>
+                  <div class="ri-l">kcal</div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="macro-grid-alpha">
-            <div class="m-chip protein">
-              <span class="m-val" id="vP">0/80g</span>
-              <span class="m-lbl">Protein</span>
-            </div>
-            <div class="m-chip carbs">
-              <span class="m-val" id="vC">0/100g</span>
-              <span class="m-lbl">Carbs</span>
-            </div>
-            <div class="m-chip fat">
-              <span class="m-val" id="vF">0/25g</span>
-              <span class="m-lbl">Fat</span>
-            </div>
-            <div class="m-chip fiber">
-              <span class="m-val" id="vFib">0/25g</span>
-              <span class="m-lbl">Fiber</span>
+            <div class="macro-grid-alpha">
+              <div class="m-chip protein">
+                <span class="m-val" id="vP">0/80g</span>
+                <span class="m-lbl">Protein</span>
+              </div>
+              <div class="m-chip carbs">
+                <span class="m-val" id="vC">0/100g</span>
+                <span class="m-lbl">Carbs</span>
+              </div>
+              <div class="m-chip fat">
+                <span class="m-val" id="vF">0/25g</span>
+                <span class="m-lbl">Fat</span>
+              </div>
+              <div class="m-chip fiber">
+                <span class="m-val" id="vFib">0/25g</span>
+                <span class="m-lbl">Fiber</span>
+              </div>
             </div>
           </div>
         </div>
 
         <div>
-          <div class="sh">Water Tracker — Target 4L (16 Glasses)</div>
-          <div class="wgrid" id="wgrid"></div>
-          <div class="wrow2">
-            <span id="wlbl">0 / 16 glasses</span
-            ><span class="wcnt" id="wml">0 ml</span>
-          </div>
+          <div class="sh">Water Tracker — Monthly Progress</div>
+          <div class="wgrid" id="wgrid" style="min-height: 200px;"></div>
         </div>
 
         <div>

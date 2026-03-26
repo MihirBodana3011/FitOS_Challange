@@ -40,7 +40,7 @@ async function requestNotificationPermission() {
   }
 }
 
-function sendLocalNotification(title, body, icon = "🔔") {
+function sendLocalNotification(title, body, icon = "🔔", delay = 100) {
   if (Notification.permission === "granted") {
     try {
       if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
@@ -48,22 +48,33 @@ function sendLocalNotification(title, body, icon = "🔔") {
           type: "SCHEDULE_NOTIFICATION",
           title: `${icon} ${title}`,
           body: body,
-          delay: 100,
+          delay: delay,
         });
       } else {
-        new Notification(`${icon} ${title}`, { 
-          body: body,
-          tag: "fitos-reminder",
-          requireInteraction: true,
-          vibrate: [200, 100, 200]
-        });
+        setTimeout(() => {
+          new Notification(`${icon} ${title}`, { 
+            body: body,
+            tag: "fitos-reminder",
+            requireInteraction: true,
+            vibrate: [200, 100, 200]
+          });
+        }, Math.max(0, delay));
       }
-      console.log(`✅ Notification sent: ${title}`);
+      console.log(`✅ Notification scheduled: ${title} in ${Math.round(delay/1000)}s`);
     } catch (err) {
       console.error("Notification failed:", err);
     }
   }
 }
+
+window.testNotification = function() {
+  if (Notification.permission !== "granted") {
+    requestNotificationPermission();
+  } else {
+    showToast("Test Notification in 5s! Lock your phone.", "🧪");
+    sendLocalNotification("Test Reminder", "PWA Notifications are working! 🚀", "🧪", 5000);
+  }
+};
 
 // Auto-schedule reminders for diet items
 function startAutomaticReminders() {
@@ -82,12 +93,8 @@ function startAutomaticReminders() {
     const delay = reminderTime - now;
     console.log(`⏰ Reminder scheduled for ${time}: "${title}" in ${Math.round(delay/60000)} min`);
     
-    setTimeout(() => {
-      if (Notification.permission === "granted") {
-        sendLocalNotification(title, body, icon);
-        haptic([200, 100, 200]);
-      }
-    }, delay);
+    // Offload scheduling to SW for reliability when app is backgrounded
+    sendLocalNotification(title, body, icon, delay);
   };
   
   // Schedule all diet reminders
@@ -1305,9 +1312,23 @@ function updMacros() {
 
 // DIET INTERACTIONS
 function togCard(e, id) {
+  if (e) e.stopPropagation();
   const card = document.querySelector(`[data-id="${id}"]`);
   if (!card) return;
-  card.classList.toggle("op");
+  const isOpen = card.classList.toggle("open");
+  // Rotate chevron arrow button
+  const arb = card.querySelector(".arb");
+  if (arb) arb.style.transform = isOpen ? "rotate(180deg) scale(1.1)" : "rotate(0deg)";
+  // Toggle the meal body
+  const body = card.querySelector(".mcb");
+  if (body) {
+    if (isOpen) {
+      body.style.display = "block";
+      body.style.animation = "fadeIn 0.25s ease";
+    } else {
+      body.style.display = "none";
+    }
+  }
 }
 function selOpt(mid, btn) {
   document
@@ -1327,20 +1348,22 @@ function renderDiet() {
   DIET.forEach((s) => {
     // Phase dividers
     if (s.id === "pregym")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(251,146,60,.3))"></div><div class="phase-chip" style="color:var(--orange);border-color:rgba(251,146,60,.35);background:rgba(251,146,60,.08)">🌙 Post-Shift — Pre-Gym</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(251,146,60,.3),transparent)"></div></div>`;
+      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(251,146,60,0.25))"></div><div class="phase-chip" style="color:var(--orange);border-color:rgba(251,146,60,0.3);background:rgba(251,146,60,0.06)">🌙 Post-Shift — Pre-Gym</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(251,146,60,0.25),transparent)"></div></div>`;
     if (s.id === "wake")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(16,185,129,.3))"></div><div class="phase-chip" style="color:var(--green);border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)">☀️ Awake — Meal Time</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(16,185,129,.3),transparent)"></div></div>`;
+      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(16,185,129,0.25))"></div><div class="phase-chip" style="color:var(--green);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.06)">☀️ Awake — Meal Time</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(16,185,129,0.25),transparent)"></div></div>`;
     if (s.id === "brk1")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(75,131,232,.3))"></div><div class="phase-chip" style="color:var(--blue);border-color:rgba(75,131,232,.35);background:rgba(75,131,232,.08)">💼 Night Shift — 6:30 PM to 2:30 AM</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(75,131,232,.3),transparent)"></div></div>`;
+      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(75,131,232,0.25))"></div><div class="phase-chip" style="color:var(--blue);border-color:rgba(75,131,232,0.3);background:rgba(75,131,232,0.06)">💼 Night Shift — 6:30 PM to 2:30 AM</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(75,131,232,0.25),transparent)"></div></div>`;
+    
     const dotC = col(s.color || "green");
     let card = "";
+    
     if (s.type === "sleep") {
       card = `<div class="sleep-blk">
         <div class="sleep-blk-ico">🌙</div>
         <div class="sleep-blk-info">
           <div class="sleep-blk-title">Deep Sleep — Fat Burning Mode 🔥</div>
           <div class="sleep-blk-sub">6:15 AM – 12:00 PM · ~5hr 45min · GH hormone peaks at max · Body burns stored fat passively</div>
-          <div class="sleep-blk-stats">
+          <div class="sleep-blk-stats" style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
             <span class="sleep-stat">💤 ~6 hrs</span>
             <span class="sleep-stat">🔥 Fat burn</span>
             <span class="sleep-stat">💪 Muscle repair</span>
@@ -1348,68 +1371,88 @@ function renderDiet() {
         </div>
       </div>`;
       html += `<div class="trow sr">
-        <div class="tt" style="color:var(--purple);font-weight:700">😴</div>
-        <div class="tdw"><div class="tdot" style="background:var(--purple);border:1.5px solid var(--bg)"></div></div>
+        <div class="tt" style="color:var(--purple);font-weight:800;padding-top:16px;">😴</div>
+        <div class="tdw"><div class="tdot" style="background:var(--purple);border:2.5px solid var(--bg2);width:12px;height:12px;"></div></div>
         <div class="tcrd">${card}</div>
       </div>`;
       return;
     } else if (s.type === "gymblock") {
       const wd = WORKOUTS[todayWT()];
-      card = `<div class="gymb morning" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})">
-        <div class="gymb-ico">🌅</div>
-        <div style="flex:1">
-          <div class="gymb-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${wd.name}</div>
-          <div class="gymb-sub" style="overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} cal burned</div>
-          <div class="morning-badge">☀️ Morning Session</div>
+      card = `<div class="gymb morning" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:14px; padding:16px;">
+        <div class="gymb-ico" style="flex-shrink:0; font-size:32px;">🌅</div>
+        <div style="flex:1;min-width:0;text-align:left;">
+          <div class="morning-badge" style="margin-bottom:6px;">☀️ Morning Session</div>
+          <div class="gymb-title" style="font-weight:900; font-size:16px; color:var(--t);">${wd.name}</div>
+          <div class="gymb-sub" style="font-size:12px; color:var(--t3); margin-top:4px;">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} kcal</div>
         </div>
-        <div style="font-size:22px;color:var(--orange);flex-shrink:0">↗</div>
+        <div style="font-size:24px; color:var(--gold); opacity:0.6;">↗</div>
       </div>`;
     } else if (s.type === "supp") {
-      card = `<div class="p-card sc" style="padding:14px;overflow:hidden;word-break:break-word;border-left:4px solid ${col(s.color)}">
-        <div style="display:flex; align-items:flex-start; gap:12px;">
-          <div class="scico" style="font-size:24px; padding:8px; background:${bg(s.color)}; border-radius:12px;">${s.icon}</div>
-          <div style="flex:1">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              <div class="scn" style="color:${col(s.color)};font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${s.name}</div>
-              <div class="sctag" style="font-size:9px; background:${bg(s.color)}; color:${col(s.color)}; padding:2px 8px; border-radius:10px; font-weight:800;">${s.tag}</div>
+      const macros = s.cal ? `
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal}</span></div>
+          ${s.p ? `<div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>` : ""}
+          ${s.fib ? `<div class="g-chip"><span style="color:var(--teal)">F</span><span>${s.fib}g</span></div>` : ""}
+        </div>` : "";
+
+      card = `<div class="p-card sc" style="padding:0; border-top:4px solid ${col(s.color)}; box-shadow:var(--shadow-md);">
+        <div class="sc-header" style="display:flex; align-items:center; gap:12px; padding:16px;">
+          <div style="width:44px; height:44px; border-radius:14px; background:${col(s.color)}15; display:flex; align-items:center; justify-content:center; font-size:24px; border:1px solid ${col(s.color)}20;">${s.icon}</div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+              <div class="scn" style="color:var(--t); font-weight:900; font-size:15px;">${s.name}</div>
+              <div style="font-size:9px; background:${col(s.color)}12; color:${col(s.color)}; padding:2px 8px; border-radius:20px; font-weight:900; border:1px solid ${col(s.color)}25; text-transform:uppercase; letter-spacing:0.5px;">${s.tag}</div>
             </div>
-            <div class="scd" style="font-size:12px;color:var(--t2);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word">${s.desc}</div>
-            <div class="scw" style="font-size:10.5px;opacity:0.8;font-style:italic;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word">${s.why}</div>
+            <div style="font-size:12px; color:var(--t3); font-weight:600;">Scheduled for ${s.disp}</div>
           </div>
+        </div>
+        <div style="padding:0 16px 16px; border-top:1px solid var(--bd);">
+          <div style="font-size:13px; color:var(--t2); line-height:1.6; margin-top:12px;">${s.desc}</div>
+          <div style="font-size:12px; color:var(--t3); font-style:italic; line-height:1.5; margin-top:8px; padding-top:8px; border-top:1px dashed var(--bd);">${s.why}</div>
+          ${macros}
         </div>
       </div>`;
     } else {
       const ii = s.items
-        ? `<ul class="il" style="margin-top:12px; border-top:1px solid var(--bd); padding-top:12px;">${s.items.map((it) => `<li style="margin-bottom:6px; font-size:12.5px;">${it}</li>`).join("")}</ul>`
+        ? `<ul class="il" style="margin-top:14px; border-top:1px solid var(--bd); padding-top:14px; display:block;">${s.items.map((it) => `<li class="ili" style="margin-bottom:6px; color:var(--t2); font-size:13px;">${it}</li>`).join("")}</ul>`
         : "";
       const oi = s.opts
-        ? `<div class="og" id="og_${s.id}">${s.opts.map((o) => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}">${o.id}: ${o.label}</button>`).join("")}</div><div class="odesc" id="od_${s.id}"></div>`
+        ? `<div class="og" id="og_${s.id}" style="margin-top:14px; display:grid; grid-template-columns:1fr; gap:8px;">${s.opts.map((o) => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}" style="text-align:left; justify-content:flex-start; padding:12px 14px; font-weight:700;">${o.id}: ${o.label}</button>`).join("")}</div><div class="odesc" id="od_${s.id}" style="margin-top:10px; padding:10px; background:var(--bg3); border-radius:8px; font-size:12px; color:var(--t2); display:none;"></div>`
         : "";
-      card = `<div class="p-card mc" data-id="${s.id}" onclick="togCard(event,'${s.id}')" style="padding:0; cursor:pointer;">
-        <div class="mch" style="padding:16px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
-          <div class="mcico" style="background:${bg(s.color)}; width:46px; height:46px; min-width:46px; border-radius:13px; font-size:22px; display:flex; align-items:center; justify-content:center;">${s.icon}</div>
+      
+      const macroBadges = `
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+          <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal}</span></div>
+          <div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>
+          ${s.c ? `<div class="g-chip"><span style="color:var(--green)">C</span><span>${s.c}g</span></div>` : ""}
+          ${s.fib ? `<div class="g-chip"><span style="color:var(--teal)">F</span><span>${s.fib}g</span></div>` : ""}
+        </div>`;
+
+      card = `<div class="p-card mc" data-id="${s.id}" style="padding:0; box-shadow:var(--shadow-md);">
+        <div class="mch" onclick="togCard(event,'${s.id}')" style="padding:16px; display:flex; align-items:center; gap:12px;">
+          <div class="mcico" style="background:${bg(s.color)}; width:52px; height:52px; border-radius:15px; font-size:26px; display:flex; align-items:center; justify-content:center;">${s.icon}</div>
           <div class="mcnfo" style="flex:1; min-width:0;">
-            <div class="mcnm" style="font-weight:800; font-size:15px; line-height:1.25;">${s.name}</div>
-            <div class="mcsb" style="font-size:11.5px; opacity:0.7; line-height:1.3; margin-top:2px;">${s.sub}</div>
+            <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t);">${s.name}</div>
+            <div class="mcsb" style="font-size:12px; color:var(--t3); margin-top:2px;">${s.sub}</div>
+            ${macroBadges}
           </div>
-          <button class="arb" onclick="togCard(event,'${s.id}')" style="background:var(--bg3); border:1.5px solid var(--bd); font-size:16px; color:var(--t2); width:36px; height:36px; min-width:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer;">▾</button>
-          <div class="mcrt" style="width:100%; display:flex; gap:8px;">
-             <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')" style="flex:1; background:var(--bg3); border:1.5px solid var(--bd2); color:var(--t2); font-size:13px; font-weight:800; padding:11px 10px; border-radius:12px; transition:all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); text-transform:uppercase; letter-spacing:0.3px; min-height:44px; cursor:pointer;">✕ Skip</button>
-             <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')" style="flex:1.5; background:linear-gradient(135deg, var(--gold), var(--amber)); border:none; color:white; font-size:13px; font-weight:800; padding:11px 10px; border-radius:12px; transition:all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); text-transform:uppercase; letter-spacing:0.3px; box-shadow:0 4px 14px rgba(198,146,10,0.3); min-height:44px; cursor:pointer;">✓ Done</button>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="arb" style="background:var(--bg3); border:1px solid var(--bd); width:36px; height:36px; border-radius:10px; transition:transform 0.3s ease;">▾</button>
           </div>
         </div>
-        <div style="padding:0 16px 14px; display:flex; gap:6px; flex-wrap:wrap;">
-            <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal} <small>kcal</small></span></div>
-            <div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>
-            <div class="g-chip"><span style="color:var(--green)">C</span><span>${s.c}g</span></div>
-            <div class="g-chip"><span style="color:var(--amber)">F</span><span>${s.f}g</span></div>
+        <div class="mcrt" style="padding:0 16px 16px; display:flex; gap:10px;">
+          <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')" style="flex:1;">✕ Skip</button>
+          <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')" style="flex:2;">✓ Done</button>
         </div>
-        <div class="mcb" style="padding:0 16px 16px;">${ii}${oi}</div>
+        <div class="mcb" style="padding:0 16px 16px; display:none;">${ii}${oi}</div>
       </div>`;
     }
-    html += `<div class="trow${s.type === "supp" ? " sr" : ""}">
+
+    html += `<div class="trow${s.type === "supp" ? " trow-supp" : ""}">
       <div class="tt" id="tt_${s.id}">${s.disp}</div>
-      <div class="tdw"><div class="tdot" id="dt_${s.id}" style="background:${dotC};${s.type !== "supp" ? "border:2px solid var(--bg)" : "border:1.5px solid var(--bg)"}"></div></div>
+      <div class="tdw">
+        <div class="tdot" id="dt_${s.id}" style="background:${dotC}; border:2.5px solid var(--bg2); width:12px; height:12px;"></div>
+      </div>
       <div class="tcrd">${card}</div>
     </div>`;
   });
@@ -1440,7 +1483,10 @@ function hlSlot() {
       card.classList.toggle("anow", i === ai && !S.done.has(s.id));
     const dt = $("dt_" + s.id),
       tt = $("tt_" + s.id);
-    if (dt) dt.classList.toggle("now", i === ai);
+    if (dt) {
+      dt.classList.toggle("now", i === ai);
+      dt.classList.toggle("active", i === ai);
+    }
     if (tt) tt.classList.toggle("now", i === ai);
   });
 }
@@ -1583,35 +1629,31 @@ function buildWorkoutHTML(type) {
       .map(([t, cnt]) => {
         const tc = typeColors[t] || {
           c: "var(--t2)",
-          bg: "rgba(255,255,255,.06)",
+          bg: "rgba(0,0,0,.03)",
           icon: "⚡",
         };
         const lbl = typeLabels[t] || t;
-        return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;width:100%">
-            <div style="font-size:18px">${tc.icon}</div>
-            <div><div style="font-size:12px;font-weight:800;color:${tc.c}">${lbl}</div>
-            <div style="font-size:10.5px;color:var(--t3);margin-top:1px">${cnt} ex · <span style="color:${tc.c};font-weight:700">${setCounts[t]} sets</span></div></div>
+        return `<div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow-sm);">
+            <div style="font-size:20px; background:${tc.c}15; width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; border:1px solid ${tc.c}25;">${tc.icon}</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:900;color:var(--t)">${lbl}</div>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px; font-weight:700;">${cnt} ex · <span style="color:${tc.c}">${setCounts[t]} sets</span></div>
+            </div>
           </div>`;
       })
       .join("");
     breakdownHTML = `
-        <div style="border-top:1px solid rgba(255,255,255,.06);margin-top:14px;padding-top:14px">
-          <div style="font-size:10px;font-weight:800;letter-spacing:.09em;color:${wc};text-transform:uppercase;margin-bottom:10px">📊 Exercise Breakdown</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(75,131,232,.1);border:1px solid rgba(75,131,232,.25);border-radius:14px;padding:3px 8px;font-size:10px">
-              <span>🏋️</span><span style="font-size:11px;font-weight:700;color:var(--blue)">Machines</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--blue);margin-left:3px">${machines}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:14px;padding:3px 8px;font-size:10px">
-              <span>🔵</span><span style="font-size:11px;font-weight:700;color:var(--purple)">Dumbbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--purple);margin-left:3px">${dumbbells}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.25);border-radius:14px;padding:3px 8px;font-size:10px">
-              <span>🔴</span><span style="font-size:11px;font-weight:700;color:var(--red)">Barbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--red);margin-left:3px">${barbells}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:14px;padding:3px 8px;font-size:10px">
-              <span>🤸</span><span style="font-size:11px;font-weight:700;color:var(--green)">Bodyweight</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--green);margin-left:3px">${bodyweight}</span>
-            </div>
+        <div style="border-top:1px solid var(--bd);margin-top:20px;padding-top:20px">
+          <div style="font-size:11px;font-weight:900;letter-spacing:1px;color:${wc};text-transform:uppercase;margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+            <span style="background:${wc}22; padding:4px 8px; border-radius:6px;">📊</span> Exercise Breakdown
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${chips}</div>
+          <div class="breakdown-wrapper" style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;-ms-overflow-style:none;">
+            <div class="g-chip" style="background:${wc}12; border-color:${wc}25; color:${wc}"><span>🏋️</span><span>${machines} Machines</span></div>
+            <div class="g-chip" style="background:rgba(139,92,246,0.1); border-color:rgba(139,92,246,0.2); color:var(--purple)"><span>🔵</span><span>${dumbbells} DBs</span></div>
+            <div class="g-chip" style="background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.2); color:var(--red)"><span>🔴</span><span>${barbells} BBs</span></div>
+            <div class="g-chip" style="background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.2); color:var(--green)"><span>🤸</span><span>${bodyweight} BW</span></div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">${chips}</div>
         </div>`;
   }
 
@@ -1624,63 +1666,63 @@ function buildWorkoutHTML(type) {
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   const quoteHTML = `
-      <div style="text-align:center; padding:30px 20px; border-top:1px dashed var(--bd); margin-top:20px; opacity:0.6;">
-        <div style="font-size:14px; font-style:italic; font-family:'Raleway',sans-serif; font-weight:700;">"${randomQuote}"</div>
-        <div style="font-size:10px; text-transform:uppercase; letter-spacing:2px; margin-top:10px; font-weight:900;">FitOS Motivation · Keep Pushing</div>
+      <div style="text-align:center; padding:40px 20px; border-top:1px dashed var(--bd); margin-top:30px; opacity:0.8; background:linear-gradient(to bottom, transparent, var(--bg3)); border-radius:0 0 24px 24px;">
+        <div style="font-size:16px; font-style:italic; font-family:'Manrope',sans-serif; font-weight:800; color:var(--t2); line-height:1.6;">"${randomQuote}"</div>
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:900; color:var(--gold);">FitOS Motivation · Keep Pushing</div>
       </div>`;
 
   if (isRest) {
-    return `<div class="p-card wo-header" style="border-color:var(--t3); background:linear-gradient(135deg, rgba(156,139,106,0.1), transparent); margin-bottom:16px; padding:20px; text-align:center;">
-            <div style="font-size:40px; margin-bottom:12px;">🌙</div>
-            <div class="wo-day" style="color:var(--t2); font-size:28px; font-weight:900; letter-spacing:-1px;">Recovery Mode</div>
-            <div class="wo-meta" style="font-size:14px; opacity:0.8; margin-bottom:16px;">Sunday · Active Rest & Reset</div>
-            <div style="background:var(--bg3); padding:16px; border-radius:16px; font-size:14px; font-style:italic; border:1px solid var(--bd); max-width:400px; margin:0 auto 20px;">
+    return `<div class="p-card wo-header" style="border-top:6px solid var(--t3); background:var(--bg2); margin-bottom:20px; padding:32px 24px; text-align:center; box-shadow:var(--shadow-lg);">
+            <div style="font-size:52px; margin-bottom:16px; animation: float 3s ease-in-out infinite;">🌙</div>
+            <div class="wo-day" style="color:var(--t); font-size:32px; font-weight:900; letter-spacing:-1.2px;">Recovery Mode</div>
+            <div class="wo-meta" style="font-size:13px; font-weight:700; color:var(--t3); margin-top:6px; text-transform:uppercase; letter-spacing:1px;">Sunday · Active Rest & Reset</div>
+            <div style="background:var(--bg3); padding:20px; border-radius:20px; font-size:14px; font-style:italic; border:1px solid var(--bd); max-width:400px; margin:24px auto; line-height:1.6; color:var(--t2);">
               "${wd.tip}"
             </div>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:10px;">
-                <div style="text-align:center;"><div style="font-size:20px;">💧</div><div style="font-size:10px; font-weight:800; margin-top:4px;">HYDRATE</div></div>
-                <div style="text-align:center;"><div style="font-size:20px;">🥗</div><div style="font-size:10px; font-weight:800; margin-top:4px;">CLEAN DIET</div></div>
-                <div style="text-align:center;"><div style="font-size:20px;">🧘</div><div style="font-size:10px; font-weight:800; margin-top:4px;">STRETCH</div></div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:32px;">
+                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">💧</div><div style="font-size:11px; font-weight:900; color:var(--t3);">HYDRATE</div></div>
+                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">🥗</div><div style="font-size:11px; font-weight:900; color:var(--t3);">CLEAN DIET</div></div>
+                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">🧘</div><div style="font-size:11px; font-weight:900; color:var(--t3);">STRETCH</div></div>
             </div>
           </div>
-          ${secHTML}
+          <div style="padding:0 4px">${secHTML}</div>
           ${quoteHTML}`;
   }
 
-  return `<div class="p-card wo-header" style="border-color:${wc}55; background:linear-gradient(135deg, ${wc}15, rgba(255,255,255,0.8)); margin-bottom:14px; padding:16px; border-radius:16px;">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
-      <div class="ex-num-new" style="background:${wc}; color:white; width:36px; height:36px; font-size:16px; box-shadow:0 8px 16px ${wc}44">W</div>
-      <div>
-        <div class="wo-day" style="color:var(--t); font-size:26px; font-weight:900; letter-spacing:-1px; line-height:1;">${wd.name}</div>
-        <div class="wo-meta" style="font-size:11px; font-weight:800; opacity:0.6; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px;">${wd.days} · Fit Master Gym</div>
+  return `<div class="p-card wo-header" style="border-top:6px solid ${wc}; background:var(--bg2); margin-bottom:18px; padding:24px; border-radius:24px; box-shadow:var(--shadow-lg);">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px; flex-wrap:wrap;">
+      <div class="ex-num-new" style="background:${wc}; color:white; width:44px; height:44px; font-size:20px; font-weight:900; border-radius:14px; box-shadow:0 8px 20px ${wc}33; display:flex; align-items:center; justify-content:center;">${wd.name.charAt(0)}</div>
+      <div style="flex:1;">
+        <div class="wo-day" style="color:var(--t); font-size:28px; font-weight:900; letter-spacing:-1px; line-height:1.1;">${wd.name}</div>
+        <div class="wo-meta" style="font-size:12px; font-weight:800; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:0.5px;">${wd.days} · Fit Master Gym</div>
       </div>
-      <div style="margin-left:auto; font-size:10px; font-weight:900; background:${wc}15; color:${wc}; padding:6px 14px; border-radius:20px; border:1px solid ${wc}22; text-transform:uppercase; letter-spacing:1px;">🌅 4 AM – 6 AM</div>
+      <div style="font-size:10px; font-weight:900; background:var(--bg3); color:var(--t2); padding:8px 14px; border-radius:24px; border:1px solid var(--bd); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">🌅 4 AM – 6 AM</div>
     </div>
-    <div class="wo-tip" style="background:rgba(0,0,0,0.03); padding:10px 12px; border-radius:12px; font-size:11px; border:1px solid rgba(0,0,0,0.05); margin-bottom:20px; font-style:italic; line-height:1.4;">"${wd.tip}"</div>
-    <div class="wo-stats" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-bottom:12px;">
-      <div style="text-align:center; background:rgba(255,255,255,0.5); padding:10px; border-radius:16px; border:1px solid rgba(0,0,0,0.03);">
+    <div class="wo-tip" style="background:var(--bg3); padding:14px 18px; border-radius:18px; font-size:12px; border:1px solid var(--bd); margin-bottom:24px; font-style:italic; line-height:1.6; color:var(--t2);">"${wd.tip}"</div>
+    <div class="wo-stats" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
+      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
         <div class="ws-v" id="wod_${type}" style="color:${wc}; font-weight:900; font-size:20px; font-family:var(--mono);">${done}/${allEx.length}</div>
-        <div class="ws-l" style="font-size:9px; opacity:0.6; margin-top:2px;">Exercises</div>
+        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Ex</div>
       </div>
-      <div style="text-align:center; background:rgba(255,255,255,0.5); padding:10px; border-radius:16px; border:1px solid rgba(0,0,0,0.03);">
+      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
         <div class="ws-v" style="color:var(--amber); font-weight:900; font-size:20px; font-family:var(--mono);">${totalSets}</div>
-        <div class="ws-l" style="font-size:9px; opacity:0.6; margin-top:2px;">Sets</div>
+        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Sets</div>
       </div>
-      <div style="text-align:center; background:rgba(255,255,255,0.5); padding:10px; border-radius:16px; border:1px solid rgba(0,0,0,0.03);">
+      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
         <div class="ws-v" style="color:var(--red); font-weight:900; font-size:20px; font-family:var(--mono);">~${wd.cal}</div>
-        <div class="ws-l" style="font-size:9px; opacity:0.6; margin-top:2px;">Kcal</div>
+        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Kcal</div>
       </div>
-      <div style="text-align:center; background:rgba(255,255,255,0.5); padding:10px; border-radius:16px; border:1px solid rgba(0,0,0,0.03);">
-        <div class="ws-v" style="color:var(--t); font-weight:900; font-size:20px; font-family:var(--mono);">${Math.round(pct)}%</div>
-        <div class="ws-l" style="font-size:9px; opacity:0.6; margin-top:2px;">Progress</div>
+      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
+        <div class="ws-v" style="color:var(--green); font-weight:900; font-size:20px; font-family:var(--mono);">${Math.round(pct)}%</div>
+        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Prog</div>
       </div>
     </div>
-    <div class="progbar" style="height:6px; background:rgba(0,0,0,0.05); border-radius:10px; margin-bottom:16px; overflow:hidden;">
-      <div class="progfill" id="pb_${type}" style="width:${pct}%; height:100%; background:${wc}; transition:width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+    <div class="progbar" style="height:8px; background:var(--bg4); border-radius:20px; margin-bottom:20px; overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);">
+      <div class="progfill" id="pb_${type}" style="width:${pct}%; height:100%; background:linear-gradient(90deg, ${wc}, ${wc}aa); border-radius:20px; transition:width 1s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
     </div>
     ${breakdownHTML}
   </div>
-  ${secHTML}
+  <div style="padding:0 4px">${secHTML}</div>
   ${quoteHTML}`;
 }
 
@@ -1853,16 +1895,16 @@ function buildAllWorkouts() {
                 const exList = sec.exercises
                   .map((ex, i) => {
                     const imgSrc = ex.img
-                      ? `<div class="ex-img-wrap" style="width:50px; height:50px; border-radius:10px; padding:2px;"><img src="${ex.img}" loading="lazy" style="border-radius:8px"></div>`
+                      ? `<div style="width:44px; height:44px; min-width:44px; border-radius:10px; overflow:hidden; background:var(--bg3); border:1px solid var(--bd); flex-shrink:0;"><img src="${ex.img}" loading="lazy" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>`
                       : "";
-                    return `<div class="ex-card-new" style="padding:12px; gap:12px; border-top:1px solid var(--bd);">
-                <div style="font-size:10px; font-weight:900; color:var(--gold); width:20px; text-align:center;">${i + 1}</div>
+                    return `<div style="padding:10px 14px; display:flex; align-items:flex-start; gap:10px; border-top:1px solid var(--bd); box-sizing:border-box; max-width:100%;">
+                <div style="font-size:9px; font-weight:900; color:var(--gold); min-width:18px; padding-top:2px; text-align:center;">${i + 1}</div>
                 ${imgSrc}
-                <div class="ex-info-new">
-                  <div style="font-size:14px; font-weight:800; color:var(--t);">${ex.n}</div>
-                  <div style="font-size:11px; color:var(--t3); opacity:0.8;">${ex.d}</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:13px; font-weight:800; color:var(--t); line-height:1.3; word-break:break-word;">${ex.n}</div>
+                  <div style="font-size:11px; color:var(--t3); line-height:1.4; margin-top:3px; word-break:break-word;">${ex.d}</div>
+                  <div style="display:inline-block; font-size:9px; font-weight:700; padding:2px 8px; border-radius:8px; background:rgba(198,146,10,.07); color:var(--gold); margin-top:4px;">${ex.t}</div>
                 </div>
-                <div class="g-chip" style="padding:4px 8px; font-size:9px;">${ex.t}</div>
               </div>`;
                   })
                   .join("");
@@ -1873,23 +1915,21 @@ function buildAllWorkouts() {
               })
               .join("");
 
-            return `<div class="p-card mc" id="allc_${type}" onclick="togAllCard('${type}')" style="padding:0; margin-bottom:16px; cursor:pointer;">
-            <div class="mch" style="padding:20px;">
-              <div class="mcico" style="background:${wc}11; color:${wc}; width:54px; height:54px; border-radius:16px; font-size:26px; display:flex; align-items:center; justify-content:center;">${type === "back" ? "💪" : type === "chest" ? "🎯" : type === "rest" ? "😴" : "🦵"}</div>
-              <div class="mcnfo" style="margin-left:14px;">
-                <div class="mcnm" style="font-weight:900; font-size:var(--fs-lg); color:${wc};">${wd.name}</div>
-                <div class="mcsb" style="font-weight:700; opacity:0.7;">Weekly Target · ${wd.days}</div>
+            return `<div class="p-card mc" id="allc_${type}" style="padding:0; margin-bottom:14px; cursor:pointer; overflow:hidden;">
+            <div class="mch" onclick="window.togAllCard('${type}')" style="padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; -webkit-user-select:none; user-select:none;">
+              <div style="background:${wc}18; color:${wc}; width:48px; height:48px; min-width:48px; border-radius:13px; font-size:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${type === "back" ? "💪" : type === "chest" ? "🎯" : type === "rest" ? "😴" : "🦵"}</div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-weight:900; font-size:15px; color:${wc}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.3;">${wd.name}</div>
+                <div style="font-size:11px; color:var(--t3); font-weight:600; margin-top:2px;">${wd.days} · ${allEx.length} Exercises · ${totalSets} Sets</div>
               </div>
-              <div class="mcrt" style="margin-left:auto;">
-                 <div style="font-family:var(--mono); font-weight:900; font-size:var(--fs-2xs); color:white; background:${wc}; padding:var(--space-xs) var(--space-md); border-radius:20px; box-shadow:0 4px 10px ${wc}44">~${wd.cal} kcal</div>
-              </div>
+              <div style="font-family:var(--mono); font-weight:900; font-size:11px; color:white; background:${wc}; padding:4px 10px; border-radius:14px; white-space:nowrap; flex-shrink:0;">~${wd.cal} kcal</div>
             </div>
-            <div style="padding:0 20px 20px; display:flex; gap:10px; flex-wrap:wrap;">
-                <div class="g-chip"><span style="color:${wc}">🏋️</span><span>${allEx.length} <small>Exercises</small></span></div>
-                <div class="g-chip"><span style="color:var(--amber)">⚡</span><span>${totalSets} <small>Sets</small></span></div>
-                ${muscleChips}
+            <div style="padding:0 16px 12px; display:flex; gap:6px; flex-wrap:wrap;">
+              <div class="g-chip"><span style="color:${wc}">🏋️</span><span>${allEx.length} Exercises</span></div>
+              <div class="g-chip"><span style="color:var(--amber)">⚡</span><span>${totalSets} Sets</span></div>
+              ${muscleChips}
             </div>
-            <div class="mcb" style="border-top:1px solid var(--bd)">${exRows}</div>
+            <div class="mcb" style="border-top:1px solid var(--bd); display:none; max-height:70vh; overflow-y:auto; -webkit-overflow-scrolling:touch;">${exRows}</div>
           </div>`;
           })
           .join("")}
@@ -2285,7 +2325,17 @@ function togMeal(e, id) {
 
 window.togAllCard = function (id) {
   const card = document.getElementById("allc_" + id);
-  if (card) card.classList.toggle("op");
+  if (!card) return;
+  const isOpen = card.classList.toggle("open");
+  const body = card.querySelector(".mcb");
+  if (body) {
+    if (isOpen) {
+      body.style.display = "block";
+      body.style.animation = "fadeIn 0.3s ease";
+    } else {
+      body.style.display = "none";
+    }
+  }
 };
 
 function getGap(d) {
@@ -2302,54 +2352,62 @@ function togIsab(i) {
 }
 
 // Patched water builder — persists on click
-// Patched water builder — premium "Wave" UI
+// Patched water builder — premium "Wave" UI with Hydration Status
 function buildWater() {
   const g = $("wgrid");
   if (!g) return;
   const w = S.water || 0;
+  
+  // Hydration status logic
+  let status = "Keep going! 💧";
+  let color = "var(--t3)";
+  if (w >= 16) { status = "Perfectly Hydrated! 🏆"; color = "var(--green)"; }
+  else if (w >= 12) { status = "Almost there! ⚡"; color = "var(--blue)"; }
+  else if (w >= 8) { status = "Good progress! 👍"; color = "var(--amber)"; }
+  else if (w > 0) { status = "Nicely started! 🌱"; color = "var(--gold)"; }
 
   g.innerHTML = `
-        <div class="wt-container">
-          <div class="wt-header">
-            <div class="wt-info">
-              <div class="wt-count">${w} <span class="wt-unit">Glasses</span></div>
-              <div class="wt-target">Target: 16 (4.0L)</div>
-            </div>
-            <div class="wt-icon">💧</div>
-          </div>
+    <div class="wt-container">
+      <div class="wt-header">
+        <div class="wt-info">
+          <div class="wt-count">${w} <span class="wt-unit">Glasses</span></div>
+          <div class="wt-target">Target: 16 (4.0L)</div>
+        </div>
+        <div class="wt-icon">💧</div>
+      </div>
 
-          <div class="wt-grid">
-            ${Array.from({ length: 16 })
-              .map(
-                (_, i) => `
-              <button class="wt-glass ${i < w ? "filled" : ""}" onclick="addWater(${i < w ? -1 : 1})" data-index="${i}">
-                <div class="wt-glass-icon">${i < w ? "🌊" : "🧊"}</div>
-                <div class="wt-glass-fill"></div>
-              </button>
-            `,
-              )
-              .join("")}
-          </div>
+      <div class="wt-grid">
+        ${Array.from({ length: 16 })
+          .map(
+            (_, i) => `
+          <button class="wt-glass ${i < w ? "filled" : ""}" onclick="addWater(${i < w ? -1 : 1})" data-index="${i}">
+            <div class="wt-glass-icon">${i < w ? "🌊" : "🧊"}</div>
+            <div class="wt-glass-fill"></div>
+          </button>
+        `,
+          )
+          .join("")}
+      </div>
 
-          <div class="wt-progress">
-            <div class="wt-progress-bar">
-              <div class="wt-progress-fill" style="width: ${(w / 16) * 100}%"></div>
-            </div>
-            <div class="wt-progress-text">${Math.round((w / 16) * 100)}% Complete</div>
-          </div>
-        </div>`;
+      <div class="wt-status" style="text-align:center; margin-bottom:12px; font-weight:800; font-size:14px; color:${color}; animation: float-sm 3s ease-in-out infinite;">${status}</div>
+
+      <div class="wt-progress">
+        <div class="wt-progress-bar">
+          <div class="wt-progress-fill" style="width: ${(w / 16) * 100}%"></div>
+        </div>
+        <div class="wt-progress-text">${Math.round((w / 16) * 100)}% Complete · ${w * 250}ml logged</div>
+      </div>
+    </div>`;
 }
 
 window.addWater = function (val) {
   S.water = Math.max(0, (S.water || 0) + val);
-  const lbl = $("wlbl"),
-    mll = $("wml");
-  if (lbl) lbl.textContent = `${S.water} / 16 glasses`;
-  if (mll) mll.textContent = `${S.water * 250} ml`;
   persistDaily();
   buildWater();
-  if (val > 0 && window.showToast)
-    window.showToast("+250ml Water logged!", "💧");
+  if (val > 0) {
+    if (window.haptic) window.haptic([40]);
+    if (window.showToast) window.showToast("+250ml Water logged!", "💧");
+  }
 };
 
 // Patched set tracking — persists
@@ -2476,11 +2534,18 @@ function mobTab(id, btn) {
 // ============================================================
 const pStyle = document.createElement("style");
 pStyle.innerHTML = `
-      .topbar, .botnav {
+      .topbar {
         backdrop-filter: blur(20px) saturate(180%) !important;
         -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        background: rgba(253, 250, 244, 0.75) !important;
-        border-bottom: 1px solid rgba(180, 140, 20, 0.15) !important;
+        background: rgba(253, 250, 244, 0.95) !important;
+        z-index: 99998 !important;
+      }
+      .botnav {
+        backdrop-filter: blur(20px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+        background: rgba(253, 250, 244, 0.98) !important;
+        z-index: 99999 !important;
+        pointer-events: all !important;
       }
       .excard { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
       .excard.done-ex {
@@ -2489,8 +2554,8 @@ pStyle.innerHTML = `
         background: transparent !important; border-color: transparent !important;
       }
       #toast-box {
-        position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%);
-        display: flex; flex-direction: column; gap: 8px; z-index: 9999; pointer-events: none;
+        position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+        display: flex; flex-direction: column; gap: 8px; z-index: 99990; pointer-events: none;
       }
       .ftoast {
         background: rgba(10, 22, 40, 0.95); color: #FFF;
