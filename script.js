@@ -1365,12 +1365,12 @@ function renderDiet() {
         <div style="font-size:22px;color:var(--orange);flex-shrink:0">↗</div>
       </div>`;
     } else if (s.type === "supp") {
-      card = `<div class="p-card sc" style="padding:14px; border-left:4px solid ${col(s.color)}">
+      card = `<div class="p-card sc" style="padding:14px;overflow:hidden;word-break:break-word;border-left:4px solid ${col(s.color)}">
         <div style="display:flex; align-items:flex-start; gap:12px;">
           <div class="scico" style="font-size:24px; padding:8px; background:${bg(s.color)}; border-radius:12px;">${s.icon}</div>
           <div style="flex:1">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              <div class="scn" style="color:${col(s.color)}; font-weight:800; font-size:15px;">${s.name}</div>
+              <div class="scn" style="color:${col(s.color)};font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${s.name}</div>
               <div class="sctag" style="font-size:9px; background:${bg(s.color)}; color:${col(s.color)}; padding:2px 8px; border-radius:10px; font-weight:800;">${s.tag}</div>
             </div>
             <div class="scd" style="font-size:12px;color:var(--t2);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word">${s.desc}</div>

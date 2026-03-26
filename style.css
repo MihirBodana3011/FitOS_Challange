@@ -239,7 +239,7 @@ h1,h2,h3,h4,h5,h6,.mcnm,.exnm,.gymb-title,.wo-day,.sn,.scn{overflow-wrap:break-w
 .tt{width:50px;min-width:50px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--t3);text-align:center;padding-top:16px;flex-shrink:0}
 .tdw{width:16px;min-width:16px;display:flex;flex-direction:column;align-items:center;padding-top:16px;z-index:1;flex-shrink:0}
 .td{width:12px;height:12px;border-radius:50%;border:2.5px solid var(--gold);background:var(--bg2);z-index:1;box-shadow:0 0 0 3px rgba(198,146,10,.08)}
-.tcrd{flex:1;min-width:0;max-width:calc(100% - 78px)}
+.tcrd{flex:1;min-width:0;max-width:calc(100% - 78px);overflow:hidden;word-break:break-word}
 
 /* Meal Cards — Premium design */
 .mc{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-xl);overflow:hidden;transition:all .2s ease;box-sizing:border-box;width:100%;box-shadow:var(--shadow-sm)}
@@ -637,3 +637,9 @@ h1,h2,h3,h4,h5,h6,.mcnm,.exnm,.gymb-title,.wo-day,.sn,.scn{overflow-wrap:break-w
 /* FIX 15: Overall content container overflow */
 #allworkoutscontent,#progressContent,#wocontent{max-width:100%;overflow-x:hidden;overflow-y:visible}
 #allworkoutscontent *,#progressContent *,#wocontent *{max-width:100%;box-sizing:border-box}
+
+/* GLOBAL OVERFLOW FIX */
+#allworkoutscontent,#progressContent,#wocontent,#dietTL{overflow:hidden!important;max-width:100%!important}
+#allworkoutscontent *,#progressContent *,#wocontent *{max-width:100%!important;box-sizing:border-box!important}
+.sc,.p-card{overflow:hidden!important;word-break:break-word!important}
+.scd,.scw{overflow:hidden!important;text-overflow:ellipsis!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;word-break:break-word!important}
