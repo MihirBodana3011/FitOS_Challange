@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5"
     />
     <link rel="manifest" href="manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -14,12 +14,157 @@
       content="black-translucent"
     />
     <meta name="theme-color" content="#C6920A" />
+    <meta name="apple-mobile-web-app-title" content="FitOS" />
     <title>FitOS — Hyper-Advanced Weight Loss</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" href="Image/logo-new.png" type="image/png" />
     <link rel="stylesheet" href="style.css" />
+    <style id="mobile-ultimate-fix">
+@media (max-width: 768px) {
+  /* === LAYOUT === */
+  body .layout { display:flex!important;flex-direction:column!important;min-height:100vh!important;padding-top:52px!important;padding-bottom:68px!important; }
+  body .orb { display:none!important; }
+
+  /* === TOPBAR FIXED === */
+  body .topbar { position:fixed!important;top:0!important;left:0!important;right:0!important;height:52px!important;z-index:1000!important;display:flex!important;align-items:center!important;padding:0 10px!important;gap:6px!important;background:rgba(255,255,255,.97)!important;backdrop-filter:blur(10px)!important;box-shadow:0 1px 8px rgba(0,0,0,.08)!important; }
+  body .logo .xbadge, body .ai-greeting { display:none!important; }
+  body .topright .dc, body .topright .cstrip, body .topright .bmi-b { display:none!important; }
+  body .clkwrap { display:flex!important;flex-direction:column!important;align-items:flex-end!important; }
+  body .clk { display:block!important;font-size:11px!important;white-space:nowrap!important; }
+  body .datelbl { display:block!important;font-size:9px!important;white-space:nowrap!important;opacity:.7!important; }
+
+  /* === HIDE DESKTOP TABBAR === */
+  body .tabbar, body #desktopTabbar { display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important; }
+
+  /* === BOTTOM NAV FIXED === */
+  body .botnav { display:flex!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;height:60px!important;z-index:1000!important;background:rgba(255,255,255,.97)!important;border-top:1px solid rgba(180,140,20,.12)!important;box-shadow:0 -2px 12px rgba(0,0,0,.06)!important;padding-bottom:env(safe-area-inset-bottom,0)!important; }
+  body .bntab { flex:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;border:none!important;background:none!important; }
+  body .bnico { font-size:20px!important; }
+  body .bnlbl { font-size:10px!important; }
+
+  /* === SIDEBAR === */
+  body .sidebar { position:static!important;height:auto!important;overflow:visible!important;display:none!important;padding:12px!important;gap:12px!important; }
+  body .sidebar.mob-visible { display:flex!important; }
+
+  /* === MAIN === */
+  body .main { flex:1!important;overflow:visible!important; }
+  body .tc { padding:12px 10px 16px!important;max-width:100%!important;overflow-x:hidden!important; }
+
+  /* === SECTION HEADINGS === */
+  body .sh { font-size:10px!important;letter-spacing:.12em!important;margin-bottom:8px!important; }
+
+  /* === MEAL CARDS === */
+  body .mc { max-width:100%!important;overflow:hidden!important; }
+  body .mch { display:flex!important;flex-wrap:wrap!important;padding:14px!important;gap:8px!important;align-items:center!important; }
+  body .mcico { width:40px!important;height:40px!important;min-width:40px!important;font-size:20px!important;border-radius:12px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important; }
+  body .mcnfo { flex:1!important;min-width:0!important; }
+  body .mcnm { font-size:14px!important;font-weight:800!important; }
+  body .mcrt { width:100%!important;margin-left:0!important;display:flex!important;gap:8px!important; }
+  body .btn-skip { flex:1!important;min-height:44px!important;font-size:13px!important;font-weight:800!important;border-radius:12px!important;cursor:pointer!important; }
+  body .btn-done { flex:1.4!important;min-height:44px!important;font-size:13px!important;font-weight:800!important;border-radius:12px!important;cursor:pointer!important; }
+  body .arb { width:36px!important;min-width:36px!important;height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:var(--bg3)!important;border:1px solid var(--bd)!important;border-radius:10px!important;font-size:16px!important;padding:0!important;flex-shrink:0!important; }
+  body .g-chip { padding:5px 8px!important;font-size:11px!important;flex:1!important;min-width:0!important;justify-content:center!important; }
+
+  /* === EXERCISE CARDS — ROW LAYOUT === */
+  body .ex-card-new, body .p-card.ex-card-new { display:flex!important;flex-direction:row!important;align-items:flex-start!important;gap:10px!important;padding:12px!important;flex-wrap:wrap!important;max-width:100%!important;overflow:hidden!important; }
+  body .ex-img-wrap { width:56px!important;height:56px!important;min-width:56px!important;max-width:56px!important;border-radius:10px!important;flex-shrink:0!important;overflow:hidden!important; }
+  body .ex-img-wrap img { width:100%!important;height:100%!important;object-fit:contain!important; }
+  body .ex-info-new { flex:1!important;min-width:0!important;max-width:calc(100% - 70px)!important; }
+  body .exnm { font-size:13px!important;font-weight:800!important;line-height:1.25!important; }
+  body .exdt { font-size:11px!important;line-height:1.4!important; }
+  body .extbadge { font-size:9px!important;padding:2px 8px!important; }
+
+  /* Exercise action buttons — INLINE ROW */
+  body .ex-actions-new { width:100%!important;display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important;padding-top:8px!important;border-top:1px solid rgba(180,140,20,.12)!important;margin-top:4px!important; }
+  body .btn-haptic { width:32px!important;height:32px!important;min-width:32px!important;border-radius:8px!important;font-size:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important; }
+  body .set-row-new { display:flex!important;flex-wrap:wrap!important;gap:4px!important; }
+  body .set-dot-new { width:32px!important;height:32px!important;min-width:32px!important;font-size:11px!important;border-radius:8px!important;display:flex!important;align-items:center!important;justify-content:center!important; }
+  body .exck { width:36px!important;height:36px!important;font-size:16px!important;border-radius:10px!important;flex-shrink:0!important; }
+
+  /* Exercise list */
+  body .exlist { gap:8px!important; }
+  body .sec-hdr { margin:12px 0 8px!important; }
+  body .sec-lbl { font-size:9px!important; }
+
+  /* === WORKOUT HEADER === */
+  body .wo-header, body .p-card.wo-header { padding:14px!important;border-radius:14px!important;margin-bottom:12px!important;max-width:100%!important;overflow:hidden!important; }
+  body .wo-day { font-size:18px!important; }
+  body .wo-meta { font-size:10px!important; }
+  body .wo-tip { padding:10px!important;font-size:11px!important;border-radius:10px!important; }
+  body .wo-stats { grid-template-columns:repeat(2,1fr)!important;gap:8px!important; }
+  body .ws-v { font-size:16px!important; }
+  body .ws-l { font-size:8px!important; }
+  body .progbar { height:5px!important; }
+
+  /* === ALL WORKOUTS TAB === */
+  body .gymb, body .p-card.gymb { padding:12px!important;border-radius:12px!important;max-width:100%!important;overflow:hidden!important;margin-bottom:8px!important; }
+  body .gymb-title { font-size:14px!important;font-weight:800!important; }
+  body .gymb-sub { font-size:10px!important; }
+  body #allworkoutscontent { max-width:100%!important;overflow-x:hidden!important; }
+  body #allworkoutscontent .p-card { max-width:100%!important;overflow:hidden!important; }
+
+  /* === PROGRESS TAB === */
+  body #progressContent { max-width:100%!important;overflow-x:hidden!important; }
+  body #progressContent .p-card { max-width:100%!important;overflow:hidden!important;margin-bottom:10px!important; }
+  body .prog-stat-v { font-size:24px!important; }
+  body .prog-stat-l { font-size:9px!important; }
+
+  /* === STATS PANEL === */
+  body .pgrid { grid-template-columns:1fr 1fr!important;gap:6px!important; }
+  body .pc { padding:8px!important;text-align:center!important;border-radius:10px!important; }
+  body .pc-v { font-size:20px!important; }
+  body .rb-wrap { width:130px!important;height:130px!important; }
+  body .macro-grid-alpha { grid-template-columns:1fr 1fr!important;gap:5px!important; }
+
+  /* === TIMELINE === */
+  body .trow { gap:6px!important; }
+  body .tt { width:44px!important;min-width:44px!important;font-size:10px!important; }
+  body .tcrd { flex:1!important;min-width:0!important;max-width:calc(100% - 68px)!important;overflow:hidden!important; }
+
+  /* === DAY STRIP === */
+  body .day-strip { gap:3px!important; }
+  body .ds-node { min-width:50px!important;padding:6px 3px!important; }
+  body .ds-ico { font-size:16px!important; }
+  body .ds-time { font-size:9px!important; }
+  body .ds-lbl { font-size:8px!important; }
+
+  /* === GENERAL OVERFLOW FIX === */
+  body .p-card, body [class*="card"], body [style*="display:flex"] { max-width:100%!important;box-sizing:border-box!important; }
+  body div[style*="display:flex;gap:8px;flex-wrap:wrap"] > div { max-width:100%!important; }
+  body div[style*="min-width:calc(50%"] { min-width:calc(50% - 8px)!important;max-width:100%!important; }
+  body .foot { font-size:10px!important;padding:12px!important;overflow-wrap:break-word!important; }
+}
+
+@media (max-width: 380px) {
+  body .topbar { height:48px!important; }
+  body .layout { padding-top:48px!important; }
+  body .ex-img-wrap { width:48px!important;height:48px!important;min-width:48px!important;max-width:48px!important; }
+  body .exnm { font-size:12px!important; }
+  body .wo-day { font-size:16px!important; }
+  body .botnav { height:54px!important; }
+}
+</style>
+    <style>
+    /* Safety overrides for mobile — cannot be beaten by external CSS */
+    @media (max-width: 768px) {
+      .ex-img-wrap { width: 60px !important; height: 60px !important; min-width: 60px !important; max-width: 60px !important; flex-shrink: 0 !important; }
+      .ex-card-new { display: flex !important; flex-direction: row !important; align-items: flex-start !important; flex-wrap: wrap !important; }
+      .datelbl { display: block !important; font-size: 9px !important; }
+      .clk { display: block !important; font-size: 11px !important; }
+      .clkwrap { display: flex !important; flex-direction: column !important; align-items: flex-end !important; }
+      .tabbar { display: none !important; }
+      .wo-stats { grid-template-columns: repeat(2, 1fr) !important; }
+      .mcrt { width: 100% !important; margin-left: 0 !important; display: flex !important; gap: 8px !important; }
+      .btn-done, .btn-skip { min-height: 44px !important; font-size: 13px !important; border-radius: 12px !important; }
+      .arb { width: 36px !important; min-width: 36px !important; height: 40px !important; background: var(--bg3) !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+    }
+    @media (max-width: 380px) {
+      .ex-img-wrap { width: 50px !important; height: 50px !important; min-width: 50px !important; max-width: 50px !important; }
+    }
+    </style>
   </head>
 
   <body>
