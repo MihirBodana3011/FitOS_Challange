@@ -16,27 +16,109 @@ if ("serviceWorker" in navigator) {
 }
 
 async function requestNotificationPermission() {
-  if (!("Notification" in window)) return;
-  const permission = await Notification.requestPermission();
-  if (permission === "granted") {
-    alert(
-      "Reminders Enabled! You will now receive diet and water notifications.",
-    );
+  if (!("Notification" in window)) {
+    alert("❌ Your browser doesn't support notifications");
+    return;
+  }
+  
+  if (Notification.permission === "granted") {
+    alert("✅ Reminders already enabled! You will receive diet and water notifications.");
+    startAutomaticReminders();
+    return;
+  }
+  
+  if (Notification.permission !== "denied") {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      alert("✅ Reminders Enabled! You will now receive diet and water notifications at scheduled times.");
+      localStorage.setItem("notificationsEnabled", "true");
+      startAutomaticReminders();
+      haptic([200, 100, 200]);
+    } else {
+      alert("❌ Notifications blocked. Please enable in browser settings (Settings → Notifications)");
+    }
   }
 }
 
-function sendLocalNotification(title, body) {
+function sendLocalNotification(title, body, icon = "🔔") {
   if (Notification.permission === "granted") {
-    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({
-        type: "SCHEDULE_NOTIFICATION",
-        title: title,
-        body: body,
-        delay: 100,
-      });
-    } else {
-      new Notification(title, { body: body });
+    try {
+      if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: "SCHEDULE_NOTIFICATION",
+          title: `${icon} ${title}`,
+          body: body,
+          delay: 100,
+        });
+      } else {
+        new Notification(`${icon} ${title}`, { 
+          body: body,
+          tag: "fitos-reminder",
+          requireInteraction: true,
+          vibrate: [200, 100, 200]
+        });
+      }
+      console.log(`✅ Notification sent: ${title}`);
+    } catch (err) {
+      console.error("Notification failed:", err);
     }
+  }
+}
+
+// Auto-schedule reminders for diet items
+function startAutomaticReminders() {
+  if (Notification.permission !== "granted") return;
+  
+  const scheduleReminder = (time, title, body, icon) => {
+    const [hours, mins] = time.split(":").map(Number);
+    const now = new Date();
+    let reminderTime = new Date();
+    reminderTime.setHours(hours, mins, 0, 0);
+    
+    if (reminderTime <= now) {
+      reminderTime.setDate(reminderTime.getDate() + 1);
+    }
+    
+    const delay = reminderTime - now;
+    console.log(`⏰ Reminder scheduled for ${time}: "${title}" in ${Math.round(delay/60000)} min`);
+    
+    setTimeout(() => {
+      if (Notification.permission === "granted") {
+        sendLocalNotification(title, body, icon);
+        haptic([200, 100, 200]);
+      }
+    }, delay);
+  };
+  
+  // Schedule all diet reminders
+  DIET.forEach(item => {
+    if (item.type === "meal" || item.type === "supp") {
+      const emoji = {
+        meal: "🍱",
+        supp: "💊"
+      }[item.type] || item.icon || "🔔";
+      
+      scheduleReminder(
+        item.time,
+        item.name || item.tag,
+        (item.sub || item.desc || "It's time!"),
+        emoji
+      );
+    }
+  });
+  
+  // Water reminder every 2 hours
+  const waterTimes = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00"];
+  waterTimes.forEach(time => {
+    scheduleReminder(time, "Drink Water", "💧 Time to drink 250ml water (1 glass)", "💧");
+  });
+}
+
+// Check and restore notification state on page load
+function initializeNotifications() {
+  if (Notification.permission === "granted" && localStorage.getItem("notificationsEnabled")) {
+    console.log("✅ Notifications auto-enabled from storage");
+    startAutomaticReminders();
   }
 }
 
@@ -1078,6 +1160,7 @@ const S = {
   f: 0,
   fib: 0,
   done: new Set(),
+  skipped: new Set(),
   water: 0,
   isab: [false, false],
 };
@@ -1303,24 +1386,25 @@ function renderDiet() {
         ? `<div class="og" id="og_${s.id}">${s.opts.map((o) => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}">${o.id}: ${o.label}</button>`).join("")}</div><div class="odesc" id="od_${s.id}"></div>`
         : "";
       card = `<div class="p-card mc" data-id="${s.id}" onclick="togCard(event,'${s.id}')" style="padding:0; cursor:pointer;">
-        <div class="mch" style="padding:18px;">
-          <div class="mcico" style="background:${bg(s.color)}; width:48px; height:48px; border-radius:14px; font-size:24px;">${s.icon}</div>
-          <div class="mcnfo" style="margin-left:14px;">
-            <div class="mcnm" style="font-weight:800; font-size:16px;">${s.name}</div>
-            <div class="mcsb" style="font-size:12px; opacity:0.7;">${s.sub}</div>
+        <div class="mch" style="padding:16px; display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+          <div class="mcico" style="background:${bg(s.color)}; width:46px; height:46px; min-width:46px; border-radius:13px; font-size:22px; display:flex; align-items:center; justify-content:center;">${s.icon}</div>
+          <div class="mcnfo" style="flex:1; min-width:0;">
+            <div class="mcnm" style="font-weight:800; font-size:15px; line-height:1.25;">${s.name}</div>
+            <div class="mcsb" style="font-size:11.5px; opacity:0.7; line-height:1.3; margin-top:2px;">${s.sub}</div>
           </div>
-          <div class="mcrt" style="margin-left:auto;">
-             <button class="chkb" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')" style="background:var(--bg3); border:1px solid var(--bd); color:var(--gold); font-size:18px; width:40px; height:40px; border-radius:12px;">✓</button>
-             <button class="arb" style="margin-left:8px; background:none; border:none; font-size:18px;">▾</button>
+          <button class="arb" onclick="togCard(event,'${s.id}')" style="background:var(--bg3); border:1.5px solid var(--bd); font-size:16px; color:var(--t2); width:36px; height:36px; min-width:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer;">▾</button>
+          <div class="mcrt" style="width:100%; display:flex; gap:8px;">
+             <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')" style="flex:1; background:var(--bg3); border:1.5px solid var(--bd2); color:var(--t2); font-size:13px; font-weight:800; padding:11px 10px; border-radius:12px; transition:all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); text-transform:uppercase; letter-spacing:0.3px; min-height:44px; cursor:pointer;">✕ Skip</button>
+             <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')" style="flex:1.5; background:linear-gradient(135deg, var(--gold), var(--amber)); border:none; color:white; font-size:13px; font-weight:800; padding:11px 10px; border-radius:12px; transition:all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); text-transform:uppercase; letter-spacing:0.3px; box-shadow:0 4px 14px rgba(198,146,10,0.3); min-height:44px; cursor:pointer;">✓ Done</button>
           </div>
         </div>
-        <div style="padding:0 18px 18px; display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="padding:0 16px 14px; display:flex; gap:6px; flex-wrap:wrap;">
             <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal} <small>kcal</small></span></div>
             <div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>
             <div class="g-chip"><span style="color:var(--green)">C</span><span>${s.c}g</span></div>
             <div class="g-chip"><span style="color:var(--amber)">F</span><span>${s.f}g</span></div>
         </div>
-        <div class="mcb" style="padding:0 18px 18px;">${ii}${oi}</div>
+        <div class="mcb" style="padding:0 16px 16px;">${ii}${oi}</div>
       </div>`;
     }
     html += `<div class="trow${s.type === "supp" ? " sr" : ""}">
@@ -1384,7 +1468,7 @@ function buildWorkoutHTML(type) {
           <div class="sec-lbl">${sec.name}</div>
           <div class="sec-line"></div>
         </div>
-        <div class="exlist" style="display:flex; flex-direction:column; gap:12px;">`;
+        <div class="exlist" style="display:flex; flex-direction:column; gap:10px;">`;
     sec.exercises.forEach((ex) => {
       const i = exIdx++;
       if (!EX[type][i]) EX[type][i] = { done: 0, completed: false };
@@ -1403,7 +1487,7 @@ function buildWorkoutHTML(type) {
           ? `<button class="exck${EX[type][i].completed ? " dn" : ""}" id="ek_${type}_${i}" onclick="togSingle('${type}',${i})" style="width:40px; height:40px; border-radius:12px; font-size:18px;">✓</button>`
           : "";
       const imgSrc = ex.img
-        ? `<img src="${ex.img}" loading="lazy" style="width:85px;min-width:85px;height:85px;border-radius:8px;object-fit:contain;background:var(--bg);border:1px solid var(--bd);padding:2px;">`
+        ? `<img src="${ex.img}" loading="lazy" style="width:100%;height:100%;border-radius:8px;object-fit:contain;background:var(--bg);border:1px solid var(--bd);padding:2px;">`
         : "";
 
       secHTML += `<div class="p-card ex-card-new${EX[type][i].completed ? " done-ex" : ""}" id="exc_${type}_${i}">
@@ -1503,7 +1587,7 @@ function buildWorkoutHTML(type) {
           icon: "⚡",
         };
         const lbl = typeLabels[t] || t;
-        return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;flex:1;min-width:130px">
+        return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;flex:1;min-width:calc(50% - 8px);max-width:100%">
             <div style="font-size:18px">${tc.icon}</div>
             <div><div style="font-size:12px;font-weight:800;color:${tc.c}">${lbl}</div>
             <div style="font-size:10.5px;color:var(--t3);margin-top:1px">${cnt} ex · <span style="color:${tc.c};font-weight:700">${setCounts[t]} sets</span></div></div>
@@ -1514,16 +1598,16 @@ function buildWorkoutHTML(type) {
         <div style="border-top:1px solid rgba(255,255,255,.06);margin-top:14px;padding-top:14px">
           <div style="font-size:10px;font-weight:800;letter-spacing:.09em;color:${wc};text-transform:uppercase;margin-bottom:10px">📊 Exercise Breakdown</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(75,131,232,.1);border:1px solid rgba(75,131,232,.25);border-radius:20px;padding:5px 11px">
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(75,131,232,.1);border:1px solid rgba(75,131,232,.25);border-radius:14px;padding:3px 8px;font-size:10px">
               <span>🏋️</span><span style="font-size:11px;font-weight:700;color:var(--blue)">Machines</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--blue);margin-left:3px">${machines}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:20px;padding:5px 11px">
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:14px;padding:3px 8px;font-size:10px">
               <span>🔵</span><span style="font-size:11px;font-weight:700;color:var(--purple)">Dumbbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--purple);margin-left:3px">${dumbbells}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.25);border-radius:20px;padding:5px 11px">
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.25);border-radius:14px;padding:3px 8px;font-size:10px">
               <span>🔴</span><span style="font-size:11px;font-weight:700;color:var(--red)">Barbells</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--red);margin-left:3px">${barbells}</span>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:20px;padding:5px 11px">
+            <div style="display:flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:14px;padding:3px 8px;font-size:10px">
               <span>🤸</span><span style="font-size:11px;font-weight:700;color:var(--green)">Bodyweight</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--green);margin-left:3px">${bodyweight}</span>
             </div>
           </div>
@@ -1546,7 +1630,7 @@ function buildWorkoutHTML(type) {
       </div>`;
 
   if (isRest) {
-    return `<div class="p-card wo-header" style="border-color:var(--t3); background:linear-gradient(135deg, rgba(156,139,106,0.1), transparent); margin-bottom:20px; padding:32px; text-align:center;">
+    return `<div class="p-card wo-header" style="border-color:var(--t3); background:linear-gradient(135deg, rgba(156,139,106,0.1), transparent); margin-bottom:16px; padding:20px; text-align:center;">
             <div style="font-size:40px; margin-bottom:12px;">🌙</div>
             <div class="wo-day" style="color:var(--t2); font-size:28px; font-weight:900; letter-spacing:-1px;">Recovery Mode</div>
             <div class="wo-meta" style="font-size:14px; opacity:0.8; margin-bottom:16px;">Sunday · Active Rest & Reset</div>
@@ -1563,8 +1647,8 @@ function buildWorkoutHTML(type) {
           ${quoteHTML}`;
   }
 
-  return `<div class="p-card wo-header" style="border-color:${wc}55; background:linear-gradient(135deg, ${wc}15, rgba(255,255,255,0.8)); margin-bottom:24px; padding:32px; border-radius:24px;">
-    <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+  return `<div class="p-card wo-header" style="border-color:${wc}55; background:linear-gradient(135deg, ${wc}15, rgba(255,255,255,0.8)); margin-bottom:14px; padding:16px; border-radius:16px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
       <div class="ex-num-new" style="background:${wc}; color:white; width:36px; height:36px; font-size:16px; box-shadow:0 8px 16px ${wc}44">W</div>
       <div>
         <div class="wo-day" style="color:var(--t); font-size:26px; font-weight:900; letter-spacing:-1px; line-height:1;">${wd.name}</div>
@@ -1572,8 +1656,8 @@ function buildWorkoutHTML(type) {
       </div>
       <div style="margin-left:auto; font-size:10px; font-weight:900; background:${wc}15; color:${wc}; padding:6px 14px; border-radius:20px; border:1px solid ${wc}22; text-transform:uppercase; letter-spacing:1px;">🌅 4 AM – 6 AM</div>
     </div>
-    <div class="wo-tip" style="background:rgba(0,0,0,0.03); padding:14px 18px; border-radius:18px; font-size:12px; border:1px solid rgba(0,0,0,0.05); margin-bottom:20px; font-style:italic; line-height:1.4;">"${wd.tip}"</div>
-    <div class="wo-stats" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:20px;">
+    <div class="wo-tip" style="background:rgba(0,0,0,0.03); padding:10px 12px; border-radius:12px; font-size:11px; border:1px solid rgba(0,0,0,0.05); margin-bottom:20px; font-style:italic; line-height:1.4;">"${wd.tip}"</div>
+    <div class="wo-stats" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-bottom:12px;">
       <div style="text-align:center; background:rgba(255,255,255,0.5); padding:10px; border-radius:16px; border:1px solid rgba(0,0,0,0.03);">
         <div class="ws-v" id="wod_${type}" style="color:${wc}; font-weight:900; font-size:20px; font-family:var(--mono);">${done}/${allEx.length}</div>
         <div class="ws-l" style="font-size:9px; opacity:0.6; margin-top:2px;">Exercises</div>
@@ -1674,7 +1758,7 @@ function buildAllWorkouts() {
       <div style="padding:0 0 16px">
         <!-- Header -->
         <div class="p-card all-header-premium" style="padding:32px; margin-bottom:24px; border-radius:24px;">
-          <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
              <div class="ex-num-new" style="background:var(--gold); color:white; width:36px; height:36px; font-size:16px; box-shadow:0 8px 16px var(--gold-b)">P</div>
              <div>
                 <div style="font-family:'Raleway',sans-serif;font-size:26px;font-weight:900;color:var(--t);letter-spacing:-1px; line-height:1;">Global Workout Plan</div>
@@ -1862,6 +1946,7 @@ function checkDailyReset() {
   S.isab = td.isab || [false, false];
   // Restore meals done
   S.done = new Set(td.meals || []);
+  S.skipped = new Set(td.skipped || []);
   S.cal = 0;
   S.p = 0;
   S.c = 0;
@@ -1890,6 +1975,7 @@ function persistDaily() {
   const store = loadStore();
   const td = getToday(store);
   td.meals = [...S.done];
+  td.skipped = [...S.skipped];
   td.water = S.water;
   td.isab = S.isab;
   td.exercises = JSON.parse(JSON.stringify(EX));
@@ -2135,15 +2221,41 @@ function deleteWeightEntry(date) {
 // PATCHED FUNCTIONS — now also call persistDaily()
 // ============================================================
 let curMobTab = "diet";
+function skipMeal(e, id) {
+  e.stopPropagation();
+  const s = DIET.find((x) => x.id === id);
+  if (!s || s.type !== "meal") return;
+  const btnD = $("chk_" + id), btnS = $("skp_" + id), card = document.querySelector(`[data-id="${id}"]`);
+  if (S.done.has(id)) {
+    S.done.delete(id);
+    S.cal -= s.cal; S.p -= s.p; S.c -= s.c; S.f -= s.f; S.fib -= s.fib || 0;
+    updMacros();
+  }
+  if (S.skipped.has(id)) {
+    S.skipped.delete(id);
+    if (btnS) { btnS.innerHTML = "✕ Skip"; btnS.style.background = "var(--bg3)"; btnS.style.color = "var(--t3)"; btnS.style.borderColor = "var(--bd)"; }
+    if (card) { card.style.opacity = "1"; card.style.transform = "scale(1)"; }
+    if (btnD) { btnD.style.display = ""; btnD.innerHTML = "✓ Done"; btnD.style.background = "linear-gradient(135deg, var(--gold), var(--amber))"; }
+  } else {
+    S.skipped.add(id);
+    if (btnS) { btnS.innerHTML = "✕ Skipped"; btnS.style.background = "rgba(220,38,38,0.1)"; btnS.style.color = "var(--red)"; btnS.style.borderColor = "var(--red)"; }
+    if (card) { card.style.opacity = "0.5"; card.style.transform = "scale(0.98)"; card.classList.remove("anow"); }
+    if (btnD) { btnD.style.display = "none"; }
+    if (window.showToast) window.showToast("Meal Skipped", "⏭️");
+  }
+  persistDaily();
+}
+
 function togMeal(e, id) {
   e.stopPropagation();
   const s = DIET.find((x) => x.id === id);
   if (!s || s.type !== "meal") return;
-  const btn = $("chk_" + id),
-    card = document.querySelector(`[data-id="${id}"]`);
+  const btn = $("chk_" + id), btnS = $("skp_" + id), card = document.querySelector(`[data-id="${id}"]`);
+  if (S.skipped.has(id)) return;
   if (S.done.has(id)) {
     S.done.delete(id);
-    btn.classList.remove("done");
+    if (btn) { btn.classList.remove("done"); btn.innerHTML = "✓ Done"; btn.style.background = "linear-gradient(135deg, var(--gold), var(--amber))"; }
+    if (btnS) { btnS.style.display = ""; }
     if (card) {
       card.classList.remove("ck", "anow");
     }
@@ -2154,7 +2266,8 @@ function togMeal(e, id) {
     S.fib -= s.fib || 0;
   } else {
     S.done.add(id);
-    btn.classList.add("done");
+    if (btn) { btn.classList.add("done"); btn.innerHTML = "✓ Completed"; btn.style.background = "var(--green)"; btn.style.boxShadow = "none"; }
+    if (btnS) { btnS.style.display = "none"; }
     if (card) {
       card.classList.add("ck");
       card.classList.remove("anow");
@@ -2545,9 +2658,19 @@ renderDiet();
 setTimeout(() => {
   S.done.forEach((id) => {
     const btn = $("chk_" + id);
+    const btnS = $("skp_" + id);
     const card = document.querySelector(`[data-id="${id}"]`);
-    if (btn) btn.classList.add("done");
+    if (btn) { btn.classList.add("done"); btn.innerHTML = "✓ Completed"; btn.style.background = "var(--green)"; btn.style.boxShadow = "none"; }
+    if (btnS) { btnS.style.display = "none"; }
     if (card) card.classList.add("ck");
+  });
+  S.skipped.forEach((id) => {
+    const btnD = $("chk_" + id);
+    const btnS = $("skp_" + id);
+    const card = document.querySelector(`[data-id="${id}"]`);
+    if (btnS) { btnS.innerHTML = "✕ Skipped"; btnS.style.background = "rgba(220,38,38,0.1)"; btnS.style.color = "var(--red)"; btnS.style.borderColor = "var(--red)"; }
+    if (card) { card.style.opacity = "0.5"; card.style.transform = "scale(0.98)"; }
+    if (btnD) { btnD.style.display = "none"; }
   });
   // Restore isabgol buttons
   [0, 1].forEach((i) => {
@@ -2567,3 +2690,11 @@ setInterval(tick, 1000);
 hlSlot();
 setInterval(hlSlot, 60000);
 setTimeout(updMacros, 300);
+
+// Initialize notifications and reminders
+initializeNotifications();
+
+// Auto-initialize reminders if permissions already granted
+if (Notification.permission === "granted") {
+  startAutomaticReminders();
+}

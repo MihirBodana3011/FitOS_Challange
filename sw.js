@@ -4,7 +4,7 @@ const ASSETS = [
   "./index.html",
   "./style.css",
   "./script.js",
-  "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap",
+  "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap",
 ];
 
 // Install Event
@@ -61,17 +61,49 @@ self.addEventListener("fetch", (e) => {
   );
 });
 
-// Notification Logic
+// Notification Logic - Enhanced
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SCHEDULE_NOTIFICATION") {
     const { title, body, delay } = event.data;
+    
+    // Schedule notification after delay
     setTimeout(() => {
       self.registration.showNotification(title, {
         body: body,
-        icon: "./Image/logo-192.svg",
-        badge: "./Image/logo-192.svg",
+        icon: "./Image/logo-new.png",
+        badge: "./Image/logo-new.png",
+        tag: "fitos-reminder", // Prevent duplicate notifications
+        requireInteraction: false,
         vibrate: [200, 100, 200],
-      });
+        actions: [
+          { action: "open", title: "Open App" },
+          { action: "dismiss", title: "Dismiss" }
+        ]
+      }).catch(err => console.error("Notification failed:", err));
     }, delay);
   }
+});
+
+// Handle notification clicks
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  
+  if (event.action === "dismiss") {
+    return;
+  }
+  
+  // Open or focus the app
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      for (let i = 0; i < clientList.length; i++) {
+        const client = clientList[i];
+        if (client.url === "/" && "focus" in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow("/");
+      }
+    })
+  );
 });

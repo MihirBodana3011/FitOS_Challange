@@ -50,24 +50,24 @@
   --r-lg: clamp(0.8rem, 3.5vw, 1rem);
   --r-xl: clamp(1rem, 4.5vw, 1.25rem);
 
-  /* Fluid type scale — Optimized for extreme mobile fit */
-  --fs-3xs: clamp(0.55rem, 1.4vw, 0.7rem);
-  --fs-2xs: clamp(0.65rem, 1.7vw, 0.8rem);
-  --fs-xs: clamp(0.75rem, 2.1vw, 0.95rem);
-  --fs-sm: clamp(0.85rem, 2.4vw, 1.05rem);
-  --fs-md: clamp(0.95rem, 2.8vw, 1.15rem);
-  --fs-lg: clamp(1.1rem, 3.2vw, 1.35rem);
-  --fs-xl: clamp(1.2rem, 3.8vw, 1.6rem);
-  --fs-2xl: clamp(1.4rem, 4.5vw, 2rem);
-  --fs-3xl: clamp(1.8rem, 5.5vw, 2.8rem);
+  /* Fluid type scale — Ultra-compact for perfect mobile fit */
+  --fs-3xs: clamp(0.45rem, 1.1vw, 0.60rem);
+  --fs-2xs: clamp(0.55rem, 1.4vw, 0.70rem);
+  --fs-xs: clamp(0.65rem, 1.7vw, 0.85rem);
+  --fs-sm: clamp(0.75rem, 2vw, 0.95rem);
+  --fs-md: clamp(0.85rem, 2.3vw, 1.05rem);
+  --fs-lg: clamp(0.95rem, 2.7vw, 1.25rem);
+  --fs-xl: clamp(1.05rem, 3.2vw, 1.45rem);
+  --fs-2xl: clamp(1.25rem, 3.7vw, 1.75rem);
+  --fs-3xl: clamp(1.65rem, 4.7vw, 2.45rem);
 
-  /* Spacing scale — More compact on mobile */
-  --space-xs: clamp(0.2rem, 0.8vw, 0.4rem);
-  --space-sm: clamp(0.4rem, 1.5vw, 0.6rem);
-  --space-md: clamp(0.6rem, 2.5vw, 0.8rem);
-  --space-lg: clamp(0.8rem, 3.5vw, 1.2rem);
-  --space-xl: clamp(1.2rem, 5vw, 1.8rem);
-  --space-2xl: clamp(1.8rem, 7vw, 2.5rem);
+  /* Spacing scale — Ultra-tight compact spacing */
+  --space-xs: clamp(0.12rem, 0.5vw, 0.25rem);
+  --space-sm: clamp(0.25rem, 1vw, 0.45rem);
+  --space-md: clamp(0.45rem, 1.8vw, 0.65rem);
+  --space-lg: clamp(0.65rem, 2.5vw, 0.95rem);
+  --space-xl: clamp(0.95rem, 3.5vw, 1.40rem);
+  --space-2xl: clamp(1.40rem, 5.5vw, 2.05rem);
 }
 
 html {
@@ -587,16 +587,25 @@ h6 {
   grid-template-columns: 1fr 1fr;
   gap: 5px;
   margin-bottom: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pc {
   background: var(--bg2);
   border: 1px solid var(--bd);
   border-radius: 18px;
-  padding: 12px 14px;
+  padding: 8px 10px;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   animation: fup 0.4s ease both;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .pc:nth-child(1) {
@@ -623,25 +632,38 @@ h6 {
 }
 
 .pc-l {
-  font-size: clamp(10px, 1.8vw, 11.5px);
+  font-size: clamp(9px, 1.6vw, 10px);
   color: var(--t3);
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
 }
 
 .pc-v {
   font-family: var(--mono);
-  font-size: clamp(18px, 4vw, 24px);
+  font-size: clamp(16px, 3.5vw, 22px);
   font-weight: 800;
   line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pc-s {
-  font-size: clamp(10px, 1.8vw, 11.5px);
+  font-size: clamp(9px, 1.6vw, 10px);
   color: var(--t3);
-  margin-top: 2px;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
 }
 
 .bmibar {
@@ -688,6 +710,8 @@ h6 {
   position: relative;
   overflow: hidden;
   margin-bottom: var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .p-card:hover {
@@ -725,12 +749,14 @@ h6 {
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 12px;
   padding: 6px 12px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-size: 11px;
   font-weight: 700;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .g-chip:hover {
@@ -1316,12 +1342,16 @@ h6 {
 }
 
 .ib-l {
-  font-size: var(--fs-sm);
+  font-size: clamp(9px, 2vw, 10px);
   font-weight: 700;
   color: var(--t2);
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .ib.done .ib-l {
@@ -1330,10 +1360,14 @@ h6 {
 }
 
 .ib-t {
-  font-size: var(--fs-xs);
+  font-size: clamp(8px, 1.8vw, 9px);
   color: var(--t3);
-  margin-top: var(--space-xs);
+  margin-top: 1px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .isab-note {
@@ -1352,20 +1386,27 @@ h6 {
 .sql {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  flex-wrap: nowrap;
+  gap: 3px;
   animation: fup 0.5s ease both;
   animation-delay: 0.4s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sq {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 5px;
   background: var(--bg3);
   border: 1px solid var(--bd);
   border-radius: 9px;
-  padding: 8px 10px;
+  padding: 6px 8px;
   transition: all 0.15s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sq:active {
@@ -1380,32 +1421,44 @@ h6 {
 }
 
 .sn {
-  font-size: clamp(11px, 2.5vw, 12.5px);
+  font-size: clamp(11px, 2.3vw, 12px);
   font-weight: 600;
   flex: 1;
   line-height: 1.2;
   color: var(--t);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  min-width: 0;
 }
 
 .st {
-  font-size: clamp(8.5px, 2vw, 10px);
+  font-size: clamp(8px, 1.8vw, 9px);
   color: var(--t3);
   text-align: right;
   white-space: nowrap;
+  margin-left: auto;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 /* WEEK GRID */
 .wk {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 1px;
   animation: fup 0.5s ease both;
   animation-delay: 0.5s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .wd {
   text-align: center;
-  padding: 6px 2px;
+  padding: 5px 1px;
   border-radius: 8px;
   border: 1px solid var(--bd);
   background: var(--bg3);
@@ -1418,17 +1471,23 @@ h6 {
 }
 
 .wdn {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--t3);
   font-weight: 800;
   text-transform: uppercase;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wdt {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ============================================================
@@ -1436,28 +1495,35 @@ h6 {
    ============================================================ */
 .main {
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* TABBAR */
 .tabbar {
   display: flex;
+  flex-wrap: nowrap;
   border-bottom: 1px solid var(--bd);
   background: var(--bg2);
   position: sticky;
   top: 0;
   z-index: 200;
-  padding: 0 14px;
-  justify-content: center;
-  flex-wrap: wrap;
+  padding: 0 11px;
+  justify-content: flex-start;
+  overflow-x: auto;
   box-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tab {
-  padding: 14px 13px;
-  font-size: clamp(11px, 2.5vw, 12.5px);
+  padding: 10px 9px;
+  font-size: clamp(9px, 2vw, 10.5px);
   font-weight: 700;
   color: var(--t2);
   cursor: pointer;
@@ -1468,12 +1534,12 @@ h6 {
   transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 5px;
-  white-space: nowrap;
-  min-height: 48px;
-  -webkit-tap-highlight-color: transparent;
-  flex: 1;
   justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+  min-height: 40px;
+  -webkit-tap-highlight-color: transparent;
+  flex: 0 0 auto;
 }
 
 .tab:active {
@@ -1495,8 +1561,11 @@ h6 {
 /* TAB CONTENT */
 .tc {
   display: none;
-  padding: 14px;
+  padding: 9px;
   animation: fup 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .tc.on {
@@ -1525,9 +1594,12 @@ h6 {
 
 .trow {
   display: flex;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
   position: relative;
   animation: fup 0.35s ease both;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .trow::after {
@@ -1764,7 +1836,9 @@ h6 {
     0 2px 8px rgba(0, 0, 0, 0.04),
     0 1px 2px rgba(0, 0, 0, 0.02);
   -webkit-tap-highlight-color: transparent;
-  margin-bottom: var(--space-sm);
+  margin-bottom: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mc:hover {
@@ -1806,12 +1880,16 @@ h6 {
 .mch {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-lg);
+  justify-content: space-between;
+  gap: 3px;
+  padding: 6px 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: var(--r-lg) var(--r-lg) 0 0;
   background: linear-gradient(135deg, rgba(198, 146, 10, 0.02), transparent);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 .mch:hover {
@@ -1831,13 +1909,13 @@ h6 {
 }
 
 .mcico {
-  width: clamp(2.5rem, 6vw, 3rem);
-  height: clamp(2.5rem, 6vw, 3rem);
+  width: clamp(2rem, 4.5vw, 2.6rem);
+  height: clamp(2rem, 4.5vw, 2.6rem);
   border-radius: var(--r-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   flex-shrink: 0;
   background: linear-gradient(135deg, var(--gold-b), rgba(255, 255, 255, 0.1));
   border: 1px solid var(--bd);
@@ -1847,57 +1925,66 @@ h6 {
 .mcnfo {
   flex: 1;
   min-width: 0;
-  word-wrap: break-word;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .mcnm {
-  font-size: var(--fs-md);
+  font-size: clamp(13px, 2.3vw, 14.5px);
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.2;
   color: var(--t);
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-  margin-bottom: var(--space-xs);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .mcsb {
-  font-size: var(--fs-sm);
+  font-size: clamp(11px, 2vw, 12px);
   color: var(--t2);
-  margin-top: var(--space-xs);
-  white-space: normal;
-  word-wrap: break-word;
-  overflow: visible;
-  text-overflow: clip;
-  overflow-wrap: break-word;
-  line-height: 1.4;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  display: block;
 }
 
 .mcrt {
   display: flex;
   align-items: center;
-  gap: 5px;
+  justify-content: flex-end;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .ctag {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 3px 7px;
+  padding: 2px 6px;
   border-radius: 10px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .chkb {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid var(--bd2);
   background: none;
   color: var(--t3);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   align-items: center;
@@ -2367,22 +2454,25 @@ button:focus-visible,
 .exlist {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .excard {
   background: var(--bg2);
   border: 1px solid var(--bd);
   border-radius: 12px;
-  padding: 11px 12px;
+  padding: 8px 9px;
   display: flex;
   align-items: center;
-  gap: 9px;
+  justify-content: space-between;
+  gap: 6px;
   transition: all 0.2s;
   animation: fup 0.3s ease both;
   cursor: default;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .excard.done-ex {
@@ -2403,35 +2493,54 @@ button:focus-visible,
 .exinfo {
   flex: 1;
   min-width: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .exnm {
-  font-size: clamp(12px, 2.8vw, 13.5px);
+  font-size: clamp(12px, 2.6vw, 13px);
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   color: var(--t);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .exdt {
-  font-size: clamp(10px, 2.2vw, 11.5px);
+  font-size: clamp(10px, 2vw, 11px);
   color: var(--t2);
-  line-height: 1.4;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .extbadge {
-  font-size: clamp(8px, 1.8vw, 9.5px);
+  font-size: clamp(8px, 1.6vw, 9px);
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 2px 6px;
   border-radius: 9px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex-shrink: 0;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .setrow {
   display: flex;
-  gap: 5px;
+  flex-wrap: nowrap;
+  gap: 4px;
   align-items: center;
+  justify-content: flex-end;
   flex-shrink: 0;
 }
 
@@ -2475,13 +2584,13 @@ button:focus-visible,
 }
 
 .exck {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid var(--bd2);
   background: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
   display: flex;
@@ -2515,8 +2624,8 @@ button:focus-visible,
 .sec-hdr {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 14px 0 8px;
+  gap: 6px;
+  margin: 9px 0 6px;
 }
 
 .sec-line {
@@ -2526,16 +2635,20 @@ button:focus-visible,
 }
 
 .sec-lbl {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  padding: 3px 9px;
+  padding: 2px 8px;
   border-radius: 20px;
   border: 1px solid var(--bd);
   color: var(--t3);
   white-space: nowrap;
   background: var(--bg4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
 }
 
 /* ANIMATION DELAYS */
@@ -9804,4 +9917,1657 @@ body.night-shift-active::after {
   .tc {
     padding: 15px 10px !important;
   }
+}
+
+/* ============================================================
+   ENHANCED MOBILE OPTIMIZATION (Tailwind + Custom)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Better touch targets (min 44px × 44px) */
+  button, a, .ib, .wgrid > *, .sq, .mc, input[type="number"],
+  input[type="text"], .p-card, .wk > * {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improve button padding for easier tapping */
+  .wt-save-btn, .tab, .btn-reminders {
+    min-height: 48px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Better text rendering on mobile */
+  body {
+    text-rendering: optimizeSpeed;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Remove system default delays on tap */
+  button, a, input, textarea, select {
+    -webkit-touch-callout: none;
+  }
+
+  /* Improve form inputs */
+  input[type="number"], input[type="text"] {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Better card spacing */
+  .p-card {
+    margin: 8px 0 !important;
+    padding: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* COMPREHENSIVE ALIGNMENT FIXES FOR MOBILE */
+  /* Prevent all wrapping in containers */
+  .tc, .trow, .sql, .sq, .setrow, .mch, .excard {
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* PREVENT TEXT WRAPPING IN ALL CARDS */
+  .mcnm, .exnm, .sn, .st {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mcsb {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mcnfo, .exinfo {
+    overflow: hidden !important;
+    min-width: 0 !important;
+  }
+
+  /* Prevent wrapping in all text elements */
+  .mcnm, .mcnfo .mcnm {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+  }
+
+  /* Text alignment fixes */
+  .mcnfo, .exinfo, .sn {
+    text-align: left !important;
+  }
+
+  .st, .mcrt, .setrow {
+    text-align: right !important;
+    margin-left: auto !important;
+  }
+
+  .pc, .wd, .mc {
+    text-align: center !important;
+  }
+
+  /* Flex alignment helpers */
+  .mch {
+    justify-content: space-between !important;
+  }
+
+  .excard {
+    justify-content: space-between !important;
+  }
+
+  /* Grid fixes */
+  .pgrid, .macro-grid-alpha, .wk {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Remove overflow issues */
+  .main, .layout, .tc, .tl {
+    overflow-x: hidden !important;
+  }
+
+  /* AGGRESSIVE NO-WRAP RULES FOR CARD TEXT */
+  /* All card titles stay on one line */
+  .mcnm, .exnm, .pc-l, .pc-v, .sn, .sh, .scn, .sctag {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    max-width: 100% !important;
+  }
+
+  /* Card containers prevent child wrapping */
+  .mch, .excard, .sq, .pc, .p-card {
+    flex-wrap: nowrap !important;
+  }
+
+  /* All flex children in cards don't wrap */
+  .mch > *, .excard > *, .sq > *, .setrow > * {
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Subtitle text one line with ellipsis */
+  .mcsb {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  /* Optimize grid layout */
+  .pgrid, .macro-grid-alpha, .wk, .sql {
+    gap: 8px !important;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)) !important;
+  }
+
+  /* CARD ALIGNMENT & SIZING FOR MOBILE - PERFECT FIT */
+  .p-card {
+    padding: 12px 14px !important;
+    margin: 0 0 10px 0 !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+  }
+
+  .mc {
+    margin: 0 0 8px 0 !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .mch {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+
+  .mcico {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    flex-shrink: 0 !important;
+    font-size: 20px !important;
+  }
+
+  .mcnfo {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  .mcnm {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .mcsb {
+    font-size: 11px !important;
+    opacity: 0.7 !important;
+  }
+
+  .mcrt {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .chkb {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    padding: 0 !important;
+  }
+
+  .arb {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+  }
+
+  /* EXERCISE CARDS */
+  .excard {
+    padding: 12px !important;
+    margin: 8px 0 !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .eximg {
+    width: 100% !important;
+    height: 140px !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
+  }
+
+  .exnm {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  .exdt {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* PROFILE CARDS */
+  .pc {
+    padding: 12px !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    background: var(--bg3) !important;
+    border: 1px solid var(--bd) !important;
+  }
+
+  .pc-l {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+  }
+
+  .pc-v {
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    margin: 6px 0 !important;
+  }
+
+  .pc-s {
+    font-size: 10px !important;
+  }
+
+  /* MEAL CARD EXPANDED INFO */
+  .mcexp {
+    padding: 12px 14px !important;
+    background: var(--bg3) !important;
+    border-top: 1px solid var(--bd) !important;
+  }
+
+  .il {
+    margin: 0 !important;
+    padding-left: 16px !important;
+  }
+
+  .il li {
+    margin: 6px 0 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  .og {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+
+  .opp {
+    padding: 10px 12px !important;
+    background: var(--bg2) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: 8px !important;
+    text-align: left !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+  }
+
+  .opp.sel {
+    background: var(--gold-b) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold) !important;
+    font-weight: 700 !important;
+  }
+
+  .odesc {
+    padding: 10px 12px !important;
+    background: rgba(198, 146, 10, 0.05) !important;
+    border-left: 3px solid var(--gold) !important;
+    border-radius: 6px !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* MACRO CHIPS */
+  .g-chip {
+    padding: 6px 10px !important;
+    font-size: 10px !important;
+    border-radius: 8px !important;
+    gap: 4px !important;
+  }
+
+  /* WATER GRID */
+  .wgrid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .wglass {
+    aspect-ratio: 1 !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* SUPPLEMENTARY BOXES */
+  .sq {
+    padding: 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--bd) !important;
+    background: var(--bg3) !important;
+    margin-bottom: 10px !important;
+  }
+
+  .sd {
+    width: 4px !important;
+    height: 40px !important;
+    border-radius: 2px !important;
+    margin-right: 10px !important;
+  }
+
+  .sn {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+
+  .st {
+    font-size: 10px !important;
+    opacity: 0.7 !important;
+  }
+
+  /* WEIGHT ENTRY BOX */
+  .wt-entry-box {
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .wt-entry-row {
+    gap: 8px !important;
+  }
+
+  .wt-input {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+  }
+
+  .wt-save-btn {
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+
+  /* ISABGOL BUTTONS */
+  .ib {
+    padding: 12px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+  }
+
+  .ib-ico {
+    font-size: 24px !important;
+  }
+
+  .ib-l {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+
+  .ib-t {
+    font-size: 10px !important;
+  }
+
+  /* SLEEP BLOCK */
+  .sleep-blk {
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .sleep-blk-ico {
+    font-size: 32px !important;
+  }
+
+  .sleep-blk-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  .sleep-blk-sub {
+    font-size: 11px !important;
+  }
+
+  /* GYM BLOCK */
+  .gymb {
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .gymb-ico {
+    font-size: 24px !important;
+  }
+
+  .gymb-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  .gymb-sub {
+    font-size: 10px !important;
+  }
+
+  .morning-badge {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+    margin-top: 6px !important;
+  }
+
+  /* Better notification button visibility */
+  .btn-reminders {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, var(--gold), rgba(198, 146, 10, 0.8)) !important;
+    box-shadow: 0 2px 8px rgba(198, 146, 10, 0.3) !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .btn-reminders:active {
+    transform: scale(0.95) !important;
+    box-shadow: 0 1px 4px rgba(198, 146, 10, 0.5) !important;
+  }
+
+  /* Horizontal scrolling improvements */
+  .day-strip-wrap, .sql, .tabbar {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Better mobile video/image handling */
+  img, video {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Safe area fixes for notch devices */
+  .topbar {
+    padding-left: max(8px, env(safe-area-inset-left)) !important;
+    padding-right: max(8px, env(safe-area-inset-right)) !important;
+  }
+
+  .botnav {
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  /* Prevent pinch zoom glitches */
+  body {
+    touch-action: manipulation;
+  }
+
+  /* Better accordion/collapsible handling */
+  .det, .ddet, [hidden] {
+    display: none !important;
+  }
+
+  .details[open] > .det,
+  .details[open] > .ddet {
+    display: block !important;
+  }
+
+  /* Improve notification visibility */
+  @supports (padding: max(0px)) {
+    .btn-reminders {
+      padding-right: max(12px, env(safe-area-inset-right)) !important;
+    }
+  }
+
+  /* Optimize sidebar for small screens */
+  .sidebar {
+    display: none !important;
+  }
+
+  /* Better tab scrolling */
+  .tabbar .tab {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
+  .tabbar .tab.on {
+    border-bottom-width: 3px !important;
+  }
+
+  /* Reduce motion for performance */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Dark mode DISABLED - Light mode only for better mobile readability */
+  /* Keep light theme for comfortable viewing */
+  :root {
+    --bg: #fdfaf4;
+    --bg2: #ffffff;
+    --t: #1a1208;
+  }
+
+  /* Improved form controls */
+  .wt-input {
+    font-size: 16px !important;
+    padding: 12px !important;
+    border: 2px solid var(--bd) !important;
+    border-radius: 8px !important;
+  }
+
+  .wt-input:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(198, 146, 10, 0.1) !important;
+  }
+
+  /* Better list item spacing */
+  .exdrp, .exdri {
+    padding: 10px !important;
+    margin: 6px 0 !important;
+  }
+
+  /* Optimize ring chart for mobile */
+  .ring-c {
+    max-width: 100% !important;
+    aspect-ratio: 1;
+  }
+
+  .rb-wrap {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* ============================================================
+   ULTRA-SMALL PHONES (< 380px width) 
+   ============================================================ */
+@media (max-width: 380px) {
+  :root {
+    --fs-sm: clamp(0.75rem, 2vw, 0.85rem);
+    --fs-md: clamp(0.85rem, 2.3vw, 0.95rem);
+    --space-sm: clamp(0.3rem, 1.2vw, 0.5rem);
+  }
+
+  .topbar {
+    height: 48px !important;
+    gap: 4px !important;
+  }
+
+  .btn-reminders {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+  }
+
+  .tabbar {
+    height: 40px !important;
+    top: 48px !important;
+  }
+
+  .tab {
+    font-size: 10px !important;
+    min-width: 70px !important;
+    padding: 0 6px !important;
+  }
+
+  .logo .lt {
+    font-size: 14px !important;
+  }
+
+  .layout {
+    padding-top: 88px !important;
+  }
+}
+
+/* ============================================================
+   ★ MASTER MOBILE OVERRIDE — appended last, wins all conflicts
+   ============================================================ */
+
+/* ---------- TOKENS ---------- */
+@media (max-width: 768px) {
+  :root {
+    --topbar-h: 56px;
+    --tabbar-h: 48px;
+    --botnav-h: 66px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --page-top:   calc(var(--topbar-h) + var(--tabbar-h));  /* 104px */
+    --page-bot:   calc(var(--botnav-h) + var(--safe-bottom));
+  }
+}
+
+/* ---------- FULL LAYOUT ---------- */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  body { touch-action: pan-y; }
+
+  .layout {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: 100dvh !important;
+    padding-top:    var(--page-top)    !important;
+    padding-bottom: var(--page-bot)    !important;
+    padding-left:   0 !important;
+    padding-right:  0 !important;
+    overflow-x: hidden !important;
+  }
+}
+
+/* ---------- TOP BAR ---------- */
+@media (max-width: 768px) {
+  .topbar {
+    position: fixed    !important;
+    top: 0             !important;
+    left: 0            !important;
+    right: 0           !important;
+    height: var(--topbar-h) !important;
+    z-index: 9000      !important;
+    display: flex      !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 max(12px, env(safe-area-inset-left)) !important;
+    background: rgba(255,255,255,0.98) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07) !important;
+    gap: 10px !important;
+  }
+
+  /* Logo group */
+  .logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  .lm {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 13px !important;
+    border-radius: 9px !important;
+  }
+  .lt { font-size: 18px !important; }
+  .logo .xbadge, .vbadge { display: none !important; }
+
+  /* AI greeting — show but clamp width */
+  .ai-greeting {
+    font-size: 10px !important;
+    max-width: 80px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Right side — clock + reminder btn */
+  .topright {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  .topright .dc,
+  .topright .cstrip,
+  .topright .bmi-b { display: none !important; }
+
+  /* Clock */
+  .clkwrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 0 !important;
+  }
+  .clk {
+    font-size: 11px !important;
+    font-family: var(--mono) !important;
+    font-weight: 700 !important;
+    color: var(--t) !important;
+  }
+  /* .datelbl display:none REMOVED for mobile clock visibility */
+
+  /* Reminder button */
+  .btn-reminders {
+    display: inline-flex   !important;
+    align-items: center    !important;
+    gap: 4px               !important;
+    font-size: 9px         !important;
+    font-weight: 800       !important;
+    padding: 6px 10px      !important;
+    border-radius: 12px    !important;
+    border: none           !important;
+    background: linear-gradient(135deg, #d4a847, #b8880f) !important;
+    color: #fff            !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px  !important;
+    box-shadow: 0 3px 10px rgba(198,146,10,0.3) !important;
+    white-space: nowrap    !important;
+    cursor: pointer        !important;
+  }
+  .btn-reminders:active {
+    transform: scale(0.94) !important;
+  }
+}
+
+/* ---------- DESKTOP TAB BAR (scrollable on mobile) ---------- */
+@media (max-width: 768px) {
+  #desktopTabbar,
+  .tabbar {
+    position: fixed        !important;
+    top: var(--topbar-h)   !important;
+    left: 0                !important;
+    right: 0               !important;
+    height: var(--tabbar-h)!important;
+    z-index: 8000          !important;
+    display: flex          !important;
+    flex-wrap: nowrap      !important;
+    flex-direction: row    !important;
+    overflow-x: auto       !important;
+    overflow-y: hidden     !important;
+    scrollbar-width: none  !important;
+    -webkit-overflow-scrolling: touch !important;
+    background: #fff       !important;
+    border-bottom: 1px solid var(--bd) !important;
+    padding: 0 8px         !important;
+    gap: 2px               !important;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.04) !important;
+  }
+  .tabbar::-webkit-scrollbar { display: none !important; }
+
+  .tab {
+    flex: 0 0 auto         !important;
+    height: 100%           !important;
+    min-width: 90px        !important;
+    padding: 0 12px        !important;
+    font-size: 11px        !important;
+    font-weight: 800       !important;
+    white-space: nowrap    !important;
+    display: flex          !important;
+    align-items: center    !important;
+    justify-content: center !important;
+    border: none           !important;
+    border-bottom: 3px solid transparent !important;
+    border-radius: 0       !important;
+    background: transparent !important;
+    color: var(--t3)       !important;
+    cursor: pointer        !important;
+    transition: color 0.2s, border-color 0.2s !important;
+  }
+  .tab.on {
+    color: var(--gold)          !important;
+    border-bottom-color: var(--gold) !important;
+    background: rgba(198,146,10,0.05) !important;
+  }
+}
+
+/* ---------- BOTTOM NAV ---------- */
+@media (max-width: 768px) {
+  .botnav {
+    display: flex          !important;
+    position: fixed        !important;
+    bottom: 0              !important;
+    left: 0                !important;
+    right: 0               !important;
+    height: var(--botnav-h)!important;
+    z-index: 9000          !important;
+    align-items: stretch   !important;
+    background: rgba(255,255,255,0.98) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(198,146,10,0.1) !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
+    padding-bottom: var(--safe-bottom) !important;
+  }
+
+  .bntab {
+    flex: 1                !important;
+    display: flex          !important;
+    flex-direction: column !important;
+    align-items: center    !important;
+    justify-content: center !important;
+    gap: 2px               !important;
+    border: none           !important;
+    background: transparent !important;
+    cursor: pointer        !important;
+    padding: 6px 0 4px     !important;
+    color: var(--t3)       !important;
+    transition: color 0.2s, background 0.2s !important;
+    border-top: 3px solid transparent !important;
+    position: relative     !important;
+  }
+  .bntab.on {
+    color: var(--gold)     !important;
+    border-top-color: var(--gold) !important;
+    background: rgba(198,146,10,0.04) !important;
+  }
+  .bnico { font-size: 20px !important; line-height: 1 !important; }
+  .bnlbl { font-size: 10px !important; font-weight: 700 !important; letter-spacing: 0.2px !important; }
+}
+
+/* ---------- SIDEBAR (hidden on mobile, shown via stats tab) ---------- */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none      !important;
+    position: static   !important;
+    border: none       !important;
+    width: 100%        !important;
+    padding: 0 0 16px  !important;
+    background: transparent !important;
+  }
+  .sidebar.mob-visible {
+    display: flex      !important;
+    flex-direction: column !important;
+    gap: 16px          !important;
+    padding: 16px 14px !important;
+  }
+}
+
+/* ---------- MAIN + TABS ---------- */
+@media (max-width: 768px) {
+  .main {
+    width: 100%        !important;
+    overflow-x: hidden !important;
+    flex: 1            !important;
+  }
+
+  .tc {
+    display: none !important;
+    padding: 14px 12px 24px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .tc.on { display: block !important; }
+}
+
+/* ---------- DAY STRIP ---------- */
+@media (max-width: 768px) {
+  .day-strip-wrap {
+    overflow-x: auto      !important;
+    overflow-y: hidden    !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    margin: 0 -12px 16px  !important;
+    padding: 0 12px       !important;
+  }
+  .day-strip-wrap::-webkit-scrollbar { display: none !important; }
+  .day-strip {
+    display: flex         !important;
+    flex-wrap: nowrap     !important;
+    align-items: center   !important;
+    gap: 0                !important;
+    min-width: max-content !important;
+    padding: 8px 0        !important;
+  }
+  .ds-node {
+    min-width: 68px       !important;
+    padding: 10px 8px     !important;
+    font-size: 10px       !important;
+    border-radius: 12px   !important;
+    flex-shrink: 0        !important;
+  }
+  .ds-ico  { font-size: 18px !important; }
+  .ds-time { font-size: 9px  !important; }
+  .ds-lbl  { font-size: 9px  !important; }
+  .ds-conn {
+    flex-shrink: 0 !important;
+    width: 12px    !important;
+    min-width: 12px !important;
+  }
+}
+
+/* ---------- PROFILE GRID (in sidebar/stats) ---------- */
+@media (max-width: 768px) {
+  .pgrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .pc {
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .pc-l  { font-size: 10px !important; }
+  .pc-v  { font-size: 20px !important; font-weight: 900 !important; margin: 4px 0 !important; }
+  .pc-s  { font-size: 10px !important; }
+  .premark { font-size: 10.5px !important; line-height: 1.6 !important; }
+}
+
+/* ---------- MACRO / CALORIE RING ---------- */
+@media (max-width: 768px) {
+  .ring-c {
+    display: flex    !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 16px        !important;
+    flex-wrap: wrap  !important;
+  }
+  .rb-wrap {
+    width:  clamp(120px, 40vw, 160px) !important;
+    height: clamp(120px, 40vw, 160px) !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ---------- MEAL TIMELINE CARDS ---------- */
+@media (max-width: 768px) {
+  .tl { padding: 0 !important; }
+
+  /* Section dividers */
+  .sdiv {
+    padding: 10px 0 6px !important;
+    margin-top: 8px !important;
+  }
+  .sdiv-t, .sec-lbl {
+    font-size: 11px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* Meal card container */
+  .mc {
+    margin-bottom: 8px !important;
+    border-radius: 14px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Meal card header row */
+  .mch {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .mcico {
+    width: 42px    !important;
+    height: 42px   !important;
+    min-width: 42px !important;
+    border-radius: 10px !important;
+    font-size: 20px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .mcnfo {
+    flex: 1        !important;
+    min-width: 0   !important;
+    display: flex  !important;
+    flex-direction: column !important;
+  }
+  .mcnm {
+    font-size: 13.5px !important;
+    font-weight: 700  !important;
+    white-space: nowrap !important;
+    overflow: hidden  !important;
+    text-overflow: ellipsis !important;
+  }
+  .mcsb {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: var(--t3) !important;
+    margin-top: 2px !important;
+  }
+
+  .mcrt {
+    display: flex    !important;
+    align-items: center !important;
+    gap: 6px         !important;
+    flex-shrink: 0   !important;
+  }
+  .tt {
+    font-size: 10px  !important;
+    font-family: var(--mono) !important;
+    white-space: nowrap !important;
+  }
+  .chkb {
+    width: 36px     !important;
+    height: 36px    !important;
+    min-width: 36px !important;
+    border-radius: 8px !important;
+    font-size: 15px !important;
+    flex-shrink: 0  !important;
+  }
+  .arb {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 13px !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Expanded meal details */
+  .mcexp {
+    padding: 12px 14px !important;
+    font-size: 12px !important;
+  }
+  .il { padding-left: 16px !important; }
+  .il li { font-size: 11.5px !important; line-height: 1.6 !important; margin-bottom: 4px !important; }
+
+  /* Option chooser */
+  .og { flex-direction: column !important; gap: 8px !important; }
+  .opp { padding: 10px 12px !important; font-size: 12px !important; text-align: left !important; }
+  .odesc { font-size: 11px !important; padding: 10px 12px !important; line-height: 1.5 !important; }
+
+  /* Macro chips */
+  .g-chip { padding: 5px 9px !important; font-size: 10px !important; gap: 3px !important; }
+}
+
+/* ---------- SUPPLEMENT CARDS ---------- */
+@media (max-width: 768px) {
+  .sq {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    margin-bottom: 8px !important;
+    width: 100% !important;
+  }
+  .sd  { width: 4px !important; min-height: 36px !important; border-radius: 3px !important; flex-shrink: 0 !important; }
+  .sql { flex: 1 !important; min-width: 0 !important; }
+  .sn  { font-size: 12.5px !important; font-weight: 700 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+  .st  { font-size: 10.5px !important; color: var(--t3) !important; }
+  .scn { font-size: 11px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+}
+
+/* ---------- GYM / SLEEP BLOCKS ---------- */
+@media (max-width: 768px) {
+  .gymb, .sleep-blk {
+    padding: 14px !important;
+    border-radius: 14px !important;
+    margin-bottom: 10px !important;
+  }
+  .gymb-ico, .sleep-blk-ico { font-size: 28px !important; }
+  .gymb-title, .sleep-blk-title { font-size: 14px !important; font-weight: 700 !important; }
+  .gymb-sub,  .sleep-blk-sub  { font-size: 11px !important; }
+  .morning-badge { font-size: 10px !important; padding: 4px 8px !important; }
+}
+
+/* ---------- ISABGOL BUTTONS ---------- */
+@media (max-width: 768px) {
+  .irow { gap: 8px !important; }
+  .ib {
+    padding: 12px 8px !important;
+    border-radius: 12px !important;
+    min-height: 82px !important;
+  }
+  .ib-ico { font-size: 22px !important; }
+  .ib-l   { font-size: 11px !important; font-weight: 700 !important; }
+  .ib-t   { font-size: 9.5px !important; }
+}
+
+/* ---------- WATER TRACKER ---------- */
+@media (max-width: 768px) {
+  .wt-container, .wt-wrap { padding: 14px !important; border-radius: 16px !important; }
+  .wt-grid, .wgrid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+  }
+  .wt-glass, .wglass {
+    min-height: 52px !important;
+    border-radius: 10px !important;
+    font-size: 20px !important;
+  }
+  .wt-count { font-size: var(--fs-2xl) !important; }
+}
+
+/* ---------- WORKOUT / EXERCISE CARDS ---------- */
+@media (max-width: 768px) {
+  .wo-day  { font-size: 22px !important; }
+  .wo-meta { font-size: 11px !important; }
+
+  /* Exercise card layout — column removed, using row */
+  .excard {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+    gap: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  /* NEUTRALIZED: was making images full-width */
+  .eximg { width: 100%; height: 160px; border-radius: 10px; object-fit: cover; }
+  .exnm, .ex-title-new { font-size: 14px !important; font-weight: 700 !important; }
+  .exdt { font-size: 11.5px !important; line-height: 1.45 !important; }
+
+  /* Set rows */
+  .setrow {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Gym block buttons */
+  .gymb {
+    padding: 14px !important;
+    border-radius: 14px !important;
+    margin-bottom: 10px !important;
+    width: 100% !important;
+  }
+}
+
+/* ---------- PROGRESS SECTION ---------- */
+@media (max-width: 768px) {
+  .prog-stat-v { font-size: 28px !important; }
+  .prog-stat-l { font-size: 10px !important; }
+
+  /* Weight entry */
+  .wt-entry-box {
+    padding: 14px !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+  }
+  .wt-entry-row { flex-wrap: wrap !important; gap: 8px !important; }
+  .wt-input {
+    font-size: 16px !important; /* Prevents iOS zoom */
+    padding: 12px !important;
+    border-radius: 10px !important;
+    flex: 1 !important;
+    min-width: 120px !important;
+  }
+  .wt-save-btn {
+    padding: 12px 18px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    min-height: 48px !important;
+  }
+}
+
+/* ---------- FOOTER NOTE ---------- */
+@media (max-width: 768px) {
+  .foot {
+    font-size: 10.5px !important;
+    line-height: 1.65 !important;
+    padding: 14px 14px 20px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+@media (max-width: 768px) {
+  .sh {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.6px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ---------- REST TIMER OVERLAY ---------- */
+@media (max-width: 768px) {
+  .rest-timer-overlay {
+    padding: 20px !important;
+  }
+  .rest-timer-ring {
+    width: clamp(140px, 55vw, 180px) !important;
+    height: clamp(140px, 55vw, 180px) !important;
+  }
+}
+
+/* ---------- IMAGES & MEDIA ---------- */
+@media (max-width: 768px) {
+  img, video {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  /* Prevent any horizontal overflow from children */
+  * {
+    max-width: 100%;
+  }
+  pre, code {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+  }
+}
+
+/* ---------- ULTRA SMALL (≤ 380px) ---------- */
+@media (max-width: 380px) {
+  :root {
+    --topbar-h: 50px;
+    --tabbar-h: 42px;
+    --botnav-h: 60px;
+    --page-top: calc(var(--topbar-h) + var(--tabbar-h));
+  }
+
+  .lm  { width: 30px !important; height: 30px !important; }
+  .lt  { font-size: 16px !important; }
+  .clk { font-size: 10px !important; }
+  .btn-reminders { font-size: 8.5px !important; padding: 5px 8px !important; }
+
+  .tab { min-width: 78px !important; font-size: 10px !important; padding: 0 8px !important; }
+
+  .bnico { font-size: 18px !important; }
+  .bnlbl { font-size: 9px !important; }
+
+  .tc { padding: 10px 10px 20px !important; }
+
+  .mcnm { font-size: 12.5px !important; }
+  .mch  { padding: 10px 12px !important; gap: 8px !important; }
+  .mcico { width: 38px !important; height: 38px !important; min-width: 38px !important; }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ================================================================
+   FITOS v3 — DEFINITIVE MOBILE FIX (FINAL OVERRIDE)
+   All rules here use !important and come LAST to win specificity
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ── TOPBAR: Show date, time, day properly ──────────────────── */
+  .topbar {
+    height: 52px !important;
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    z-index: 1000 !important;
+    padding: 0 10px !important;
+    gap: 6px !important;
+    background: rgba(255,255,255,0.97) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .logo { gap: 4px !important; margin-right: auto !important; }
+  .lm { width: 28px !important; height: 28px !important; font-size: 11px !important; }
+  .lt { font-size: 16px !important; }
+  .logo .xbadge { display: none !important; }
+  .ai-greeting { display: none !important; }
+
+  .topright {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+  .topright .dc { display: none !important; }
+  .topright .cstrip { display: none !important; }
+  .topright .bmi-b { display: none !important; }
+  .btn-reminders { font-size: 8px !important; padding: 3px 6px !important; }
+
+  /* SHOW clock and date on mobile */
+  .clkwrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 0 !important;
+    min-width: fit-content !important;
+  }
+  .clk {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    display: block !important;
+    white-space: nowrap !important;
+  }
+  .datelbl {
+    font-size: 9px !important;
+    display: block !important;
+    white-space: nowrap !important;
+    opacity: 0.7 !important;
+  }
+
+  /* ── LAYOUT ─────────────────────────────────────────────────── */
+  .layout {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+    padding-top: 52px !important;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 8px) !important;
+  }
+
+  .orb { display: none !important; }
+
+  .sidebar {
+    position: static !important;
+    height: auto !important;
+    border-right: none !important;
+    overflow: visible !important;
+    padding: 12px 12px 0 !important;
+    display: none !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .sidebar.mob-visible { display: flex !important; }
+
+  .main {
+    flex: 1 !important;
+    overflow: visible !important;
+    margin-top: 0 !important;
+  }
+
+  .tabbar { display: none !important; }
+
+  .tc { padding: 12px 10px 16px !important; }
+
+  /* ── SECTION HEADINGS ───────────────────────────────────────── */
+  .sh {
+    font-size: 10px !important;
+    letter-spacing: 0.12em !important;
+    margin-bottom: 8px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+  }
+
+  /* ── MEAL CARDS ─────────────────────────────────────────────── */
+  .mc { max-width: 100% !important; overflow: hidden !important; }
+  
+  .mch {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    padding: 14px !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+
+  .mcico {
+    width: 40px !important; height: 40px !important; min-width: 40px !important;
+    font-size: 20px !important; border-radius: 12px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mcnfo { flex: 1 !important; min-width: 0 !important; margin-left: 6px !important; }
+  .mcnm { font-size: 14px !important; font-weight: 800 !important; line-height: 1.25 !important; }
+  .mcsb { font-size: 11px !important; opacity: 0.6 !important; margin-top: 1px !important; }
+
+  /* Buttons row = full width below header */
+  .mcrt {
+    width: 100% !important;
+    margin-left: 0 !important;
+    display: flex !important;
+    gap: 8px !important;
+    order: 3 !important;
+  }
+
+  .btn-skip {
+    flex: 1 !important;
+    min-height: 44px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    border-radius: 12px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+  }
+
+  .btn-done {
+    flex: 1.4 !important;
+    min-height: 44px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    border-radius: 12px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+  }
+
+  .arb {
+    width: 36px !important; min-width: 36px !important; height: 40px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    background: var(--bg3) !important; border: 1px solid var(--bd) !important;
+    border-radius: 10px !important; font-size: 16px !important; padding: 0 !important;
+    flex-shrink: 0 !important; cursor: pointer !important;
+  }
+
+  /* G-chips (nutrition) */
+  .g-chip {
+    padding: 5px 8px !important; font-size: 11px !important;
+    border-radius: 8px !important; flex: 1 !important; min-width: 0 !important;
+    justify-content: center !important; gap: 3px !important;
+  }
+
+  .mcb { padding: 0 14px 14px !important; }
+  .opp { padding: 7px 12px !important; font-size: 12px !important; min-height: 36px !important; }
+
+  /* ── EXERCISE CARDS — KEEP AS ROW, small image ──────────────── */
+  .ex-card-new {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 12px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .ex-img-wrap {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .ex-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    min-width: unset !important;
+    max-width: unset !important;
+  }
+
+  .ex-info-new {
+    flex: 1 !important;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  .ex-title-new { gap: 6px !important; }
+  .ex-num-new {
+    width: 22px !important; height: 22px !important; min-width: 22px !important;
+    font-size: 11px !important; flex-shrink: 0 !important;
+  }
+  .exnm { font-size: 13px !important; font-weight: 800 !important; line-height: 1.25 !important; }
+  .exdt { font-size: 11px !important; line-height: 1.4 !important; margin-top: 3px !important; }
+  .extbadge { font-size: 9px !important; padding: 2px 8px !important; }
+
+  .ex-actions-new {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    padding-top: 6px !important;
+    border-top: 1px solid var(--bd) !important;
+  }
+
+  .btn-haptic { width: 34px !important; height: 34px !important; min-width: 34px !important; }
+  .set-dot-new { width: 34px !important; height: 34px !important; font-size: 11px !important; min-width: 34px !important; }
+  .set-row-new { display: flex !important; flex-wrap: wrap !important; gap: 5px !important; }
+  .exck { width: 38px !important; height: 38px !important; font-size: 16px !important; }
+
+  .sec-hdr { margin: 14px 0 8px !important; gap: 8px !important; }
+  .sec-lbl { font-size: 9px !important; white-space: nowrap !important; }
+
+  /* ── WORKOUT HEADER ─────────────────────────────────────────── */
+  .wo-header {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    margin-bottom: 14px !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .wo-day { font-size: 18px !important; letter-spacing: -0.3px !important; }
+  .wo-meta { font-size: 10px !important; }
+  .wo-tip { padding: 10px 12px !important; font-size: 11px !important; border-radius: 12px !important; }
+
+  .wo-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .ws-v { font-size: 16px !important; }
+  .ws-l { font-size: 8px !important; }
+
+  /* ── DAY STRIP ──────────────────────────────────────────────── */
+  .day-strip-wrap { margin: 0 -4px 10px !important; }
+  .day-strip { padding: 10px 8px !important; gap: 3px !important; }
+  .ds-node { padding: 6px 3px !important; min-width: 50px !important; border-radius: 10px !important; }
+  .ds-ico { font-size: 16px !important; }
+  .ds-time { font-size: 9px !important; white-space: nowrap !important; }
+  .ds-lbl { font-size: 8px !important; }
+  .ds-conn { width: 10px !important; min-width: 10px !important; }
+
+  /* ── TIMELINE ───────────────────────────────────────────────── */
+  .trow { gap: 6px !important; }
+  .tt { width: 44px !important; min-width: 44px !important; font-size: 10px !important; padding-top: 12px !important; text-align: center !important; }
+  .tdw { width: 14px !important; min-width: 14px !important; }
+  .tdot { width: 8px !important; height: 8px !important; }
+  .tcrd { flex: 1 !important; min-width: 0 !important; max-width: calc(100% - 68px) !important; }
+  .trow::after { left: 57px !important; }
+
+  /* ── SIDEBAR STATS ──────────────────────────────────────────── */
+  .pgrid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+  .pc { padding: 8px !important; text-align: center !important; border-radius: 10px !important; }
+  .pc-l { font-size: 9px !important; }
+  .pc-v { font-size: 20px !important; }
+  .pc-s { font-size: 9px !important; }
+  .premark { font-size: 10px !important; line-height: 1.5 !important; padding: 8px !important; }
+
+  .rb-wrap { width: 130px !important; height: 130px !important; }
+  .ri-n { font-size: 24px !important; }
+
+  .macro-grid-alpha { grid-template-columns: 1fr 1fr !important; gap: 5px !important; }
+  .m-chip { padding: 6px !important; }
+  .m-val { font-size: 12px !important; }
+  .m-lbl { font-size: 8px !important; }
+
+  .wrow2 { font-size: 11px !important; }
+  .irow { gap: 6px !important; }
+  .ib { min-height: 60px !important; padding: 8px 6px !important; }
+
+  .sql { gap: 4px !important; }
+  .sq { padding: 6px 8px !important; border-radius: 8px !important; }
+  .sn { font-size: 11px !important; }
+  .st { font-size: 9px !important; }
+
+  .wt-entry-box { padding: 12px !important; }
+  .wt-input { font-size: 16px !important; min-height: 44px !important; }
+  .wt-save-btn { min-height: 44px !important; font-size: 12px !important; }
+
+  /* ── BOTTOM NAV ─────────────────────────────────────────────── */
+  .botnav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important; left: 0 !important; right: 0 !important;
+    height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    background: rgba(255,255,255,0.97) !important;
+    border-top: 1px solid var(--bd) !important;
+    z-index: 400 !important;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  .bntab { flex: 1 !important; gap: 2px !important; padding: 6px 2px !important; }
+  .bnico { font-size: 20px !important; }
+  .bnlbl { font-size: 10px !important; }
+
+  /* ── GYM BLOCKS (All Workouts tab) ──────────────────────────── */
+  .gymb { padding: 12px !important; border-radius: 12px !important; width: 100% !important; }
+  .gymb-title { font-size: 13px !important; }
+  .gymb-sub { font-size: 10px !important; }
+
+  /* ── PROGRESS TAB ───────────────────────────────────────────── */
+  .prog-stat-v { font-size: 24px !important; }
+  .prog-stat-l { font-size: 9px !important; }
+
+  /* ── FOOTER ─────────────────────────────────────────────────── */
+  .foot { font-size: 10px !important; line-height: 1.6 !important; padding: 12px !important; }
+
+  /* ── REST TIMER ─────────────────────────────────────────────── */
+  .rest-timer-btn { min-height: 44px !important; padding: 10px 24px !important; font-size: 13px !important; }
+
+  /* ── KILL ACTIVE INTERACTIONS (scale down feedback) ──────────── */
+  .mc:active, .gymb:active, .ex-card-new:active, .ib:active, .bntab:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s ease !important;
+  }
+}
+
+/* ── EXTRA SMALL (≤ 380px) ────────────────────────────────────── */
+@media (max-width: 380px) {
+  .topbar { height: 48px !important; padding: 0 8px !important; }
+  .lm { width: 24px !important; height: 24px !important; }
+  .lt { font-size: 14px !important; }
+  .clk { font-size: 10px !important; }
+  .datelbl { font-size: 8px !important; }
+  .layout { padding-top: 48px !important; }
+
+  .mcico { width: 36px !important; height: 36px !important; min-width: 36px !important; font-size: 18px !important; }
+  .mcnm { font-size: 13px !important; }
+  .btn-done, .btn-skip { font-size: 12px !important; min-height: 40px !important; }
+  .arb { width: 32px !important; min-width: 32px !important; height: 36px !important; }
+
+  .ex-img-wrap { width: 50px !important; height: 50px !important; min-width: 50px !important; max-width: 50px !important; }
+  .exnm { font-size: 12px !important; }
+  .set-dot-new { width: 30px !important; height: 30px !important; }
+
+  .wo-day { font-size: 16px !important; }
+  .ws-v { font-size: 14px !important; }
+  .tt { width: 38px !important; min-width: 38px !important; font-size: 9px !important; }
+  .tcrd { max-width: calc(100% - 58px) !important; }
+  .trow::after { left: 50px !important; }
+
+  .botnav { height: calc(54px + env(safe-area-inset-bottom, 0px)) !important; }
+  .bnico { font-size: 18px !important; }
+  .bnlbl { font-size: 9px !important; }
+  
+  .ds-node { min-width: 44px !important; }
+  .ds-ico { font-size: 14px !important; }
+  .ds-time { font-size: 8px !important; }
+  .ds-lbl { font-size: 7px !important; }
+  
+  .tc { padding: 10px 8px 14px !important; }
 }

@@ -22,152 +22,158 @@
     />
     <link rel="icon" href="Image/logo-new.png" type="image/png" />
     <link rel="stylesheet" href="style.css" />
-    <style id="mobile-ultimate-fix">
+    <style id="mobile-nuclear-fix">
 @media (max-width: 768px) {
-  /* === LAYOUT === */
-  body .layout { display:flex!important;flex-direction:column!important;min-height:100vh!important;padding-top:52px!important;padding-bottom:68px!important; }
-  body .orb { display:none!important; }
+  /* LAYOUT */
+  #fitos-app .layout{display:flex;flex-direction:column;min-height:100vh;padding-top:52px;padding-bottom:68px}
+  #fitos-app .orb{display:none}
 
-  /* === TOPBAR FIXED === */
-  body .topbar { position:fixed!important;top:0!important;left:0!important;right:0!important;height:52px!important;z-index:1000!important;display:flex!important;align-items:center!important;padding:0 10px!important;gap:6px!important;background:rgba(255,255,255,.97)!important;backdrop-filter:blur(10px)!important;box-shadow:0 1px 8px rgba(0,0,0,.08)!important; }
-  body .logo .xbadge, body .ai-greeting { display:none!important; }
-  body .topright .dc, body .topright .cstrip, body .topright .bmi-b { display:none!important; }
-  body .clkwrap { display:flex!important;flex-direction:column!important;align-items:flex-end!important; }
-  body .clk { display:block!important;font-size:11px!important;white-space:nowrap!important; }
-  body .datelbl { display:block!important;font-size:9px!important;white-space:nowrap!important;opacity:.7!important; }
+  /* TOPBAR */
+  #fitos-app .topbar{position:fixed;top:0;left:0;right:0;height:52px;z-index:1000;display:flex;align-items:center;padding:0 10px;gap:6px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 8px rgba(0,0,0,.08)}
+  #fitos-app .logo .xbadge,#fitos-app .ai-greeting{display:none}
+  #fitos-app .lm{width:28px;height:28px;font-size:11px}
+  #fitos-app .lt{font-size:16px}
+  #fitos-app .topright{display:flex;align-items:center;gap:6px}
+  #fitos-app .topright .dc,#fitos-app .topright .cstrip,#fitos-app .topright .bmi-b{display:none}
+  #fitos-app .btn-reminders{font-size:8px;padding:3px 6px}
+  #fitos-app .clkwrap{display:flex;flex-direction:column;align-items:flex-end}
+  #fitos-app .clk{display:block;font-size:11px;font-weight:700;white-space:nowrap}
+  #fitos-app .datelbl{display:block;font-size:9px;white-space:nowrap;opacity:.7}
 
-  /* === HIDE DESKTOP TABBAR === */
-  body .tabbar, body #desktopTabbar { display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important; }
+  /* HIDE DESKTOP TABBAR */
+  #fitos-app .tabbar{display:none;visibility:hidden;height:0;overflow:hidden}
 
-  /* === BOTTOM NAV FIXED === */
-  body .botnav { display:flex!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;height:60px!important;z-index:1000!important;background:rgba(255,255,255,.97)!important;border-top:1px solid rgba(180,140,20,.12)!important;box-shadow:0 -2px 12px rgba(0,0,0,.06)!important;padding-bottom:env(safe-area-inset-bottom,0)!important; }
-  body .bntab { flex:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;border:none!important;background:none!important; }
-  body .bnico { font-size:20px!important; }
-  body .bnlbl { font-size:10px!important; }
+  /* BOTTOM NAV */
+  #fitos-app .botnav{display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;z-index:1000;background:rgba(255,255,255,.97);border-top:1px solid rgba(180,140,20,.12);box-shadow:0 -2px 12px rgba(0,0,0,.06);padding-bottom:env(safe-area-inset-bottom,0)}
+  #fitos-app .bntab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none}
+  #fitos-app .bnico{font-size:20px}
+  #fitos-app .bnlbl{font-size:10px;font-weight:700}
 
-  /* === SIDEBAR === */
-  body .sidebar { position:static!important;height:auto!important;overflow:visible!important;display:none!important;padding:12px!important;gap:12px!important; }
-  body .sidebar.mob-visible { display:flex!important; }
+  /* SIDEBAR */
+  #fitos-app .sidebar{position:static;height:auto;overflow:visible;display:none;padding:12px;gap:12px;border:none}
+  #fitos-app .sidebar.mob-visible{display:flex}
 
-  /* === MAIN === */
-  body .main { flex:1!important;overflow:visible!important; }
-  body .tc { padding:12px 10px 16px!important;max-width:100%!important;overflow-x:hidden!important; }
+  /* MAIN */
+  #fitos-app .main{flex:1;overflow:visible;margin-top:0}
+  #fitos-app .tc{padding:12px 10px 16px;max-width:100%;overflow-x:hidden}
+  #fitos-app .sh{font-size:10px;letter-spacing:.12em;margin-bottom:8px;font-weight:800;text-transform:uppercase}
 
-  /* === SECTION HEADINGS === */
-  body .sh { font-size:10px!important;letter-spacing:.12em!important;margin-bottom:8px!important; }
+  /* MEAL CARDS */
+  #fitos-app .mc{max-width:100%;overflow:hidden}
+  #fitos-app .mch{display:flex;flex-wrap:wrap;padding:14px;gap:8px;align-items:center}
+  #fitos-app .mcico{width:40px;height:40px;min-width:40px;font-size:20px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  #fitos-app .mcnfo{flex:1;min-width:0}
+  #fitos-app .mcnm{font-size:14px;font-weight:800;line-height:1.25}
+  #fitos-app .mcsb{font-size:11px;opacity:.6;line-height:1.3}
+  #fitos-app .mcrt{width:100%;margin-left:0;display:flex;gap:8px}
+  #fitos-app .btn-skip{flex:1;min-height:44px;font-size:13px;font-weight:800;border-radius:12px;text-transform:uppercase;cursor:pointer}
+  #fitos-app .btn-done{flex:1.4;min-height:44px;font-size:13px;font-weight:800;border-radius:12px;text-transform:uppercase;cursor:pointer}
+  #fitos-app .arb{width:36px;min-width:36px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--bd);border-radius:10px;font-size:16px;padding:0;flex-shrink:0;cursor:pointer}
+  #fitos-app .g-chip{padding:5px 8px;font-size:11px;flex:1;min-width:0;justify-content:center;gap:3px;border-radius:8px}
+  #fitos-app .mcb{padding:0 14px 14px}
+  #fitos-app .opp{padding:7px 12px;font-size:12px;min-height:36px;border-radius:10px}
 
-  /* === MEAL CARDS === */
-  body .mc { max-width:100%!important;overflow:hidden!important; }
-  body .mch { display:flex!important;flex-wrap:wrap!important;padding:14px!important;gap:8px!important;align-items:center!important; }
-  body .mcico { width:40px!important;height:40px!important;min-width:40px!important;font-size:20px!important;border-radius:12px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important; }
-  body .mcnfo { flex:1!important;min-width:0!important; }
-  body .mcnm { font-size:14px!important;font-weight:800!important; }
-  body .mcrt { width:100%!important;margin-left:0!important;display:flex!important;gap:8px!important; }
-  body .btn-skip { flex:1!important;min-height:44px!important;font-size:13px!important;font-weight:800!important;border-radius:12px!important;cursor:pointer!important; }
-  body .btn-done { flex:1.4!important;min-height:44px!important;font-size:13px!important;font-weight:800!important;border-radius:12px!important;cursor:pointer!important; }
-  body .arb { width:36px!important;min-width:36px!important;height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:var(--bg3)!important;border:1px solid var(--bd)!important;border-radius:10px!important;font-size:16px!important;padding:0!important;flex-shrink:0!important; }
-  body .g-chip { padding:5px 8px!important;font-size:11px!important;flex:1!important;min-width:0!important;justify-content:center!important; }
+  /* EXERCISE CARDS */
+  #fitos-app .ex-card-new{display:flex;flex-direction:row;align-items:flex-start;gap:10px;padding:12px;flex-wrap:wrap;max-width:100%;overflow:hidden}
+  #fitos-app .ex-img-wrap{width:56px;height:56px;min-width:56px;max-width:56px;border-radius:10px;flex-shrink:0;overflow:hidden}
+  #fitos-app .ex-img-wrap img{width:100%;height:100%;object-fit:contain}
+  #fitos-app .ex-info-new{flex:1;min-width:0;max-width:calc(100% - 70px)}
+  #fitos-app .exnm{font-size:13px;font-weight:800;line-height:1.25}
+  #fitos-app .exdt{font-size:11px;line-height:1.4;margin-top:3px}
+  #fitos-app .extbadge{font-size:9px;padding:2px 8px;border-radius:8px}
+  #fitos-app .ex-actions-new{width:100%;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(180,140,20,.12);margin-top:4px}
+  #fitos-app .btn-haptic{width:32px;height:32px;min-width:32px;border-radius:8px;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  #fitos-app .set-row-new{display:flex;flex-wrap:wrap;gap:4px}
+  #fitos-app .set-dot-new{width:32px;height:32px;min-width:32px;font-size:11px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  #fitos-app .exck{width:36px;height:36px;font-size:16px;border-radius:10px;flex-shrink:0}
+  #fitos-app .exlist{gap:8px}
+  #fitos-app .sec-hdr{margin:12px 0 8px;gap:8px}
+  #fitos-app .sec-lbl{font-size:9px;white-space:nowrap}
 
-  /* === EXERCISE CARDS — ROW LAYOUT === */
-  body .ex-card-new, body .p-card.ex-card-new { display:flex!important;flex-direction:row!important;align-items:flex-start!important;gap:10px!important;padding:12px!important;flex-wrap:wrap!important;max-width:100%!important;overflow:hidden!important; }
-  body .ex-img-wrap { width:56px!important;height:56px!important;min-width:56px!important;max-width:56px!important;border-radius:10px!important;flex-shrink:0!important;overflow:hidden!important; }
-  body .ex-img-wrap img { width:100%!important;height:100%!important;object-fit:contain!important; }
-  body .ex-info-new { flex:1!important;min-width:0!important;max-width:calc(100% - 70px)!important; }
-  body .exnm { font-size:13px!important;font-weight:800!important;line-height:1.25!important; }
-  body .exdt { font-size:11px!important;line-height:1.4!important; }
-  body .extbadge { font-size:9px!important;padding:2px 8px!important; }
+  /* WORKOUT HEADER */
+  #fitos-app .wo-header{padding:14px;border-radius:14px;margin-bottom:12px;max-width:100%;overflow:hidden}
+  #fitos-app .wo-day{font-size:18px;letter-spacing:-.3px}
+  #fitos-app .wo-meta{font-size:10px}
+  #fitos-app .wo-tip{padding:10px;font-size:11px;border-radius:10px;line-height:1.5}
+  #fitos-app .wo-stats{grid-template-columns:repeat(2,1fr);gap:8px}
+  #fitos-app .ws-v{font-size:16px}
+  #fitos-app .ws-l{font-size:8px}
+  #fitos-app .progbar{height:5px;border-radius:5px}
 
-  /* Exercise action buttons — INLINE ROW */
-  body .ex-actions-new { width:100%!important;display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important;padding-top:8px!important;border-top:1px solid rgba(180,140,20,.12)!important;margin-top:4px!important; }
-  body .btn-haptic { width:32px!important;height:32px!important;min-width:32px!important;border-radius:8px!important;font-size:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important; }
-  body .set-row-new { display:flex!important;flex-wrap:wrap!important;gap:4px!important; }
-  body .set-dot-new { width:32px!important;height:32px!important;min-width:32px!important;font-size:11px!important;border-radius:8px!important;display:flex!important;align-items:center!important;justify-content:center!important; }
-  body .exck { width:36px!important;height:36px!important;font-size:16px!important;border-radius:10px!important;flex-shrink:0!important; }
+  /* ALL WORKOUTS + PROGRESS */
+  #fitos-app .gymb{padding:12px;border-radius:12px;max-width:100%;overflow:hidden;margin-bottom:8px}
+  #fitos-app .gymb-title{font-size:14px;font-weight:800}
+  #fitos-app .gymb-sub{font-size:10px;line-height:1.4}
+  #fitos-app #allworkoutscontent,#fitos-app #progressContent{max-width:100%;overflow-x:hidden}
+  #fitos-app #allworkoutscontent .p-card,#fitos-app #progressContent .p-card{max-width:100%;overflow:hidden;margin-bottom:10px}
+  #fitos-app .prog-stat-v{font-size:24px}
+  #fitos-app .prog-stat-l{font-size:9px}
 
-  /* Exercise list */
-  body .exlist { gap:8px!important; }
-  body .sec-hdr { margin:12px 0 8px!important; }
-  body .sec-lbl { font-size:9px!important; }
+  /* STATS PANEL */
+  #fitos-app .pgrid{grid-template-columns:1fr 1fr;gap:6px}
+  #fitos-app .pc{padding:8px;text-align:center;border-radius:10px}
+  #fitos-app .pc-l{font-size:9px}
+  #fitos-app .pc-v{font-size:20px}
+  #fitos-app .pc-s{font-size:9px}
+  #fitos-app .premark{font-size:10px;line-height:1.5;padding:8px}
+  #fitos-app .rb-wrap{width:130px;height:130px}
+  #fitos-app .ri-n{font-size:24px}
+  #fitos-app .macro-grid-alpha{grid-template-columns:1fr 1fr;gap:5px}
+  #fitos-app .m-chip{padding:6px}
+  #fitos-app .m-val{font-size:12px}
+  #fitos-app .m-lbl{font-size:8px}
 
-  /* === WORKOUT HEADER === */
-  body .wo-header, body .p-card.wo-header { padding:14px!important;border-radius:14px!important;margin-bottom:12px!important;max-width:100%!important;overflow:hidden!important; }
-  body .wo-day { font-size:18px!important; }
-  body .wo-meta { font-size:10px!important; }
-  body .wo-tip { padding:10px!important;font-size:11px!important;border-radius:10px!important; }
-  body .wo-stats { grid-template-columns:repeat(2,1fr)!important;gap:8px!important; }
-  body .ws-v { font-size:16px!important; }
-  body .ws-l { font-size:8px!important; }
-  body .progbar { height:5px!important; }
+  /* WATER + ISABGOL + SUPPLEMENTS */
+  #fitos-app .wrow2{font-size:11px}
+  #fitos-app .irow{gap:6px}
+  #fitos-app .ib{min-height:60px;padding:8px 6px}
+  #fitos-app .sql{gap:4px}
+  #fitos-app .sq{padding:6px 8px;border-radius:8px}
+  #fitos-app .sn{font-size:11px}
+  #fitos-app .st{font-size:9px}
+  #fitos-app .wt-entry-box{padding:12px;border-radius:12px}
+  #fitos-app .wt-input{font-size:16px;min-height:44px}
+  #fitos-app .wt-save-btn{min-height:44px;font-size:12px;font-weight:800}
 
-  /* === ALL WORKOUTS TAB === */
-  body .gymb, body .p-card.gymb { padding:12px!important;border-radius:12px!important;max-width:100%!important;overflow:hidden!important;margin-bottom:8px!important; }
-  body .gymb-title { font-size:14px!important;font-weight:800!important; }
-  body .gymb-sub { font-size:10px!important; }
-  body #allworkoutscontent { max-width:100%!important;overflow-x:hidden!important; }
-  body #allworkoutscontent .p-card { max-width:100%!important;overflow:hidden!important; }
+  /* TIMELINE */
+  #fitos-app .trow{gap:6px}
+  #fitos-app .tt{width:44px;min-width:44px;font-size:10px;text-align:center}
+  #fitos-app .tdw{width:14px;min-width:14px}
+  #fitos-app .tcrd{flex:1;min-width:0;max-width:calc(100% - 68px);overflow:hidden}
+  #fitos-app .trow::after{left:57px}
 
-  /* === PROGRESS TAB === */
-  body #progressContent { max-width:100%!important;overflow-x:hidden!important; }
-  body #progressContent .p-card { max-width:100%!important;overflow:hidden!important;margin-bottom:10px!important; }
-  body .prog-stat-v { font-size:24px!important; }
-  body .prog-stat-l { font-size:9px!important; }
+  /* DAY STRIP */
+  #fitos-app .day-strip{gap:3px}
+  #fitos-app .ds-node{min-width:50px;padding:6px 3px;border-radius:10px}
+  #fitos-app .ds-ico{font-size:16px}
+  #fitos-app .ds-time{font-size:9px;white-space:nowrap}
+  #fitos-app .ds-lbl{font-size:8px}
+  #fitos-app .ds-conn{width:10px;min-width:10px}
 
-  /* === STATS PANEL === */
-  body .pgrid { grid-template-columns:1fr 1fr!important;gap:6px!important; }
-  body .pc { padding:8px!important;text-align:center!important;border-radius:10px!important; }
-  body .pc-v { font-size:20px!important; }
-  body .rb-wrap { width:130px!important;height:130px!important; }
-  body .macro-grid-alpha { grid-template-columns:1fr 1fr!important;gap:5px!important; }
-
-  /* === TIMELINE === */
-  body .trow { gap:6px!important; }
-  body .tt { width:44px!important;min-width:44px!important;font-size:10px!important; }
-  body .tcrd { flex:1!important;min-width:0!important;max-width:calc(100% - 68px)!important;overflow:hidden!important; }
-
-  /* === DAY STRIP === */
-  body .day-strip { gap:3px!important; }
-  body .ds-node { min-width:50px!important;padding:6px 3px!important; }
-  body .ds-ico { font-size:16px!important; }
-  body .ds-time { font-size:9px!important; }
-  body .ds-lbl { font-size:8px!important; }
-
-  /* === GENERAL OVERFLOW FIX === */
-  body .p-card, body [class*="card"], body [style*="display:flex"] { max-width:100%!important;box-sizing:border-box!important; }
-  body div[style*="display:flex;gap:8px;flex-wrap:wrap"] > div { max-width:100%!important; }
-  body div[style*="min-width:calc(50%"] { min-width:calc(50% - 8px)!important;max-width:100%!important; }
-  body .foot { font-size:10px!important;padding:12px!important;overflow-wrap:break-word!important; }
+  /* OVERFLOW FIX */
+  #fitos-app .p-card{max-width:100%;box-sizing:border-box;overflow:hidden}
+  #fitos-app .foot{font-size:10px;padding:12px;overflow-wrap:break-word;line-height:1.6}
+  #fitos-app .rest-timer-btn{min-height:44px;padding:10px 24px;font-size:13px}
 }
 
-@media (max-width: 380px) {
-  body .topbar { height:48px!important; }
-  body .layout { padding-top:48px!important; }
-  body .ex-img-wrap { width:48px!important;height:48px!important;min-width:48px!important;max-width:48px!important; }
-  body .exnm { font-size:12px!important; }
-  body .wo-day { font-size:16px!important; }
-  body .botnav { height:54px!important; }
+@media (max-width:380px){
+  #fitos-app .topbar{height:48px;padding:0 8px}
+  #fitos-app .layout{padding-top:48px}
+  #fitos-app .lm{width:24px;height:24px}
+  #fitos-app .lt{font-size:14px}
+  #fitos-app .clk{font-size:10px}
+  #fitos-app .ex-img-wrap{width:48px;height:48px;min-width:48px;max-width:48px}
+  #fitos-app .exnm{font-size:12px}
+  #fitos-app .wo-day{font-size:16px}
+  #fitos-app .ws-v{font-size:14px}
+  #fitos-app .botnav{height:54px}
+  #fitos-app .bnico{font-size:18px}
+  #fitos-app .bnlbl{font-size:9px}
 }
 </style>
-    <style>
-    /* Safety overrides for mobile — cannot be beaten by external CSS */
-    @media (max-width: 768px) {
-      .ex-img-wrap { width: 60px !important; height: 60px !important; min-width: 60px !important; max-width: 60px !important; flex-shrink: 0 !important; }
-      .ex-card-new { display: flex !important; flex-direction: row !important; align-items: flex-start !important; flex-wrap: wrap !important; }
-      .datelbl { display: block !important; font-size: 9px !important; }
-      .clk { display: block !important; font-size: 11px !important; }
-      .clkwrap { display: flex !important; flex-direction: column !important; align-items: flex-end !important; }
-      .tabbar { display: none !important; }
-      .wo-stats { grid-template-columns: repeat(2, 1fr) !important; }
-      .mcrt { width: 100% !important; margin-left: 0 !important; display: flex !important; gap: 8px !important; }
-      .btn-done, .btn-skip { min-height: 44px !important; font-size: 13px !important; border-radius: 12px !important; }
-      .arb { width: 36px !important; min-width: 36px !important; height: 40px !important; background: var(--bg3) !important; border: 1px solid var(--bd) !important; border-radius: 10px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
-    }
-    @media (max-width: 380px) {
-      .ex-img-wrap { width: 50px !important; height: 50px !important; min-width: 50px !important; max-width: 50px !important; }
-    }
-    </style>
   </head>
 
-  <body>
+  <body id="fitos-app">
     <!-- Ambient Glow Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
