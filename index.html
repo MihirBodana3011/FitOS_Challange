@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <link rel="manifest" href="manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -22,155 +22,7 @@
     />
     <link rel="icon" href="Image/logo-new.png" type="image/png" />
     <link rel="stylesheet" href="style.css" />
-    <style id="mobile-nuclear-fix">
-@media (max-width: 768px) {
-  /* LAYOUT */
-  #fitos-app .layout{display:flex;flex-direction:column;min-height:100vh;padding-top:52px;padding-bottom:68px}
-  #fitos-app .orb{display:none}
-
-  /* TOPBAR */
-  #fitos-app .topbar{position:fixed;top:0;left:0;right:0;height:52px;z-index:1000;display:flex;align-items:center;padding:0 10px;gap:6px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 8px rgba(0,0,0,.08)}
-  #fitos-app .logo .xbadge,#fitos-app .ai-greeting{display:none}
-  #fitos-app .lm{width:28px;height:28px;font-size:11px}
-  #fitos-app .lt{font-size:16px}
-  #fitos-app .topright{display:flex;align-items:center;gap:6px}
-  #fitos-app .topright .dc,#fitos-app .topright .cstrip,#fitos-app .topright .bmi-b{display:none}
-  #fitos-app .btn-reminders{font-size:8px;padding:3px 6px}
-  #fitos-app .clkwrap{display:flex;flex-direction:column;align-items:flex-end}
-  #fitos-app .clk{display:block;font-size:11px;font-weight:700;white-space:nowrap}
-  #fitos-app .datelbl{display:block;font-size:9px;white-space:nowrap;opacity:.7}
-
-  /* HIDE DESKTOP TABBAR */
-  #fitos-app .tabbar{display:none;visibility:hidden;height:0;overflow:hidden}
-
-  /* BOTTOM NAV */
-  #fitos-app .botnav{display:flex;position:fixed;bottom:0;left:0;right:0;height:60px;z-index:1000;background:rgba(255,255,255,.97);border-top:1px solid rgba(180,140,20,.12);box-shadow:0 -2px 12px rgba(0,0,0,.06);padding-bottom:env(safe-area-inset-bottom,0)}
-  #fitos-app .bntab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none}
-  #fitos-app .bnico{font-size:20px}
-  #fitos-app .bnlbl{font-size:10px;font-weight:700}
-
-  /* SIDEBAR */
-  #fitos-app .sidebar{position:static;height:auto;overflow:visible;display:none;padding:12px;gap:12px;border:none}
-  #fitos-app .sidebar.mob-visible{display:flex}
-
-  /* MAIN */
-  #fitos-app .main{flex:1;overflow:visible;margin-top:0}
-  #fitos-app .tc{padding:12px 10px 16px;max-width:100%;overflow-x:hidden}
-  #fitos-app .sh{font-size:10px;letter-spacing:.12em;margin-bottom:8px;font-weight:800;text-transform:uppercase}
-
-  /* MEAL CARDS */
-  #fitos-app .mc{max-width:100%;overflow:hidden}
-  #fitos-app .mch{display:flex;flex-wrap:wrap;padding:14px;gap:8px;align-items:center}
-  #fitos-app .mcico{width:40px;height:40px;min-width:40px;font-size:20px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  #fitos-app .mcnfo{flex:1;min-width:0}
-  #fitos-app .mcnm{font-size:14px;font-weight:800;line-height:1.25}
-  #fitos-app .mcsb{font-size:11px;opacity:.6;line-height:1.3}
-  #fitos-app .mcrt{width:100%;margin-left:0;display:flex;gap:8px}
-  #fitos-app .btn-skip{flex:1;min-height:44px;font-size:13px;font-weight:800;border-radius:12px;text-transform:uppercase;cursor:pointer}
-  #fitos-app .btn-done{flex:1.4;min-height:44px;font-size:13px;font-weight:800;border-radius:12px;text-transform:uppercase;cursor:pointer}
-  #fitos-app .arb{width:36px;min-width:36px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--bd);border-radius:10px;font-size:16px;padding:0;flex-shrink:0;cursor:pointer}
-  #fitos-app .g-chip{padding:5px 8px;font-size:11px;flex:1;min-width:0;justify-content:center;gap:3px;border-radius:8px}
-  #fitos-app .mcb{padding:0 14px 14px}
-  #fitos-app .opp{padding:7px 12px;font-size:12px;min-height:36px;border-radius:10px}
-
-  /* EXERCISE CARDS */
-  #fitos-app .ex-card-new{display:flex;flex-direction:row;align-items:flex-start;gap:10px;padding:12px;flex-wrap:wrap;max-width:100%;overflow:hidden}
-  #fitos-app .ex-img-wrap{width:56px;height:56px;min-width:56px;max-width:56px;border-radius:10px;flex-shrink:0;overflow:hidden}
-  #fitos-app .ex-img-wrap img{width:100%;height:100%;object-fit:contain}
-  #fitos-app .ex-info-new{flex:1;min-width:0;max-width:calc(100% - 70px)}
-  #fitos-app .exnm{font-size:13px;font-weight:800;line-height:1.25}
-  #fitos-app .exdt{font-size:11px;line-height:1.4;margin-top:3px}
-  #fitos-app .extbadge{font-size:9px;padding:2px 8px;border-radius:8px}
-  #fitos-app .ex-actions-new{width:100%;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px solid rgba(180,140,20,.12);margin-top:4px}
-  #fitos-app .btn-haptic{width:32px;height:32px;min-width:32px;border-radius:8px;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  #fitos-app .set-row-new{display:flex;flex-wrap:wrap;gap:4px}
-  #fitos-app .set-dot-new{width:32px;height:32px;min-width:32px;font-size:11px;border-radius:8px;display:flex;align-items:center;justify-content:center}
-  #fitos-app .exck{width:36px;height:36px;font-size:16px;border-radius:10px;flex-shrink:0}
-  #fitos-app .exlist{gap:8px}
-  #fitos-app .sec-hdr{margin:12px 0 8px;gap:8px}
-  #fitos-app .sec-lbl{font-size:9px;white-space:nowrap}
-
-  /* WORKOUT HEADER */
-  #fitos-app .wo-header{padding:14px;border-radius:14px;margin-bottom:12px;max-width:100%;overflow:hidden}
-  #fitos-app .wo-day{font-size:18px;letter-spacing:-.3px}
-  #fitos-app .wo-meta{font-size:10px}
-  #fitos-app .wo-tip{padding:10px;font-size:11px;border-radius:10px;line-height:1.5}
-  #fitos-app .wo-stats{grid-template-columns:repeat(2,1fr);gap:8px}
-  #fitos-app .ws-v{font-size:16px}
-  #fitos-app .ws-l{font-size:8px}
-  #fitos-app .progbar{height:5px;border-radius:5px}
-
-  /* ALL WORKOUTS + PROGRESS */
-  #fitos-app .gymb{padding:12px;border-radius:12px;max-width:100%;overflow:hidden;margin-bottom:8px}
-  #fitos-app .gymb-title{font-size:14px;font-weight:800}
-  #fitos-app .gymb-sub{font-size:10px;line-height:1.4}
-  #fitos-app #allworkoutscontent,#fitos-app #progressContent{max-width:100%;overflow-x:hidden}
-  #fitos-app #allworkoutscontent .p-card,#fitos-app #progressContent .p-card{max-width:100%;overflow:hidden;margin-bottom:10px}
-  #fitos-app .prog-stat-v{font-size:24px}
-  #fitos-app .prog-stat-l{font-size:9px}
-
-  /* STATS PANEL */
-  #fitos-app .pgrid{grid-template-columns:1fr 1fr;gap:6px}
-  #fitos-app .pc{padding:8px;text-align:center;border-radius:10px}
-  #fitos-app .pc-l{font-size:9px}
-  #fitos-app .pc-v{font-size:20px}
-  #fitos-app .pc-s{font-size:9px}
-  #fitos-app .premark{font-size:10px;line-height:1.5;padding:8px}
-  #fitos-app .rb-wrap{width:130px;height:130px}
-  #fitos-app .ri-n{font-size:24px}
-  #fitos-app .macro-grid-alpha{grid-template-columns:1fr 1fr;gap:5px}
-  #fitos-app .m-chip{padding:6px}
-  #fitos-app .m-val{font-size:12px}
-  #fitos-app .m-lbl{font-size:8px}
-
-  /* WATER + ISABGOL + SUPPLEMENTS */
-  #fitos-app .wrow2{font-size:11px}
-  #fitos-app .irow{gap:6px}
-  #fitos-app .ib{min-height:60px;padding:8px 6px}
-  #fitos-app .sql{gap:4px}
-  #fitos-app .sq{padding:6px 8px;border-radius:8px}
-  #fitos-app .sn{font-size:11px}
-  #fitos-app .st{font-size:9px}
-  #fitos-app .wt-entry-box{padding:12px;border-radius:12px}
-  #fitos-app .wt-input{font-size:16px;min-height:44px}
-  #fitos-app .wt-save-btn{min-height:44px;font-size:12px;font-weight:800}
-
-  /* TIMELINE */
-  #fitos-app .trow{gap:6px}
-  #fitos-app .tt{width:44px;min-width:44px;font-size:10px;text-align:center}
-  #fitos-app .tdw{width:14px;min-width:14px}
-  #fitos-app .tcrd{flex:1;min-width:0;max-width:calc(100% - 68px);overflow:hidden}
-  #fitos-app .trow::after{left:57px}
-
-  /* DAY STRIP */
-  #fitos-app .day-strip{gap:3px}
-  #fitos-app .ds-node{min-width:50px;padding:6px 3px;border-radius:10px}
-  #fitos-app .ds-ico{font-size:16px}
-  #fitos-app .ds-time{font-size:9px;white-space:nowrap}
-  #fitos-app .ds-lbl{font-size:8px}
-  #fitos-app .ds-conn{width:10px;min-width:10px}
-
-  /* OVERFLOW FIX */
-  #fitos-app .p-card{max-width:100%;box-sizing:border-box;overflow:hidden}
-  #fitos-app .foot{font-size:10px;padding:12px;overflow-wrap:break-word;line-height:1.6}
-  #fitos-app .rest-timer-btn{min-height:44px;padding:10px 24px;font-size:13px}
-}
-
-@media (max-width:380px){
-  #fitos-app .topbar{height:48px;padding:0 8px}
-  #fitos-app .layout{padding-top:48px}
-  #fitos-app .lm{width:24px;height:24px}
-  #fitos-app .lt{font-size:14px}
-  #fitos-app .clk{font-size:10px}
-  #fitos-app .ex-img-wrap{width:48px;height:48px;min-width:48px;max-width:48px}
-  #fitos-app .exnm{font-size:12px}
-  #fitos-app .wo-day{font-size:16px}
-  #fitos-app .ws-v{font-size:14px}
-  #fitos-app .botnav{height:54px}
-  #fitos-app .bnico{font-size:18px}
-  #fitos-app .bnlbl{font-size:9px}
-}
-</style>
+    
   </head>
 
   <body id="fitos-app">
@@ -203,7 +55,7 @@
             <span>BMI</span><span class="bmi-v">40.1</span>
           </div>
           <button
-            class="xbadge btn-reminders"
+            class="btn-reminders"
             onclick="requestNotificationPermission()"
           >
             🔔 REMINDERS
@@ -262,7 +114,7 @@
 
         <div>
           <div class="sh">Daily Calories — 950 kcal Target</div>
-          <div class="ring-c" style="margin-bottom: var(--space-lg)">
+          <div class="ring-c" style="margin-bottom:16px">
             <div class="rb-wrap">
               <svg viewBox="0 0 120 120" style="transform: rotate(-90deg)">
                 <!-- Background Circles -->
@@ -357,31 +209,17 @@
                   style="transition: stroke-dashoffset 1s ease"
                 />
               </svg>
-              <div
-                class="ri"
-                style="
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                  text-align: center;
-                "
-              >
+              <div class="ri">
                 <div
                   class="ri-n"
                   id="calVal"
-                  style="font-size: var(--fs-2xl); font-weight: 900"
+
                 >
                   0
                 </div>
                 <div
                   class="ri-l"
-                  style="
-                    font-size: var(--fs-3xs);
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    color: var(--t3);
-                  "
+
                 >
                   kcal
                 </div>
@@ -469,66 +307,49 @@
           </div>
         </div>
 
-        <div style="padding-bottom: 8px">
+        <div style="padding-bottom:8px">
           <div class="sh">Weekly Workout Split</div>
           <div class="wk" id="weekGrid"></div>
         </div>
 
-        <div style="padding-bottom: 16px">
+        <div style="padding-bottom:16px">
           <div class="sh">⚖️ Today's Weight — Log It</div>
-          <div class="p-card wt-entry-box" style="padding: var(--space-lg)">
+          <div class="p-card wt-entry-box" >
             <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-              "
+              style="display:flex;justify-content:space-between;align-items:flex-start"
             >
               <div>
                 <div class="wt-current-lbl">Current Weight</div>
                 <div
                   class="wt-current-val"
                   id="wtCurVal"
-                  style="
-                    font-size: var(--fs-2xl);
-                    font-weight: 900;
-                    color: var(--gold);
-                  "
+                  
                 >
                   —
                 </div>
                 <div
                   class="wt-lost"
                   id="wtLostLbl"
-                  style="font-size: var(--fs-sm); font-weight: 700"
+                  
                 ></div>
               </div>
               <div style="text-align: right">
                 <div class="wt-current-lbl">Target</div>
                 <div
-                  style="
-                    font-family: var(--mono);
-                    font-size: var(--fs-xl);
-                    font-weight: 900;
-                    color: var(--green);
-                  "
+                  style="font-family:var(--mono);font-size:var(--fs-xl);font-weight:900;color:var(--green)"
                 >
                   75.0 kg
                 </div>
                 <div
                   class="wt-current-lbl"
                   id="wtRemain"
-                  style="font-size: var(--fs-xs)"
+                  
                 ></div>
               </div>
             </div>
             <div
               class="wt-entry-row"
-              style="
-                margin-top: var(--space-lg);
-                display: flex;
-                gap: var(--space-sm);
-              "
+              style="margin-top:12px;display:flex;gap:8px"
             >
               <input
                 class="wt-input"
@@ -538,27 +359,12 @@
                 step="0.1"
                 min="50"
                 max="200"
-                style="
-                  flex: 1;
-                  padding: var(--space-sm);
-                  border-radius: var(--r-md);
-                  border: 1px solid var(--bd);
-                  background: var(--bg3);
-                  font-weight: 700;
-                "
+                
               />
               <button
                 class="wt-save-btn"
                 onclick="saveWeight()"
-                style="
-                  padding: 0 var(--space-lg);
-                  border-radius: var(--r-md);
-                  background: var(--gold);
-                  color: white;
-                  border: none;
-                  font-weight: 800;
-                  cursor: pointer;
-                "
+                
               >
                 Log ✓
               </button>
@@ -566,27 +372,19 @@
           </div>
         </div>
 
-        <div style="padding-bottom: 16px">
+        <div style="padding-bottom:16px">
           <div class="sh">⚙️ App Settings & Data</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
             <button
               class="wt-save-btn"
-              style="
-                background: var(--bg3);
-                color: var(--t2);
-                border-color: var(--bd);
-              "
+              style="background:var(--bg3);color:var(--t2);border:1px solid var(--bd)"
               onclick="exportData()"
             >
               💾 Backup
             </button>
             <button
               class="wt-save-btn"
-              style="
-                background: var(--bg3);
-                color: var(--t2);
-                border-color: var(--bd);
-              "
+              style="background:var(--bg3);color:var(--t2);border:1px solid var(--bd)"
               onclick="document.getElementById('importInp').click()"
             >
               📂 Restore
@@ -741,14 +539,7 @@
     <!-- Hyper-Advanced AI Rest Timer Overlay -->
     <div id="restTimerOverlay" class="rest-timer-overlay">
       <div
-        style="
-          font-size: var(--fs-md);
-          font-weight: 800;
-          letter-spacing: 0.1em;
-          color: var(--gold);
-          margin-bottom: var(--space-xl);
-          text-transform: uppercase;
-        "
+        style="font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--gold);margin-bottom:20px;text-transform:uppercase"
       >
         RESTING...
       </div>
@@ -784,11 +575,7 @@
         <div id="timerVal" class="rest-timer-val">60</div>
       </div>
       <div
-        style="
-          margin-top: var(--space-2xl);
-          display: flex;
-          gap: var(--space-sm);
-        "
+        style="margin-top:28px;display:flex;gap:8px"
       >
         <button onclick="skipRest()" class="rest-timer-btn">Skip Rest</button>
       </div>

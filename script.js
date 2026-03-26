@@ -1358,8 +1358,8 @@ function renderDiet() {
       card = `<div class="gymb morning" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})">
         <div class="gymb-ico">🌅</div>
         <div style="flex:1">
-          <div class="gymb-title">${wd.name}</div>
-          <div class="gymb-sub">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} cal burned</div>
+          <div class="gymb-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${wd.name}</div>
+          <div class="gymb-sub" style="overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} cal burned</div>
           <div class="morning-badge">☀️ Morning Session</div>
         </div>
         <div style="font-size:22px;color:var(--orange);flex-shrink:0">↗</div>
@@ -1373,8 +1373,8 @@ function renderDiet() {
               <div class="scn" style="color:${col(s.color)}; font-weight:800; font-size:15px;">${s.name}</div>
               <div class="sctag" style="font-size:9px; background:${bg(s.color)}; color:${col(s.color)}; padding:2px 8px; border-radius:10px; font-weight:800;">${s.tag}</div>
             </div>
-            <div class="scd" style="font-size:12px; color:var(--t2); margin-bottom:6px;">${s.desc}</div>
-            <div class="scw" style="font-size:10.5px; opacity:0.8; font-style:italic;">${s.why}</div>
+            <div class="scd" style="font-size:12px;color:var(--t2);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word">${s.desc}</div>
+            <div class="scw" style="font-size:10.5px;opacity:0.8;font-style:italic;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word">${s.why}</div>
           </div>
         </div>
       </div>`;
@@ -1587,7 +1587,7 @@ function buildWorkoutHTML(type) {
           icon: "⚡",
         };
         const lbl = typeLabels[t] || t;
-        return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;flex:1;min-width:calc(50% - 8px);max-width:100%">
+        return `<div style="display:flex;align-items:center;gap:7px;background:${tc.bg};border:1px solid ${tc.c}33;border-radius:11px;padding:8px 12px;width:100%">
             <div style="font-size:18px">${tc.icon}</div>
             <div><div style="font-size:12px;font-weight:800;color:${tc.c}">${lbl}</div>
             <div style="font-size:10.5px;color:var(--t3);margin-top:1px">${cnt} ex · <span style="color:${tc.c};font-weight:700">${setCounts[t]} sets</span></div></div>
@@ -1597,7 +1597,7 @@ function buildWorkoutHTML(type) {
     breakdownHTML = `
         <div style="border-top:1px solid rgba(255,255,255,.06);margin-top:14px;padding-top:14px">
           <div style="font-size:10px;font-weight:800;letter-spacing:.09em;color:${wc};text-transform:uppercase;margin-bottom:10px">📊 Exercise Breakdown</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
             <div style="display:flex;align-items:center;gap:6px;background:rgba(75,131,232,.1);border:1px solid rgba(75,131,232,.25);border-radius:14px;padding:3px 8px;font-size:10px">
               <span>🏋️</span><span style="font-size:11px;font-weight:700;color:var(--blue)">Machines</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--blue);margin-left:3px">${machines}</span>
             </div>
@@ -1611,7 +1611,7 @@ function buildWorkoutHTML(type) {
               <span>🤸</span><span style="font-size:11px;font-weight:700;color:var(--green)">Bodyweight</span><span style="font-family:var(--mono);font-size:12px;font-weight:800;color:var(--green);margin-left:3px">${bodyweight}</span>
             </div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:7px">${chips}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${chips}</div>
         </div>`;
   }
 
