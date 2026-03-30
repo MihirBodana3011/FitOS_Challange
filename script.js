@@ -198,15 +198,16 @@ const DIET = [
     color: "amber",
     icon: "☀️",
     name: "Wake Up — Fasted Kickstart",
-    sub: "After ~6 hrs sleep — activate metabolism",
-    cal: 65,
-    p: 2,
-    c: 6,
-    f: 4,
-    fib: 2,
+    sub: "After ~6 hrs sleep — activate digestion & protein absorption",
+    cal: 95,
+    p: 5,
+    c: 10,
+    f: 6,
+    fib: 4,
     items: [
       "Warm water + fresh lemon juice (1 glass) + 1 pinch rock salt",
       "Soaked almonds (5) + walnuts (1) + 1 soaked fig",
+      "50g sprouted moong salad with cucumber, tomato, lemon and black pepper",
     ],
   },
 
@@ -257,7 +258,7 @@ const DIET = [
     color: "green",
     icon: "🍱",
     name: "Main Meal — Lunch",
-    sub: "High protein focused",
+    sub: "Weight loss focused",
     cal: 400,
     p: 52,
     c: 40,
@@ -266,18 +267,18 @@ const DIET = [
     opts: [
       {
         id: "A",
-        label: "100g Soya + 1/2 Roti + Salad",
-        desc: "100g soya chunks curry (high protein) + 1/2 multigrain roti + large salad + 1 tsp oil for tempering.",
+        label: "100g Soya + 1 Jowar Roti + Salad",
+        desc: "100g soya chunks curry + 1 jowar (jawar) roti + large mixed salad with cucumber, carrot and greens.",
       },
       {
         id: "B",
-        label: "Dal + Paneer + Salad",
-        desc: "200ml dal + 80g paneer + big bowl of salad. Skip rice/roti for maximum fiber and protein.",
+        label: "Dal + Paneer + Chana Salad",
+        desc: "200ml moong dal + 80g paneer + roasted chana salad with sprouts, tomato and mint.",
       },
       {
         id: "C",
-        label: "Soya Bowl",
-        desc: "120g soya chunks + roasted veggies. No grains. Focus on fiber and satiety.",
+        label: "Soya Sprouts Bowl",
+        desc: "120g soya chunks + sprouted moong + chopped salad. Light, fibrous and protein-rich.",
       },
     ],
   },
@@ -332,26 +333,26 @@ const DIET = [
     icon: "🍽️",
     name: "Pre-Shift Dinner",
     sub: "Lean fuel before 6:30 PM job",
-    cal: 280,
-    p: 16,
-    c: 20,
-    f: 15,
-    fib: 5,
+    cal: 320,
+    p: 24,
+    c: 22,
+    f: 14,
+    fib: 7,
     opts: [
       {
         id: "A",
-        label: "Paneer + 1 Roti + Salad",
-        desc: "120g low-fat paneer bhurji + 1 multigrain roti + salad. Sustained energy for night shift.",
+        label: "Paneer + 1 Jowar Roti + Salad",
+        desc: "120g low-fat paneer bhurji + 1 jowar roti + big bowl of salad with sprouts.",
       },
       {
         id: "B",
-        label: "Tofu + 1 Roti + Salad",
-        desc: "120g Tofu + 1 multigrain roti + big bowl of salad. Light and lean.",
+        label: "Tofu + 1 Jowar Roti + Sprouts Salad",
+        desc: "120g tofu + 1 jowar roti + sprouts salad with mint and lemon. Low carb, protein packed.",
       },
       {
         id: "C",
         label: "Paneer Tikka Bowl",
-        desc: "150g Paneer tikka + huge salad (cucumber, tomato, onion). Fiber rich, low carb.",
+        desc: "150g paneer tikka + mixed salad + steamed greens. High protein, low sugar.",
       },
     ],
   },
@@ -366,26 +367,26 @@ const DIET = [
     icon: "☕",
     name: "Office Break — Light Snack",
     sub: "Keep under 80 cal",
-    cal: 75,
-    p: 2,
-    c: 11,
-    f: 3,
-    fib: 2,
+    cal: 95,
+    p: 6,
+    c: 12,
+    f: 4,
+    fib: 3,
     opts: [
       {
         id: "A",
-        label: "Makhana + Green Tea",
-        desc: "25g roasted makhana + 1 cup green tea. Low calorie, crunchy, filling.",
+        label: "Roasted Chana + Green Tea",
+        desc: "30g roasted chana + 1 cup green tea. Crunchy protein and low carbs.",
       },
       {
         id: "B",
-        label: "Black Coffee",
-        desc: "Black coffee (no sugar) + 15g almonds. Brain fuel for late night.",
+        label: "Poha Sprouts Bowl",
+        desc: "Light protein poha with sprouts, chana and lemon. High fiber, low calorie, office-friendly.",
       },
       {
         id: "C",
         label: "✓ Skip It",
-        desc: "Just hot water + green tea. Best option for fat loss.",
+        desc: "Just hot water + green tea. Best option for fat loss if you're already full.",
       },
     ],
   },
@@ -1126,6 +1127,134 @@ const WCOL = {
   rest: "var(--t3)",
 };
 const MAC = { cal: 950, p: 80, c: 100, f: 25, fib: 25 };
+const WEEKLY_MENU = {
+  0: {
+    wake: {
+      title: "Sprouts Poha",
+      desc: "Light poha cooked with sprouted moong, onions, tomatoes and lemon.",
+    },
+    lunch: {
+      title: "Dal + Chana Salad",
+      desc: "Moong dal with a high-protein roasted chana salad and greens.",
+    },
+    dinner: {
+      title: "Grilled Paneer + Jowar Roti",
+      desc: "130g paneer grilled with spices, served with jowar roti and cucumber salad.",
+    },
+    brk1: {
+      title: "Roasted Chana Snack",
+      desc: "Spiced dry roasted chana with a squeeze of lemon.",
+    },
+  },
+  1: {
+    wake: {
+      title: "Moong Sprouts Upma",
+      desc: "Semolina upma upgraded with sprouted moong, peas and fresh coriander.",
+    },
+    lunch: {
+      title: "Soya Bowl + Salad",
+      desc: "Soya chunks cooked in light masala with a crunchy vegetable salad.",
+    },
+    dinner: {
+      title: "Palak Paneer + Jowar Roti",
+      desc: "Spinach paneer curry with fiber-rich jowar roti and salad.",
+    },
+    brk1: {
+      title: "Poha Cups with Sprouts",
+      desc: "Individual poha servings topped with sprouts and roasted peanuts.",
+    },
+  },
+  2: {
+    wake: {
+      title: "Oats Chilla with Paneer",
+      desc: "Savory oats pancakes stuffed with paneer and herbs.",
+    },
+    lunch: {
+      title: "Dal Tadka + Chana Salad",
+      desc: "Dal tadka plus a colourful chana salad with mint and lemon.",
+    },
+    dinner: {
+      title: "Tofu Stir-Fry + Salad",
+      desc: "Soya tofu stir-fry with bell peppers and a side greens salad.",
+    },
+    brk1: {
+      title: "Sprouted Chana Chaat",
+      desc: "Fresh sprouted chana tossed with onion, tomato and chaat masala.",
+    },
+  },
+  3: {
+    wake: {
+      title: "Poha + Sprouts",
+      desc: "Poha with peas, carrots and sprouted moong for a filling breakfast.",
+    },
+    lunch: {
+      title: "Soya Curry + Jowar Roti",
+      desc: "Tomato-based soya curry with a side of jowar roti and cucumber.",
+    },
+    dinner: {
+      title: "Paneer Bhurji + Salad",
+      desc: "Spicy paneer bhurji served with mixed salad and lemon wedges.",
+    },
+    brk1: {
+      title: "Makhana + Green Tea",
+      desc: "Light roasted makhana snack with a hot cup of green tea.",
+    },
+  },
+  4: {
+    wake: {
+      title: "Sprouted Moong Salad",
+      desc: "Crunchy moong sprout salad with tomato, onion and chaat masala.",
+    },
+    lunch: {
+      title: "Dal + Paneer + Salad",
+      desc: "Protein-rich dal with paneer cubes and a big fiber salad.",
+    },
+    dinner: {
+      title: "Soya Kebab + Jowar Roti",
+      desc: "Soya kebabs with herbs, served with jowar roti and mint chutney.",
+    },
+    brk1: {
+      title: "Chana Crunch",
+      desc: "Roasted chana tossed with spices and a pinch of kala namak.",
+    },
+  },
+  5: {
+    wake: {
+      title: "Besan Chilla with Sprouts",
+      desc: "Low-oil chickpea flour chilla stuffed with sprouts.",
+    },
+    lunch: {
+      title: "Palak Dal + Paneer Salad",
+      desc: "Green lentil dal with a paneer salad and fresh greens.",
+    },
+    dinner: {
+      title: "Tofu Veg Bowl",
+      desc: "Tofu and mixed vegetable bowl with lemon dressing.",
+    },
+    brk1: {
+      title: "Poha with Peas",
+      desc: "Light poha loaded with peas and mild spices.",
+    },
+  },
+  6: {
+    wake: {
+      title: "Chana Paneer Wrap",
+      desc: "Paneer and chana stuffed in a light jowar roti wrap.",
+    },
+    lunch: {
+      title: "Dal + Soya + Salad",
+      desc: "Mixed dal with soya pieces and a crisp salad.",
+    },
+    dinner: {
+      title: "Paneer Tikka Bowl",
+      desc: "Grilled paneer tikka with lettuce, tomato and onion salad.",
+    },
+    brk1: {
+      title: "Sprouts Bhel",
+      desc: "Crunchy sprouts bhel with veggies and tangy chutney.",
+    },
+  },
+};
 const COL = {
   amber: "var(--amber)",
   green: "var(--green)",
@@ -1172,6 +1301,9 @@ const S = {
   isab: [false, false],
 };
 const EX = {};
+const CHALLENGE_DAYS = 90;
+const CHALLENGE_WEIGHT_START = 120;
+const CHALLENGE_WEIGHT_TARGET = 75;
 
 const $ = (id) => document.getElementById(id);
 const col = (k) => COL[k] || "var(--t)";
@@ -1230,6 +1362,7 @@ function tick() {
 // DAY CHIP
 function updDay() {
   const wt = todayWT();
+  const chall = getChallengeInfo();
   const bgs = {
     back: "rgba(37,99,235,.1)",
     chest: "rgba(220,38,38,.1)",
@@ -1247,7 +1380,8 @@ function updDay() {
   ];
   const dc = $("dayChip");
   dc.style.cssText = `background:${bgs[wt] || bgs.rest};color:${WCOL[wt]};border-color:${WCOL[wt]}55`;
-  dc.textContent = `${days[new Date().getDay()]} · ${WMETA[wt]}`;
+  dc.textContent = `Day ${chall.day}/${CHALLENGE_DAYS} · ${days[new Date().getDay()]} · ${WMETA[wt]}`;
+  dc.title = `90-Day Weight Loss Challenge — started ${chall.startDate} · ${chall.remaining} days left`;
 
   // Dynamic AI Greeting
   const hr = new Date().getHours();
@@ -1342,9 +1476,73 @@ function selOpt(mid, btn) {
 }
 
 // RENDER DIET
+function renderChallengeCard() {
+  const info = getChallengeInfo();
+  const progressPct = Math.min(100, Math.round((info.day / CHALLENGE_DAYS) * 100));
+  const statusText = info.started
+    ? `Today is Day ${info.day} of ${CHALLENGE_DAYS}`
+    : "Challenge not started yet. Tap start to begin your 90-day weight loss journey.";
+  const countText = info.started ? `${info.day}/${CHALLENGE_DAYS}` : `0/${CHALLENGE_DAYS}`;
+  const actionLabel = info.started ? "Restart Challenge" : "Start Challenge";
+  const buttonAction = "startChallenge()";
+  const html = `
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:13px;font-weight:800;color:var(--t);">${statusText}</div>
+      </div>
+      <div style="min-width:160px;text-align:right;">
+        <div style="font-size:22px;font-weight:900;color:var(--green);">${countText}</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px;">${info.remaining} days left</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;">
+      <div class="g-chip small" style="background:rgba(16,185,129,.12);color:var(--green);min-width:max-content;">🥣 Poha + Sprouts</div>
+      <div class="g-chip small" style="background:rgba(37,99,235,.12);color:var(--blue);min-width:max-content;">🥗 Chana Salad</div>
+      <div class="g-chip small" style="background:rgba(249,115,22,.12);color:var(--amber);min-width:max-content;">🥘 Dal + Paneer</div>
+      <div class="g-chip small" style="background:rgba(5,150,105,.12);color:var(--teal);min-width:max-content;">🌾 Jowar Roti</div>
+    </div>
+    <div style="margin-top:14px;height:10px;background:var(--bg4);border-radius:999px;overflow:hidden;">
+      <div style="height:100%;width:${progressPct}%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;"></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="wt-save-btn" style="min-width:170px;" onclick="${buttonAction}">${actionLabel}</button>
+      ${info.started ? `<button class="wt-save-btn" style="min-width:170px;background:var(--bg3);color:var(--t2);border:1px solid var(--bd);" onclick="resetChallenge()">Reset Challenge</button>` : ""}
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--t3);">Stay on track: 3 strong meals, 8 glasses water, 2 fiber boosts, and lean vegetarian protein every day.</div>
+  `;
+  $("challengeSummary").innerHTML = html;
+}
+
+function renderSidebarChallenge() {
+  const info = getChallengeInfo();
+  const progressPct = Math.min(100, Math.round((info.day / CHALLENGE_DAYS) * 100));
+  const html = `
+    <div style="display:grid;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:14px;font-weight:900;color:var(--t);">${info.started ? `Day ${info.day}` : "Challenge paused"}</div>
+        <div style="font-size:12px;color:var(--t3);">${info.remaining} days left</div>
+      </div>
+      <div style="height:8px;background:var(--bg4);border-radius:999px;overflow:hidden;">
+        <div style="height:100%;width:${progressPct}%;background:linear-gradient(90deg,var(--green),var(--blue));"></div>
+      </div>
+      <div style="display:grid;gap:8px;font-size:12px;color:var(--t2);line-height:1.5;">
+        <div>✅ Lean vegetarian meals with poha, chana, sprouts, dal, paneer and soya.</div>
+        <div>✅ Maintain 950 kcal, 80g protein, 25g fiber, and 8+ glasses water daily.</div>
+        <div>✅ Rotate salads, jowar roti, and low-oil dal each day.</div>
+      </div>
+      <button class="wt-save-btn" style="width:100%;min-width:0;" onclick="startChallenge()">${info.started ? "Restart Challenge" : "Start 90-Day Challenge"}</button>
+    </div>
+  `;
+  $("sidebarChallengeContent").innerHTML = html;
+}
+
 function renderDiet() {
+  renderChallengeCard();
+  renderSidebarChallenge();
   const tl = $("dietTL");
   let html = "";
+  const todayIndex = new Date().getDay();
+  const todayMenu = WEEKLY_MENU[todayIndex] || {};
   DIET.forEach((s) => {
     // Phase dividers
     if (s.id === "pregym")
@@ -1428,16 +1626,18 @@ function renderDiet() {
           ${s.fib ? `<div class="g-chip"><span style="color:var(--teal)">F</span><span>${s.fib}g</span></div>` : ""}
         </div>`;
 
+      const dailyMenu = todayMenu[s.id];
+
       card = `<div class="p-card mc" data-id="${s.id}" style="padding:0; box-shadow:var(--shadow-md);">
-        <div class="mch" onclick="togCard(event,'${s.id}')" style="padding:16px; display:flex; align-items:center; gap:12px;">
-          <div class="mcico" style="background:${bg(s.color)}; width:52px; height:52px; border-radius:15px; font-size:26px; display:flex; align-items:center; justify-content:center;">${s.icon}</div>
-          <div class="mcnfo" style="flex:1; min-width:0;">
-            <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t);">${s.name}</div>
-            <div class="mcsb" style="font-size:12px; color:var(--t3); margin-top:2px;">${s.sub}</div>
+        <div class="mch" onclick="togCard(event,'${s.id}')" style="padding:16px; display:flex; align-items:flex-start; gap:12px;">
+          <div class="mcico" style="background:${bg(s.color)}; width:46px; height:46px; border-radius:16px; font-size:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${s.icon}</div>
+          <div class="mcnfo" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+              <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t); line-height:1.2;">${s.name}</div>
+              <button class="arb" style="background:var(--bg3); border:1px solid var(--bd); width:36px; height:36px; border-radius:10px; transition:transform 0.3s ease;">▾</button>
+            </div>
+            <div class="mcsb" style="font-size:12px; color:var(--t3); margin-top:0;">${s.sub}</div>
             ${macroBadges}
-          </div>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <button class="arb" style="background:var(--bg3); border:1px solid var(--bd); width:36px; height:36px; border-radius:10px; transition:transform 0.3s ease;">▾</button>
           </div>
         </div>
         <div class="mcrt" style="padding:0 16px 16px; display:flex; gap:10px;">
@@ -1689,14 +1889,14 @@ function buildWorkoutHTML(type) {
           ${quoteHTML}`;
   }
 
-  return `<div class="p-card wo-header" style="border-top:6px solid ${wc}; background:var(--bg2); margin-bottom:18px; padding:24px; border-radius:24px; box-shadow:var(--shadow-lg);">
-    <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px; flex-wrap:wrap;">
-      <div class="ex-num-new" style="background:${wc}; color:white; width:44px; height:44px; font-size:20px; font-weight:900; border-radius:14px; box-shadow:0 8px 20px ${wc}33; display:flex; align-items:center; justify-content:center;">${wd.name.charAt(0)}</div>
-      <div style="flex:1;">
-        <div class="wo-day" style="color:var(--t); font-size:28px; font-weight:900; letter-spacing:-1px; line-height:1.1;">${wd.name}</div>
-        <div class="wo-meta" style="font-size:12px; font-weight:800; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:0.5px;">${wd.days} · Fit Master Gym</div>
+  return `<div class="p-card wo-header" style="border-top:6px solid ${wc}; background:var(--bg2); margin-bottom:16px; padding:18px; border-radius:22px; box-shadow:var(--shadow-lg);">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:nowrap; min-width:0;">
+      <div class="ex-num-new" style="background:${wc}; color:white; width:40px; height:40px; font-size:18px; font-weight:900; border-radius:14px; box-shadow:0 6px 16px ${wc}33; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${wd.name.charAt(0)}</div>
+      <div style="flex:1 1 auto; min-width:0;">
+        <div class="wo-day" style="color:var(--t); font-size:24px; font-weight:900; letter-spacing:-0.8px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${wd.name}</div>
+        <div class="wo-meta" style="font-size:11px; font-weight:800; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${wd.days} · Fit Master Gym</div>
       </div>
-      <div style="font-size:10px; font-weight:900; background:var(--bg3); color:var(--t2); padding:8px 14px; border-radius:24px; border:1px solid var(--bd); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">🌅 4 AM – 6 AM</div>
+      <div style="font-size:10px; font-weight:900; background:var(--bg3); color:var(--t2); padding:6px 12px; border-radius:22px; border:1px solid var(--bd); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">🌅 4 AM – 6 AM</div>
     </div>
     <div class="wo-tip" style="background:var(--bg3); padding:14px 18px; border-radius:18px; font-size:12px; border:1px solid var(--bd); margin-bottom:24px; font-style:italic; line-height:1.6; color:var(--t2);">"${wd.tip}"</div>
     <div class="wo-stats" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
@@ -1944,12 +2144,66 @@ function todayStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+function getChallengeInfo() {
+  const store = loadStore();
+  const started = store.challengeStarted || false;
+  const startDate = store.challengeStartDate || todayStr();
+  const start = new Date(startDate);
+  const today = new Date(todayStr());
+  const diff = started ? Math.floor((today - start) / 86400000) + 1 : 0;
+  const day = started ? Math.min(Math.max(1, diff), CHALLENGE_DAYS) : 0;
+  return {
+    started,
+    startDate,
+    day,
+    remaining: started ? Math.max(0, CHALLENGE_DAYS - day) : CHALLENGE_DAYS,
+  };
+}
+
+function getWeeklyMenu(slot) {
+  const todayIndex = new Date().getDay();
+  return WEEKLY_MENU[todayIndex]?.[slot] || null;
+}
+
+function startChallenge() {
+  const store = loadStore();
+  store.challengeStarted = true;
+  store.challengeStartDate = todayStr();
+  saveStore(store);
+  renderDiet();
+  buildProgressTab();
+  if (window.showToast) window.showToast("90-Day challenge started!", "🔥");
+}
+
+function resetChallenge() {
+  if (!confirm("Reset the 90-Day challenge and clear the start date?")) return;
+  const store = loadStore();
+  store.challengeStarted = false;
+  store.challengeStartDate = null;
+  saveStore(store);
+  renderDiet();
+  buildProgressTab();
+  if (window.showToast) window.showToast("Challenge reset. Ready to begin again!", "🔄");
+}
+
 function loadStore() {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const store = JSON.parse(raw);
+      if (store.challengeStarted === undefined) {
+        store.challengeStarted = !!store.challengeStartDate;
+      }
+      if (store.challengeStartDate === undefined) {
+        store.challengeStartDate = null;
+      }
+      if (!store.dailyLog) store.dailyLog = {};
+      if (!store.weightLog) store.weightLog = [];
+      saveStore(store);
+      return store;
+    }
   } catch (e) {}
-  return { weightLog: [], dailyLog: {} };
+  return { weightLog: [], dailyLog: {}, challengeStarted: false, challengeStartDate: null };
 }
 
 function saveStore(store) {
@@ -2072,8 +2326,9 @@ function buildProgressTab() {
   const log = store.weightLog;
   const dlog = store.dailyLog;
   const today = todayStr();
-  const start = 120,
-    target = 75;
+  const challenge = getChallengeInfo();
+  const start = CHALLENGE_WEIGHT_START,
+    target = CHALLENGE_WEIGHT_TARGET;
 
   // Stats
   const latest = log.length ? log[log.length - 1].weight : start;
@@ -2098,6 +2353,13 @@ function buildProgressTab() {
       Object.values(wt).some((e) => e.completed),
     );
   }).length;
+
+  const endDate = new Date(challenge.startDate);
+  endDate.setDate(endDate.getDate() + CHALLENGE_DAYS - 1);
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const endLabel = `${String(endDate.getDate()).padStart(2, "0")}-${monthNames[endDate.getMonth()]}-${endDate.getFullYear()}`;
+  const weeklyTarget = ((start - target) / CHALLENGE_DAYS * 7).toFixed(1);
+  const challengePct = Math.min(100, Math.round((challenge.day / CHALLENGE_DAYS) * 100));
 
   // Weight chart (last 10 entries)
   const chartLog = log.slice(-10);
@@ -2196,6 +2458,32 @@ function buildProgressTab() {
           <div style="font-size:var(--fs-3xs); color:var(--t3); margin-top:var(--space-xs); font-weight:600;">Based on your consistency: ${streak} day streak & ${totalWo} sessions.</div>
         </div>
 
+        <div class="wt-chart" style="padding:18px;margin-bottom:18px;background:linear-gradient(135deg,rgba(5,150,105,.08),rgba(37,99,235,.05));border:1px solid rgba(5,150,105,.12);">
+          <div class="wt-chart-title">📅 90-Day Challenge Overview</div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;">
+            <div style="padding:14px;border-radius:18px;background:rgba(255,255,255,.85);">
+              <div style="font-size:10px;font-weight:900;text-transform:uppercase;color:var(--t3);letter-spacing:.08em;">Challenge Window</div>
+              <div style="font-size:13px;font-weight:800;color:var(--t);margin-top:8px;">${challenge.startDate} → ${endLabel}</div>
+            </div>
+            <div style="padding:14px;border-radius:18px;background:rgba(255,255,255,.85);">
+              <div style="font-size:10px;font-weight:900;text-transform:uppercase;color:var(--t3);letter-spacing:.08em;">Target Loss</div>
+              <div style="font-size:13px;font-weight:800;color:var(--t);margin-top:8px;">${start - target} kg in ${CHALLENGE_DAYS} days</div>
+            </div>
+            <div style="padding:14px;border-radius:18px;background:rgba(255,255,255,.85);">
+              <div style="font-size:10px;font-weight:900;text-transform:uppercase;color:var(--t3);letter-spacing:.08em;">Days Completed</div>
+              <div style="font-size:13px;font-weight:800;color:var(--t);margin-top:8px;">${challenge.day}</div>
+            </div>
+            <div style="padding:14px;border-radius:18px;background:rgba(255,255,255,.85);">
+              <div style="font-size:10px;font-weight:900;text-transform:uppercase;color:var(--t3);letter-spacing:.08em;">Weekly Pace</div>
+              <div style="font-size:13px;font-weight:800;color:var(--t);margin-top:8px;">${weeklyTarget} kg/week</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;height:10px;background:var(--bg4);border-radius:999px;overflow:hidden;">
+            <div style="height:100%;width:${challengePct}%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;"></div>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--t3);">Challenge progress: ${challengePct}% complete · ${challenge.remaining} days remaining</div>
+        </div>
+
         <div class="prog-grid">
           <div class="prog-stat">
             <div class="prog-stat-l">Lost So Far</div>
@@ -2206,6 +2494,11 @@ function buildProgressTab() {
             <div class="prog-stat-l">Current Weight</div>
             <div class="prog-stat-v" style="color:var(--gold)">${latest}<span style="font-size:13px;color:var(--t3)"> kg</span></div>
             <div class="prog-stat-s">${+(latest - target).toFixed(1)} kg to go</div>
+          </div>
+          <div class="prog-stat">
+            <div class="prog-stat-l">Challenge Day</div>
+            <div class="prog-stat-v" style="color:var(--gold)">${challenge.day}/${CHALLENGE_DAYS}</div>
+            <div class="prog-stat-s">${challenge.remaining} days left</div>
           </div>
           <div class="prog-stat">
             <div class="prog-stat-l">Active Streak</div>
@@ -2221,7 +2514,7 @@ function buildProgressTab() {
 
         <!-- Overall Progress Bar -->
         <div class="wt-chart" style="padding:14px 16px;margin-bottom:14px">
-          <div class="wt-chart-title">🎯 Journey Progress — ${start}kg → ${target}kg</div>
+          <div class="wt-chart-title">🎯 90-Day Challenge Progress — ${start}kg → ${target}kg</div>
           <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
             <div style="flex:1;height:10px;background:var(--bd);border-radius:5px;overflow:hidden">
               <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:5px;transition:width 1s cubic-bezier(.34,1.56,.64,1)"></div>
