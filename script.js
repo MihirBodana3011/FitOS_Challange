@@ -144,6 +144,155 @@ window.haptic = function (pattern = [60, 40, 60]) {
   if (navigator.vibrate) navigator.vibrate(pattern);
 };
 
+// MOBILE NATIVE APP IMPROVEMENTS
+function initializeMobileFeatures() {
+  // Prevent zoom on input focus (iOS Safari)
+  const viewport = document.querySelector('meta[name=viewport]');
+  if (viewport) {
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+  }
+
+  // Add touch feedback to interactive elements
+  const interactiveElements = document.querySelectorAll('.p-card, .mc, .sq, .ib, .bntab, .wt-glass, .wd, .m-chip, button');
+
+  interactiveElements.forEach(element => {
+    element.addEventListener('touchstart', function(e) {
+      this.style.transform = 'scale(0.98)';
+      this.style.transition = 'transform 0.1s ease';
+      haptic([30]); // Light haptic feedback
+    }, { passive: true });
+
+    element.addEventListener('touchend', function(e) {
+      this.style.transform = '';
+      this.style.transition = 'transform 0.2s ease';
+    }, { passive: true });
+
+    element.addEventListener('touchcancel', function(e) {
+      this.style.transform = '';
+      this.style.transition = 'transform 0.2s ease';
+    }, { passive: true });
+  });
+
+  // Improve scrolling performance
+  const scrollableElements = document.querySelectorAll('.wk, .sql, .irow, #allworkoutscontent .mcb');
+  scrollableElements.forEach(element => {
+    element.style.webkitOverflowScrolling = 'touch';
+    element.style.overflowScrolling = 'touch';
+  });
+
+  // Add pull-to-refresh simulation (visual feedback)
+  let startY = 0;
+  let isPulling = false;
+
+  document.addEventListener('touchstart', function(e) {
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (window.scrollY === 0 && e.touches[0].clientY > startY + 50) {
+      isPulling = true;
+      // Add visual feedback for pull-to-refresh
+      document.body.style.transform = `translateY(${Math.min(e.touches[0].clientY - startY - 50, 60)}px)`;
+      document.body.style.transition = 'none';
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    if (isPulling) {
+      document.body.style.transform = '';
+      document.body.style.transition = 'transform 0.3s ease';
+      isPulling = false;
+      haptic([50, 30, 50]); // Pull-to-refresh haptic
+    }
+  }, { passive: true });
+
+  // Add native-like loading states
+  window.showLoading = function(element, show = true) {
+    if (show) {
+      element.style.opacity = '0.6';
+      element.style.pointerEvents = 'none';
+      element.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;gap:8px;"><div class="loading-spinner"></div>Loading...</div>';
+    } else {
+      element.style.opacity = '';
+      element.style.pointerEvents = '';
+    }
+  };
+
+  // Add loading spinner styles dynamically
+  const style = document.createElement('style');
+  style.textContent = `
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(198, 146, 10, 0.3);
+      border-top: 2px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Improve form inputs for mobile
+  const inputs = document.querySelectorAll('input, textarea, select');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      // Prevent zoom on iOS by ensuring font-size is 16px+
+      if (window.innerWidth <= 768) {
+        this.style.fontSize = '16px';
+      }
+    });
+
+    input.addEventListener('blur', function() {
+      if (window.innerWidth <= 768) {
+        this.style.fontSize = '';
+      }
+    });
+  });
+
+  // Add swipe gestures for bottom navigation
+  let startX = 0;
+  let currentTab = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    if (!startX) return;
+
+    const endX = e.changedTouches[0].clientX;
+    const diffX = startX - endX;
+
+    // Swipe threshold
+    if (Math.abs(diffX) > 50) {
+      const tabs = ['diet', 'workout', 'allworkouts', 'progress', 'stats'];
+      if (diffX > 0 && currentTab < tabs.length - 1) {
+        // Swipe left - next tab
+        currentTab++;
+        mobTab(tabs[currentTab], document.querySelector(`#bn-${tabs[currentTab]}`));
+        haptic([40, 20, 40]);
+      } else if (diffX < 0 && currentTab > 0) {
+        // Swipe right - previous tab
+        currentTab--;
+        mobTab(tabs[currentTab], document.querySelector(`#bn-${tabs[currentTab]}`));
+        haptic([40, 20, 40]);
+      }
+    }
+
+    startX = 0;
+  }, { passive: true });
+}
+
+// Initialize mobile features when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  initializeMobileFeatures();
+  initializeNotifications();
+});
+
 // ============================================================
 // DATA
 // ============================================================
@@ -1379,7 +1528,10 @@ function updDay() {
     "Saturday",
   ];
   const dc = $("dayChip");
-  dc.style.cssText = `background:${bgs[wt] || bgs.rest};color:${WCOL[wt]};border-color:${WCOL[wt]}55`;
+  dc.className = "day-chip-dynamic";
+  dc.style.setProperty('--bg-dynamic', bgs[wt] || bgs.rest);
+  dc.style.setProperty('--color-dynamic', WCOL[wt]);
+  dc.style.setProperty('--border-dynamic', WCOL[wt] + '55');
   dc.textContent = `Day ${chall.day}/${CHALLENGE_DAYS} · ${days[new Date().getDay()]} · ${WMETA[wt]}`;
   dc.title = `90-Day Weight Loss Challenge — started ${chall.startDate} · ${chall.remaining} days left`;
 
@@ -1450,9 +1602,6 @@ function togCard(e, id) {
   const card = document.querySelector(`[data-id="${id}"]`);
   if (!card) return;
   const isOpen = card.classList.toggle("open");
-  // Rotate chevron arrow button
-  const arb = card.querySelector(".arb");
-  if (arb) arb.style.transform = isOpen ? "rotate(180deg) scale(1.1)" : "rotate(0deg)";
   // Toggle the meal body
   const body = card.querySelector(".mcb");
   if (body) {
@@ -1632,17 +1781,14 @@ function renderDiet() {
         <div class="mch" onclick="togCard(event,'${s.id}')" style="padding:16px; display:flex; align-items:flex-start; gap:12px;">
           <div class="mcico" style="background:${bg(s.color)}; width:46px; height:46px; border-radius:16px; font-size:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${s.icon}</div>
           <div class="mcnfo" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-              <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t); line-height:1.2;">${s.name}</div>
-              <button class="arb" style="background:var(--bg3); border:1px solid var(--bd); width:36px; height:36px; border-radius:10px; transition:transform 0.3s ease;">▾</button>
-            </div>
+            <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t); line-height:1.2;">${s.name}</div>
             <div class="mcsb" style="font-size:12px; color:var(--t3); margin-top:0;">${s.sub}</div>
             ${macroBadges}
           </div>
         </div>
-        <div class="mcrt" style="padding:0 16px 16px; display:flex; gap:10px;">
-          <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')" style="flex:1;">✕ Skip</button>
-          <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')" style="flex:2;">✓ Done</button>
+        <div class="mcrt" style="padding:0 16px 16px; display:flex; gap:8px; align-items:center;">
+          <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')">✕</button>
+          <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')">✓</button>
         </div>
         <div class="mcb" style="padding:0 16px 16px; display:none;">${ii}${oi}</div>
       </div>`;
@@ -2283,8 +2429,8 @@ function saveWeight() {
   const inp = document.getElementById("wtInput");
   const val = parseFloat(inp.value);
   if (isNaN(val) || val < 30 || val > 300) {
-    inp.style.borderColor = "var(--red)";
-    setTimeout(() => (inp.style.borderColor = ""), 1000);
+    inp.classList.add("input-error");
+    setTimeout(() => inp.classList.remove("input-error"), 1000);
     return;
   }
   const store = loadStore();
@@ -2295,8 +2441,8 @@ function saveWeight() {
   store.weightLog.sort((a, b) => a.date.localeCompare(b.date));
   saveStore(store);
   inp.value = "";
-  inp.style.borderColor = "var(--green)";
-  setTimeout(() => (inp.style.borderColor = ""), 800);
+  inp.classList.add("input-success");
+  setTimeout(() => inp.classList.remove("input-success"), 800);
   updWeightUI();
   if (document.getElementById("tc-progress").classList.contains("on"))
     buildProgressTab();
@@ -2566,13 +2712,13 @@ function skipMeal(e, id) {
   }
   if (S.skipped.has(id)) {
     S.skipped.delete(id);
-    if (btnS) { btnS.innerHTML = "✕ Skip"; btnS.style.background = "var(--bg3)"; btnS.style.color = "var(--t3)"; btnS.style.borderColor = "var(--bd)"; }
-    if (card) { card.style.opacity = "1"; card.style.transform = "scale(1)"; }
-    if (btnD) { btnD.style.display = ""; btnD.innerHTML = "✓ Done"; btnD.style.background = "linear-gradient(135deg, var(--gold), var(--amber))"; }
+    if (btnS) { btnS.innerHTML = "✕"; btnS.classList.remove("btn-skip-skipped"); }
+    if (card) { card.classList.remove("skipped"); }
+    if (btnD) { btnD.style.display = ""; btnD.innerHTML = "✓"; btnD.classList.remove("btn-done-completed"); }
   } else {
     S.skipped.add(id);
-    if (btnS) { btnS.innerHTML = "✕ Skipped"; btnS.style.background = "rgba(220,38,38,0.1)"; btnS.style.color = "var(--red)"; btnS.style.borderColor = "var(--red)"; }
-    if (card) { card.style.opacity = "0.5"; card.style.transform = "scale(0.98)"; card.classList.remove("anow"); }
+    if (btnS) { btnS.innerHTML = "✕"; btnS.classList.add("btn-skip-skipped"); }
+    if (card) { card.classList.add("skipped"); card.classList.remove("anow"); }
     if (btnD) { btnD.style.display = "none"; }
     if (window.showToast) window.showToast("Meal Skipped", "⏭️");
   }
@@ -2587,7 +2733,7 @@ function togMeal(e, id) {
   if (S.skipped.has(id)) return;
   if (S.done.has(id)) {
     S.done.delete(id);
-    if (btn) { btn.classList.remove("done"); btn.innerHTML = "✓ Done"; btn.style.background = "linear-gradient(135deg, var(--gold), var(--amber))"; }
+    if (btn) { btn.classList.remove("btn-done-completed"); btn.innerHTML = "✓"; }
     if (btnS) { btnS.style.display = ""; }
     if (card) {
       card.classList.remove("ck", "anow");
@@ -2599,7 +2745,7 @@ function togMeal(e, id) {
     S.fib -= s.fib || 0;
   } else {
     S.done.add(id);
-    if (btn) { btn.classList.add("done"); btn.innerHTML = "✓ Completed"; btn.style.background = "var(--green)"; btn.style.boxShadow = "none"; }
+    if (btn) { btn.classList.add("btn-done-completed"); btn.innerHTML = "✓"; }
     if (btnS) { btnS.style.display = "none"; }
     if (card) {
       card.classList.add("ck");
@@ -3026,8 +3172,8 @@ setTimeout(() => {
     const btnD = $("chk_" + id);
     const btnS = $("skp_" + id);
     const card = document.querySelector(`[data-id="${id}"]`);
-    if (btnS) { btnS.innerHTML = "✕ Skipped"; btnS.style.background = "rgba(220,38,38,0.1)"; btnS.style.color = "var(--red)"; btnS.style.borderColor = "var(--red)"; }
-    if (card) { card.style.opacity = "0.5"; card.style.transform = "scale(0.98)"; }
+    if (btnS) { btnS.innerHTML = "✕ Skipped"; btnS.classList.add("btn-skip-skipped"); }
+    if (card) { card.classList.add("skipped"); }
     if (btnD) { btnD.style.display = "none"; }
   });
   // Restore isabgol buttons

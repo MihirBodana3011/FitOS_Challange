@@ -1,0 +1,197 @@
+/* ============================================================
+   FitOS — Desktop Styles (≥769px)
+   ============================================================ */
+
+@media(min-width:769px){
+
+  /* ── Layout grid ─────────────────────────────────────────── */
+  .layout{
+    display:grid;
+    grid-template-rows:auto 1fr;
+    grid-template-columns:280px 1fr;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:0;
+    overflow:hidden;
+  }
+
+  /* ── Topbar ──────────────────────────────────────────────── */
+  .topbar{
+    position:sticky;
+    top:0;
+    grid-column:1 / -1;
+    height:60px;
+    min-height:60px;
+    padding:0 24px;
+    gap:14px;
+    z-index:999;
+    display:flex;
+    align-items:center;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    box-shadow:0 1px 0 rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+    box-sizing:border-box;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    margin-right:0; flex-shrink:0;
+  }
+  .lm{ width:36px;height:36px;border-radius:12px;font-size:14px;flex-shrink:0 }
+  .lt{ font-size:20px;font-weight:900;flex-shrink:0;white-space:nowrap }
+  .xbadge{ display:inline-flex }
+  .ai-greeting{ display:block;font-size:11.5px;color:var(--t3);font-weight:600;white-space:nowrap }
+  .topright{
+    display:flex;align-items:center;gap:10px;
+    flex-shrink:0; margin-left:auto;
+  }
+  .topright .dc,
+  .topright .cstrip,
+  .topright .bmi-b{ display:flex }
+  .clkwrap{ flex-shrink:0 }
+  .clk{ font-size:13px;font-weight:700 }
+  .datelbl{ font-size:9px }
+  .btn-reminders{
+    font-size:9.5px;padding:6px 10px;
+    min-height:32px;white-space:nowrap;
+    display:flex;align-items:center;gap:5px;
+  }
+
+  /* ── Sidebar ─────────────────────────────────────────────── */
+  .sidebar{
+    display:flex;
+    position:sticky;
+    top:60px;
+    height:calc(100vh - 60px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    border-right:1px solid var(--bd);
+    box-shadow:2px 0 8px rgba(0,0,0,.025);
+    padding:20px 16px 40px;
+    gap:18px;
+    flex-direction:column;
+    box-sizing:border-box;
+    width:280px;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(212,168,71,.2) transparent;
+  }
+
+  /* ── Desktop tabbar ──────────────────────────────────────── */
+  .botnav{ display:none }
+  .tabbar{
+    display:flex;
+    visibility:visible;
+    height:auto;
+    overflow:visible;
+    background:var(--bg2);
+    border-bottom:1px solid var(--bd);
+    padding:0 24px;
+    position:sticky;
+    top:60px;
+    z-index:200;
+    gap:0;
+    flex-shrink:0;
+    box-shadow:0 2px 8px rgba(0,0,0,.03);
+  }
+  .tab{
+    padding:14px 20px;
+    font-size:13px;
+    font-weight:700;
+    white-space:nowrap;
+    min-height:50px;
+    border-radius:0;
+  }
+
+  /* ── Main content ────────────────────────────────────────── */
+  .main{
+    overflow-y:auto;
+    height:calc(100vh - 60px);
+    overflow-x:hidden;
+    min-width:0;
+  }
+  .tc{
+    padding:28px 32px 60px;
+    max-width:980px;
+    margin:0 auto;
+    box-sizing:border-box;
+    overflow-x:hidden;
+  }
+
+  /* ── Ambient orbs ────────────────────────────────────────── */
+  .orb{
+    display:block;position:fixed;border-radius:50%;
+    filter:blur(80px);opacity:.06;pointer-events:none;z-index:-1;
+  }
+  .orb-1{ width:320px;height:320px;background:var(--gold);top:12%;left:6% }
+  .orb-2{ width:240px;height:240px;background:var(--blue);top:55%;right:12% }
+  .orb-3{ width:280px;height:280px;background:var(--purple);bottom:12%;left:45% }
+
+  /* ── P-Cards on desktop ──────────────────────────────────── */
+  .p-card{
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:16px;
+    text-align:left !important;
+    overflow:visible !important;
+  }
+  .p-card:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-lg);
+    border-color:var(--bd2);
+  }
+
+  /* ── Sidebar calorie ring ────────────────────────────────── */
+  .rb-wrap{ width:160px;height:160px }
+  .ri-n{ font-size:28px }
+  .ri-l{ font-size:8px }
+
+  /* ── Water grid: all glasses ─────────────────────────────── */
+  .wt-grid{ grid-template-columns:repeat(8,1fr) }
+
+  /* ── Day schedule strip nodes ────────────────────────────── */
+  .ds-node{ min-width:68px;padding:11px 8px }
+  .ds-ico{ font-size:22px }
+  .ds-time{ font-size:9px }
+  .ds-lbl{ font-size:8px }
+
+  /* ── Timeline on desktop ─────────────────────────────────── */
+  .trow{ padding:14px 0;gap:12px }
+  .trow::after{ left:84px }
+  .tt{ width:64px;min-width:64px;font-size:11px;padding-top:16px }
+  .tdw{ width:22px;min-width:22px;padding-top:16px }
+  .tcrd{ max-width:calc(100% - 100px) }
+
+  /* ── Exercise cards ──────────────────────────────────────── */
+  .ex-card-new{ flex-wrap:nowrap;gap:18px }
+  .ex-img-wrap{ width:80px;height:80px;min-width:80px;max-width:80px }
+  .ex-info-new{ max-width:none }
+  .ex-actions-new{ width:auto;flex-direction:row;border-top:none;padding-top:0;margin-top:0 }
+
+  /* ── Meal card on desktop ────────────────────────────────── */
+  .mcrt{ width:auto;margin-left:auto;margin-top:0 }
+  .mc:hover{ box-shadow:var(--shadow-md);border-color:var(--bd2) }
+
+  /* ── Other hover effects ─────────────────────────────────── */
+  .pc:hover{ border-color:var(--bd2);box-shadow:var(--shadow-md);transform:translateY(-2px) }
+  .gymb:hover{ box-shadow:var(--shadow-md);border-color:var(--bd2);transform:translateY(-1px) }
+  .sq:hover{ background:var(--bg3);border-color:var(--bd2);transform:translateX(2px) }
+  .btn-skip:hover{ transform:translateY(-2px);box-shadow:0 6px 16px rgba(220,38,38,.15) }
+  .btn-done:hover{ transform:translateY(-2px);box-shadow:0 6px 16px rgba(5,150,105,.15) }
+
+  /* ── Wo-stats 4-col ──────────────────────────────────────── */
+  .wo-stats{ grid-template-columns:repeat(4,1fr);gap:10px }
+  .ws-v{ font-size:20px }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .foot{
+    font-size:12.5px;line-height:1.7;
+    padding:20px 24px;border-radius:18px;
+  }
+}
+
+/* ── Wide desktop ────────────────────────────────────────── */
+@media(min-width:1280px){
+  .tc{ max-width:1100px;padding:32px 40px 80px }
+  .layout{ grid-template-columns:320px 1fr }
+  .sidebar{ width:320px;padding:22px 18px 40px }
+}
