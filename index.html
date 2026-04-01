@@ -1,31 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <link rel="manifest" href="manifest.json" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="theme-color" content="#C6920A" />
-    <meta name="apple-mobile-web-app-title" content="FitOS" />
-    <title>FitOS — 90-Day Weight Loss Challenge</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="Image/logo-new.png" type="image/png" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="style-desktop.css" />
-    <link rel="stylesheet" href="style-mobile.css" />
-    
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#059669" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="FitOS" />
+
+  <title>FitOS — 90-Day Weight Loss Challenge</title>
+  
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="Image/logo-new.png" type="image/png" />
+  <link rel="apple-touch-icon" href="Image/logo-new.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Manrope:wght@400;500;600;700;800&family=Raleway:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
 
   <body id="fitos-app">
     <!-- Ambient Glow Orbs -->
@@ -44,30 +36,33 @@
           <div id="aiGreeting" class="ai-greeting">Hello Champ!</div>
         </div>
         <div class="topright">
-          <div class="dc" id="dayChip">Loading...</div>
-          <div class="cstrip">
-            <span>Cal</span>
-            <div class="cbar-wrap">
-              <div class="cbar-fill" id="topBar" style="width: 0"></div>
+          <div class="desktop-only">
+            <div class="dc" id="dayChip">Loading...</div>
+            <div class="cstrip">
+              <span>Cal</span>
+              <div class="cbar-wrap">
+                <div class="cbar-fill" id="topBar"></div>
+              </div>
+              <span class="cv" id="topVal">0/950</span>
             </div>
-            <span class="cv" id="topVal">0/950</span>
+            <div class="bmi-b">
+              <div class="pulse"></div>
+              <span>BMI</span><span class="bmi-v">40.1</span>
+            </div>
           </div>
-          <div class="bmi-b">
-            <div class="pulse"></div>
-            <span>BMI</span><span class="bmi-v">40.1</span>
-          </div>
+
           <button
             class="btn-reminders"
             onclick="requestNotificationPermission()"
-            style="display:flex; align-items:center; gap:8px;"
           >
             <span>🔔 REMINDERS</span>
-            <span onclick="event.stopPropagation(); testNotification();" style="padding:2px 8px; background:rgba(212,160,23,0.15); border-radius:12px; font-size:9px; border:1px solid rgba(212,160,23,0.3); font-weight:800; cursor:pointer;">🧪 TEST</span>
+            <span onclick="event.stopPropagation(); testNotification();" class="test-badge">🧪 TEST</span>
           </button>
-        </div>
-        <div class="clkwrap">
-          <div class="clk" id="clk">--:--:-- --</div>
-          <div class="datelbl" id="dateLbl">--/---/----</div>
+
+          <div class="clkwrap">
+            <div class="clk" id="clk">--:--:-- --</div>
+            <div class="datelbl" id="dateLbl">--/---/----</div>
+          </div>
         </div>
       </header>
 
@@ -94,10 +89,10 @@
             </div>
             <div class="pc">
               <div class="pc-l">BMI</div>
-              <div class="pc-v" style="color: var(--red)">40.1</div>
+              <div class="pc-v pc-red">40.1</div>
               <div class="pc-s">Obese III</div>
               <div class="bmibar">
-                <div class="bmif" style="width: 80%"></div>
+                <div class="bmif bmi-fill-80"></div>
               </div>
             </div>
             <div class="pc">
@@ -121,98 +116,18 @@
           <div class="dash-top">
             <div class="ring-c">
               <div class="rb-wrap">
-                <svg viewBox="0 0 120 120" style="transform: rotate(-90deg)">
+                <svg viewBox="0 0 120 120" class="ring-svg">
                   <!-- Background Circles -->
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    fill="none"
-                    stroke="var(--bd)"
-                    stroke-width="8"
-                    opacity="0.3"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="44"
-                    fill="none"
-                    stroke="var(--bd)"
-                    stroke-width="8"
-                    opacity="0.3"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="34"
-                    fill="none"
-                    stroke="var(--bd)"
-                    stroke-width="8"
-                    opacity="0.3"
-                  />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="24"
-                    fill="none"
-                    stroke="var(--bd)"
-                    stroke-width="8"
-                    opacity="0.3"
-                  />
+                  <circle class="ring-bg" cx="60" cy="60" r="54" />
+                  <circle class="ring-bg" cx="60" cy="60" r="44" />
+                  <circle class="ring-bg" cx="60" cy="60" r="34" />
+                  <circle class="ring-bg" cx="60" cy="60" r="24" />
 
                   <!-- Progress Rings (2*PI*R) -->
-                  <circle
-                    id="ringP"
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    fill="none"
-                    stroke="var(--blue)"
-                    stroke-width="8"
-                    stroke-dasharray="339.3"
-                    stroke-dashoffset="339.3"
-                    stroke-linecap="round"
-                    style="transition: stroke-dashoffset 1s ease"
-                  />
-                  <circle
-                    id="ringC"
-                    cx="60"
-                    cy="60"
-                    r="44"
-                    fill="none"
-                    stroke="var(--green)"
-                    stroke-width="8"
-                    stroke-dasharray="276.5"
-                    stroke-dashoffset="276.5"
-                    stroke-linecap="round"
-                    style="transition: stroke-dashoffset 1s ease"
-                  />
-                  <circle
-                    id="ringF"
-                    cx="60"
-                    cy="60"
-                    r="34"
-                    fill="none"
-                    stroke="var(--amber)"
-                    stroke-width="8"
-                    stroke-dasharray="213.6"
-                    stroke-dashoffset="213.6"
-                    stroke-linecap="round"
-                    style="transition: stroke-dashoffset 1s ease"
-                  />
-                  <circle
-                    id="ringFib"
-                    cx="60"
-                    cy="60"
-                    r="24"
-                    fill="none"
-                    stroke="var(--teal)"
-                    stroke-width="8"
-                    stroke-dasharray="150.8"
-                    stroke-dashoffset="150.8"
-                    stroke-linecap="round"
-                    style="transition: stroke-dashoffset 1s ease"
-                  />
+                  <circle id="ringP" class="ring-fill ring-p" cx="60" cy="60" r="54" />
+                  <circle id="ringC" class="ring-fill ring-c" cx="60" cy="60" r="44" />
+                  <circle id="ringF" class="ring-fill ring-f" cx="60" cy="60" r="34" />
+                  <circle id="ringFib" class="ring-fill ring-fib" cx="60" cy="60" r="24" />
                 </svg>
                 <div class="ri">
                   <div class="ri-n" id="calVal">0</div>
@@ -242,14 +157,14 @@
           </div>
         </div>
 
-        <div class="p-card challenge-scorecard" id="sidebarChallenge" style="margin-bottom:16px;">
+        <div class="p-card challenge-scorecard" id="sidebarChallenge">
           <div class="sh">Challenge Scorecard</div>
           <div id="sidebarChallengeContent"></div>
         </div>
 
         <div>
           <div class="sh">Water Tracker — Monthly Progress</div>
-          <div class="wgrid" id="wgrid" style="min-height: 200px;"></div>
+          <div id="wgrid" class="wgrid"></div>
         </div>
 
         <div>
@@ -276,77 +191,67 @@
           <div class="sh">Supplements Schedule</div>
           <div class="sql">
             <div class="sq">
-              <div class="sd" style="background: var(--green)"></div>
+              <div class="sd bg-green"></div>
               <div class="sn">Jeera · Saunf · Ajwain</div>
               <div class="st">12:15 PM · 3:30 PM</div>
             </div>
             <div class="sq">
-              <div class="sd" style="background: var(--teal)"></div>
+              <div class="sd bg-teal"></div>
               <div class="sn">Isabgol (2×)</div>
               <div class="st">1:00 PM · 4:00 PM</div>
             </div>
             <div class="sq">
-              <div class="sd" style="background: var(--amber)"></div>
+              <div class="sd bg-amber"></div>
               <div class="sn">Apple Cider Vinegar (2×)</div>
               <div class="st">6:00 AM (post-gym) · 4:15 PM</div>
             </div>
             <div class="sq">
-              <div class="sd" style="background: var(--purple)"></div>
+              <div class="sd bg-purple"></div>
               <div class="sn">Fat Burner Tablet</div>
               <div class="st">3:15 AM (gym days only)</div>
             </div>
             <div class="sq">
-              <div class="sd" style="background: var(--teal)"></div>
+              <div class="sd bg-teal"></div>
               <div class="sn">Green Tea</div>
               <div class="st">12:00 AM (night shift)</div>
             </div>
           </div>
         </div>
 
-        <div style="padding-bottom:8px">
+        <div class="pb-8">
           <div class="sh">Weekly Workout Split</div>
           <div class="wk" id="weekGrid"></div>
         </div>
 
-        <div style="padding-bottom:16px">
+        <div class="pb-16">
           <div class="sh">⚖️ Today's Weight — Log It</div>
           <div class="p-card wt-entry-box" >
-            <div
-              style="display:flex;justify-content:space-between;align-items:flex-start"
-            >
+            <div class="wt-header-row">
               <div>
                 <div class="wt-current-lbl">Current Weight</div>
                 <div
                   class="wt-current-val"
                   id="wtCurVal"
-                  
                 >
                   —
                 </div>
                 <div
                   class="wt-lost"
                   id="wtLostLbl"
-                  
                 ></div>
               </div>
-              <div style="text-align: right">
+              <div class="wt-target-col">
                 <div class="wt-current-lbl">Target</div>
-                <div
-                  style="font-family:var(--mono);font-size:var(--fs-xl);font-weight:900;color:var(--green)"
-                >
+                <div class="wt-target-val">
                   75.0 kg
                 </div>
                 <div
                   class="wt-current-lbl"
                   id="wtRemain"
-                  
                 ></div>
               </div>
             </div>
-            <div
-              class="wt-entry-row"
-              style="margin-top:12px;display:flex;gap:8px"
-            >
+            <div class="wt-input-row">
               <input
                 class="wt-input"
                 type="number"
@@ -368,19 +273,17 @@
           </div>
         </div>
 
-        <div style="padding-bottom:16px">
+        <div class="pb-16">
           <div class="sh">⚙️ App Settings & Data</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="settings-grid">
             <button
-              class="wt-save-btn"
-              style="background:var(--bg3);color:var(--t2);border:1px solid var(--bd)"
+              class="wt-save-btn btn-secondary"
               onclick="exportData()"
             >
               💾 Backup
             </button>
             <button
-              class="wt-save-btn"
-              style="background:var(--bg3);color:var(--t2);border:1px solid var(--bd)"
+              class="wt-save-btn btn-secondary"
               onclick="document.getElementById('importInp').click()"
             >
               📂 Restore
@@ -388,9 +291,10 @@
             <input
               type="file"
               id="importInp"
-              style="display: none"
+              class="hidden"
               onchange="importData(event)"
               accept=".json"
+              title="Import Backup Data"
             />
           </div>
         </div>
@@ -463,36 +367,36 @@
             </div>
           </div>
 
-          <div class="p-card challenge-card" id="challengeCard" style="margin-bottom:18px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-              <div style="font-size:28px;">🏆</div>
+          <div class="p-card challenge-card" id="challengeCard">
+            <div class="challenge-header">
+              <div class="challenge-icon">🏆</div>
               <div>
-                <div style="font-size:15px;font-weight:900;color:var(--t);">90-Day Weight Loss Challenge</div>
-                <div style="font-size:11px;color:var(--t3);">Track every day, lose weight consistently, and follow clean vegetarian meals.</div>
+                <div class="challenge-title">90-Day Weight Loss Challenge</div>
+                <div class="challenge-sub">Track every day, lose weight consistently, and follow clean vegetarian meals.</div>
               </div>
             </div>
-            <div id="challengeSummary" style="font-size:13px;color:var(--t2);line-height:1.6;"></div>
+            <div id="challengeSummary" class="challenge-summary"></div>
           </div>
 
           <div class="tl" id="dietTL"></div>
           <div class="foot">
-            <strong>120kg Extreme Vegetarian Protocol —</strong>
-            <span class="highlight"
+            <span class="foot-title">120kg Extreme Vegetarian Protocol —</span>
+            <span class="highlight bold-yellow"
               >Proprietary high-intensity plan — maximum fat loss through
               metabolic timing.</span
             ><br />
-            📋 Daily Cycle: Job finishes 2:30 AM → Pre-workout activation 3 AM →
+            <span class="foot-cycle">📋 Daily Cycle: Job finishes 2:30 AM → Pre-workout activation 3 AM →
             Gym Training 4–6 AM → Post-workout nutrition 6:15 AM →
-            <strong>Deep Recovery 6:15 AM–12:00 PM</strong>.<br />
-            Wake Up 12 PM → Nutrient-Dense Lunch 1:15 PM → Weight Loss Dinner
+            <strong>Deep Recovery 6:15 AM–12:00 PM</strong>.</span><br />
+            <span class="foot-schedule">Wake Up 12 PM → Nutrient-Dense Lunch 1:15 PM → Weight Loss Dinner
             5:00 PM → Professional Shift 6:30 PM → Nutritional Breaks at 9:30 PM
-            & 12:00 AM.<br />
-            Fat Burner Optimization 3:15 AM (Gym Days Only) · 🏋️ Fit Master Gym,
-            Gota.<br />
-            <span class="highlight" style="font-weight: 900"
-              >Projected Outcome: 5–8 kg sustainable fat loss per month.</span
-            >
-            <div style="margin-top:10px;font-size:12px;color:var(--t3);line-height:1.5;">
+            & 12:00 AM.</span><br />
+            <span class="foot-extra">Fat Burner Optimization 3:15 AM (Gym Days Only) · 🏋️ Fit Master Gym,
+            Gota.</span><br />
+            <div class="highlight-promo">
+              Projected Outcome: 5–8 kg sustainable fat loss per month.
+            </div>
+            <div class="highlight-tip">
               🔥 Challenge tip: rotate protein sources every day and keep meals rich in sprouts, salad, chana, paneer, soya, dal, and jowar roti.
             </div>
           </div>
@@ -512,7 +416,7 @@
         <div class="tc" id="tc-progress">
           <div id="progressContent"></div>
         </div>
-      </main>
+        <main>
     </div>
     <!-- /.layout -->
 
@@ -548,9 +452,7 @@
 
     <!-- Hyper-Advanced AI Rest Timer Overlay -->
     <div id="restTimerOverlay" class="rest-timer-overlay">
-      <div
-        style="font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--gold);margin-bottom:20px;text-transform:uppercase"
-      >
+      <div class="timer-label">
         RESTING...
       </div>
       <div class="rest-timer-ring">
@@ -558,7 +460,7 @@
           width="180"
           height="180"
           viewBox="0 0 180 180"
-          style="transform: rotate(-90deg)"
+          class="timer-svg"
         >
           <circle
             cx="90"
@@ -579,17 +481,16 @@
             stroke-dasharray="502.6"
             stroke-dashoffset="0"
             stroke-linecap="round"
-            style="transition: stroke-dashoffset 1s linear"
+            class="timer-ring-fill"
           ></circle>
         </svg>
         <div id="timerVal" class="rest-timer-val">60</div>
       </div>
-      <div
-        style="margin-top:28px;display:flex;gap:8px"
-      >
+      <div class="timer-actions">
         <button onclick="skipRest()" class="rest-timer-btn">Skip Rest</button>
       </div>
     </div>
     <script src="script.js"></script>
   </body>
 </html>
+
