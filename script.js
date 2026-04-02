@@ -20,13 +20,13 @@ async function requestNotificationPermission() {
     alert("❌ Your browser doesn't support notifications");
     return;
   }
-  
+
   if (Notification.permission === "granted") {
     alert("✅ Reminders already enabled! You will receive diet and water notifications.");
     startAutomaticReminders();
     return;
   }
-  
+
   if (Notification.permission !== "denied") {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
@@ -52,7 +52,7 @@ function sendLocalNotification(title, body, icon = "🔔", delay = 100) {
         });
       } else {
         setTimeout(() => {
-          new Notification(`${icon} ${title}`, { 
+          new Notification(`${icon} ${title}`, {
             body: body,
             tag: "fitos-reminder",
             requireInteraction: true,
@@ -60,14 +60,14 @@ function sendLocalNotification(title, body, icon = "🔔", delay = 100) {
           });
         }, Math.max(0, delay));
       }
-      console.log(`✅ Notification scheduled: ${title} in ${Math.round(delay/1000)}s`);
+      console.log(`✅ Notification scheduled: ${title} in ${Math.round(delay / 1000)}s`);
     } catch (err) {
       console.error("Notification failed:", err);
     }
   }
 }
 
-window.testNotification = function() {
+window.testNotification = function () {
   if (Notification.permission !== "granted") {
     requestNotificationPermission();
   } else {
@@ -79,24 +79,24 @@ window.testNotification = function() {
 // Auto-schedule reminders for diet items
 function startAutomaticReminders() {
   if (Notification.permission !== "granted") return;
-  
+
   const scheduleReminder = (time, title, body, icon) => {
     const [hours, mins] = time.split(":").map(Number);
     const now = new Date();
     let reminderTime = new Date();
     reminderTime.setHours(hours, mins, 0, 0);
-    
+
     if (reminderTime <= now) {
       reminderTime.setDate(reminderTime.getDate() + 1);
     }
-    
+
     const delay = reminderTime - now;
-    console.log(`⏰ Reminder scheduled for ${time}: "${title}" in ${Math.round(delay/60000)} min`);
-    
+    console.log(`⏰ Reminder scheduled for ${time}: "${title}" in ${Math.round(delay / 60000)} min`);
+
     // Offload scheduling to SW for reliability when app is backgrounded
     sendLocalNotification(title, body, icon, delay);
   };
-  
+
   // Schedule all diet reminders
   DIET.forEach(item => {
     if (item.type === "meal" || item.type === "supp") {
@@ -104,7 +104,7 @@ function startAutomaticReminders() {
         meal: "🍱",
         supp: "💊"
       }[item.type] || item.icon || "🔔";
-      
+
       scheduleReminder(
         item.time,
         item.name || item.tag,
@@ -113,7 +113,7 @@ function startAutomaticReminders() {
       );
     }
   });
-  
+
   // Water reminder every 2 hours
   const waterTimes = ["12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "00:00", "02:00"];
   waterTimes.forEach(time => {
@@ -156,18 +156,18 @@ function initializeMobileFeatures() {
   const interactiveElements = document.querySelectorAll('.p-card, .mc, .sq, .ib, .bntab, .wt-glass, .wd, .m-chip, button');
 
   interactiveElements.forEach(element => {
-    element.addEventListener('touchstart', function(e) {
+    element.addEventListener('touchstart', function (e) {
       this.style.transform = 'scale(0.98)';
       this.style.transition = 'transform 0.1s ease';
       haptic([30]); // Light haptic feedback
     }, { passive: true });
 
-    element.addEventListener('touchend', function(e) {
+    element.addEventListener('touchend', function (e) {
       this.style.transform = '';
       this.style.transition = 'transform 0.2s ease';
     }, { passive: true });
 
-    element.addEventListener('touchcancel', function(e) {
+    element.addEventListener('touchcancel', function (e) {
       this.style.transform = '';
       this.style.transition = 'transform 0.2s ease';
     }, { passive: true });
@@ -184,11 +184,11 @@ function initializeMobileFeatures() {
   let startY = 0;
   let isPulling = false;
 
-  document.addEventListener('touchstart', function(e) {
+  document.addEventListener('touchstart', function (e) {
     startY = e.touches[0].clientY;
   }, { passive: true });
 
-  document.addEventListener('touchmove', function(e) {
+  document.addEventListener('touchmove', function (e) {
     if (window.scrollY === 0 && e.touches[0].clientY > startY + 50) {
       isPulling = true;
       // Add visual feedback for pull-to-refresh
@@ -197,7 +197,7 @@ function initializeMobileFeatures() {
     }
   }, { passive: true });
 
-  document.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend', function (e) {
     if (isPulling) {
       document.body.style.transform = '';
       document.body.style.transition = 'transform 0.3s ease';
@@ -207,7 +207,7 @@ function initializeMobileFeatures() {
   }, { passive: true });
 
   // Add native-like loading states
-  window.showLoading = function(element, show = true) {
+  window.showLoading = function (element, show = true) {
     if (show) {
       element.style.opacity = '0.6';
       element.style.pointerEvents = 'none';
@@ -239,14 +239,14 @@ function initializeMobileFeatures() {
   // Improve form inputs for mobile
   const inputs = document.querySelectorAll('input, textarea, select');
   inputs.forEach(input => {
-    input.addEventListener('focus', function() {
+    input.addEventListener('focus', function () {
       // Prevent zoom on iOS by ensuring font-size is 16px+
       if (window.innerWidth <= 768) {
         this.style.fontSize = '16px';
       }
     });
 
-    input.addEventListener('blur', function() {
+    input.addEventListener('blur', function () {
       if (window.innerWidth <= 768) {
         this.style.fontSize = '';
       }
@@ -257,11 +257,11 @@ function initializeMobileFeatures() {
   let startX = 0;
   let currentTab = 0;
 
-  document.addEventListener('touchstart', function(e) {
+  document.addEventListener('touchstart', function (e) {
     startX = e.touches[0].clientX;
   }, { passive: true });
 
-  document.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend', function (e) {
     if (!startX) return;
 
     const endX = e.changedTouches[0].clientX;
@@ -288,7 +288,7 @@ function initializeMobileFeatures() {
 }
 
 // Initialize mobile features when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   initializeMobileFeatures();
   initializeNotifications();
 });
@@ -321,7 +321,7 @@ const CACHE = {
 // Memoized getters with cache invalidation
 function getDietHTML() {
   if (CACHE.dietHTML && !CACHE.needsUpdate('diet')) return CACHE.dietHTML;
-  
+
   renderChallengeCard();
   renderSidebarChallenge();
   const tl = $("dietTL");
@@ -339,7 +339,7 @@ function getDietHTML() {
 
 function getWorkoutHTML(type) {
   if (CACHE.workoutHTML[type] && !CACHE.needsUpdate(type)) return CACHE.workoutHTML[type];
-  
+
   const html = buildWorkoutHTML(type); // Original function
   CACHE.workoutHTML[type] = html;
   CACHE.lastWorkoutUpdate[type] = JSON.stringify(EX[type]);
@@ -397,10 +397,10 @@ const imageObserver = new IntersectionObserver((entries) => {
   });
 }, { rootMargin: '50px' });
 
-  // ============================================================
-  // DATA
-  // ============================================================
-  const DIET = [
+// ============================================================
+// DATA
+// ============================================================
+const DIET = [
   // ── POST-SHIFT: PRE-GYM (after returning home 2:30 AM) ──
   {
     id: "pregym",
@@ -1732,30 +1732,36 @@ function selOpt(mid, btn) {
 function renderChallengeCard() {
   const info = getChallengeInfo();
   const progressPct = Math.min(100, Math.round((info.day / CHALLENGE_DAYS) * 100));
-  const statusText = info.started
-    ? `Today is Day ${info.day} of ${CHALLENGE_DAYS}`
-    : "Challenge not started yet. Tap start to begin your 90-day weight loss journey.";
-  const countText = info.started ? `${info.day}/${CHALLENGE_DAYS}` : `0/${CHALLENGE_DAYS}`;
+  const statusText = info.started ? `Day ${info.day}` : "Challenge not started";
+  const statusSub = info.started ? "of your 90-Day Challenge" : "Tap start to begin your journey.";
+  const countText = info.started ? `${info.day} / ${CHALLENGE_DAYS}` : `0 / ${CHALLENGE_DAYS}`;
   const actionLabel = info.started ? "Restart" : "Start";
   const buttonAction = "startChallenge()";
+  
   const html = `
-    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:200px;">
-        <div style="font-size:13px;font-weight:800;color:var(--t);">${statusText}</div>
+    <div class="neo-card" style="text-align:center !important;">
+      <div class="c-status-lbl">Current Status</div>
+      
+      <div class="t-h1 c-count-val">
+        ${countText}
       </div>
-      <div style="min-width:160px;text-align:right;">
-        <div style="font-size:22px;font-weight:900;color:var(--green);">${countText}</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px;">${info.remaining} days left</div>
+      
+      <div class="t-h3" style="margin-top:12px;color:var(--t)">${statusText} <span class="t-sub">${statusSub}</span></div>
+      <div class="t-sub" style="margin-top:4px;color:var(--amber)">${info.remaining} days remaining</div>
+      
+      <div class="c-progress-wrap">
+        <div class="c-progress-fill" style="width:${progressPct}%;"></div>
+      </div>
+      
+      <div class="fx-row fx-center fx-wrap gap-md">
+        <button class="c-btn-primary" onclick="${buttonAction}">${actionLabel}</button>
+        ${info.started ? `<button class="c-btn-secondary" onclick="resetChallenge()">Reset</button>` : ""}
+      </div>
+      
+      <div class="t-meta" style="margin-top:16px;">
+        Target: Maintain core discipline — 3 clean meals, 4 liters water, consistent training.
       </div>
     </div>
-    <div style="margin-top:14px;height:10px;background:var(--bg4);border-radius:999px;overflow:hidden;">
-      <div style="height:100%;width:${progressPct}%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;"></div>
-    </div>
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <button class="wt-save-btn" style="flex:1;min-width:120px;" onclick="${buttonAction}">${actionLabel}</button>
-      ${info.started ? `<button class="wt-save-btn" style="flex:1;min-width:120px;background:var(--bg3);color:var(--t2);border:1px solid var(--bd);" onclick="resetChallenge()">Reset</button>` : ""}
-    </div>
-    <div style="margin-top:12px;font-size:11px;color:var(--t3);">Stay on track: 3 strong meals, 8 glasses water, 2 fiber boosts, and lean vegetarian protein every day.</div>
   `;
   $("challengeSummary").innerHTML = html;
 }
@@ -1764,20 +1770,20 @@ function renderSidebarChallenge() {
   const info = getChallengeInfo();
   const progressPct = Math.min(100, Math.round((info.day / CHALLENGE_DAYS) * 100));
   const html = `
-    <div style="display:grid;gap:12px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div style="font-size:14px;font-weight:900;color:var(--t);">${info.started ? `Day ${info.day}` : "Challenge paused"}</div>
-        <div style="font-size:12px;color:var(--t3);">${info.remaining} days left</div>
+    <div class="fx-col gap-md">
+      <div class="fx-row fx-between fx-wrap gap-sm">
+        <div class="t-h3" style="color:var(--t)">${info.started ? `Day ${info.day}` : "Challenge paused"}</div>
+        <div class="t-sub">${info.remaining} days left</div>
       </div>
-      <div style="height:8px;background:var(--bg4);border-radius:999px;overflow:hidden;">
-        <div style="height:100%;width:${progressPct}%;background:linear-gradient(90deg,var(--green),var(--blue));"></div>
+      <div class="c-progress-wrap" style="height:8px; margin: 0;">
+        <div class="c-progress-fill" style="width:${progressPct}%;"></div>
       </div>
-      <div style="display:grid;gap:8px;font-size:12px;color:var(--t2);line-height:1.5;">
+      <div class="fx-col gap-sm t-sub" style="color:var(--t2); line-height:1.5;">
         <div>✅ Lean vegetarian meals with poha, chana, sprouts, dal, paneer and soya.</div>
         <div>✅ Maintain 950 kcal, 80g protein, 25g fiber, and 8+ glasses water daily.</div>
         <div>✅ Rotate salads, jowar roti, and low-oil dal each day.</div>
       </div>
-      <button class="wt-save-btn" style="width:100%;min-width:0;" onclick="startChallenge()">${info.started ? "Restart" : "Start 90-Day Challenge"}</button>
+      <button class="wt-save-btn" style="width:100%;" onclick="startChallenge()">${info.started ? "Restart" : "Start 90-Day Challenge"}</button>
     </div>
   `;
   $("sidebarChallengeContent").innerHTML = html;
@@ -1793,15 +1799,15 @@ function renderDiet() {
   DIET.forEach((s) => {
     // Phase dividers
     if (s.id === "pregym")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(251,146,60,0.25))"></div><div class="phase-chip" style="color:var(--orange);border-color:rgba(251,146,60,0.3);background:rgba(251,146,60,0.06)">🌙 Post-Shift — Pre-Gym</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(251,146,60,0.25),transparent)"></div></div>`;
+      html += `<div class="phase-divider"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(251,146,60,0.25))"></div><div class="p-chip" style="color:var(--orange);border-color:rgba(251,146,60,0.3);background:rgba(251,146,60,0.06)">🌙 Post-Shift — Pre-Gym</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(251,146,60,0.25),transparent)"></div></div>`;
     if (s.id === "wake")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(16,185,129,0.25))"></div><div class="phase-chip" style="color:var(--green);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.06)">☀️ Awake — Meal Time</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(16,185,129,0.25),transparent)"></div></div>`;
+      html += `<div class="phase-divider"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(16,185,129,0.25))"></div><div class="p-chip" style="color:var(--green);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.06)">☀️ Awake — Meal Time</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(16,185,129,0.25),transparent)"></div></div>`;
     if (s.id === "brk1")
-      html += `<div class="phase-div"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(75,131,232,0.25))"></div><div class="phase-chip" style="color:var(--blue);border-color:rgba(75,131,232,0.3);background:rgba(75,131,232,0.06)">💼 Night Shift — 6:30 PM to 2:30 AM</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(75,131,232,0.25),transparent)"></div></div>`;
-    
+      html += `<div class="phase-divider"><div class="phase-line" style="background:linear-gradient(90deg,transparent,rgba(75,131,232,0.25))"></div><div class="p-chip" style="color:var(--blue);border-color:rgba(75,131,232,0.3);background:rgba(75,131,232,0.06)">💼 Night Shift — 6:30 PM to 2:30 AM</div><div class="phase-line" style="background:linear-gradient(90deg,rgba(75,131,232,0.25),transparent)"></div></div>`;
+
     const dotC = col(s.color || "green");
     let card = "";
-    
+
     if (s.type === "sleep") {
       card = `<div class="sleep-blk">
         <div class="sleep-blk-ico">🌙</div>
@@ -1821,50 +1827,50 @@ function renderDiet() {
       return;
     } else if (s.type === "gymblock") {
       const wd = WORKOUTS[todayWT()];
-      card = `<div class="gymb morning" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:14px; padding:16px;">
+      card = `<div class="gymb morning neo-card fx-row" onclick="showTab('workout',null);window.scrollTo({top:0,behavior:'smooth'})" style="gap:14px; padding:16px;">
         <div class="gymb-ico" style="flex-shrink:0; font-size:32px;">🌅</div>
-        <div style="flex:1;min-width:0;text-align:left;">
-          <div class="morning-badge" style="margin-bottom:6px;">☀️ Morning Session</div>
-          <div class="gymb-title" style="font-weight:900; font-size:16px; color:var(--t);">${wd.name}</div>
-          <div class="gymb-sub" style="font-size:12px; color:var(--t3); margin-top:4px;">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} kcal</div>
+        <div class="fx-col" style="flex:1;min-width:0;">
+          <div class="morning-badge">☀️ Morning Session</div>
+          <div class="t-h3" style="color:var(--t);">${wd.name}</div>
+          <div class="t-meta">🕓 04:00 AM – 06:00 AM · ${wd.days} · ~${wd.cal} kcal</div>
         </div>
         <div style="font-size:24px; color:var(--gold); opacity:0.6;">↗</div>
       </div>`;
     } else if (s.type === "supp") {
       const macros = s.cal ? `
-        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+        <div class="macro-ribbon">
           <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal}</span></div>
           ${s.p ? `<div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>` : ""}
           ${s.fib ? `<div class="g-chip"><span style="color:var(--teal)">F</span><span>${s.fib}g</span></div>` : ""}
         </div>` : "";
 
-      card = `<div class="p-card sc" style="padding:0; border-top:4px solid ${col(s.color)}; box-shadow:var(--shadow-md);">
-        <div class="sc-header" style="display:flex; align-items:center; gap:12px; padding:16px;">
-          <div style="width:44px; height:44px; border-radius:14px; background:${col(s.color)}15; display:flex; align-items:center; justify-content:center; font-size:24px; border:1px solid ${col(s.color)}20;">${s.icon}</div>
-          <div style="flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
-              <div class="scn" style="color:var(--t); font-weight:900; font-size:15px;">${s.name}</div>
-              <div style="font-size:9px; background:${col(s.color)}12; color:${col(s.color)}; padding:2px 8px; border-radius:20px; font-weight:900; border:1px solid ${col(s.color)}25; text-transform:uppercase; letter-spacing:0.5px;">${s.tag}</div>
+      card = `<div class="neo-card sc" style="padding:0; border-top:4px solid ${col(s.color)};">
+        <div class="d-head">
+          <div class="d-ico" style="background:${col(s.color)}15; border:1px solid ${col(s.color)}20;">${s.icon}</div>
+          <div class="fx-col" style="flex:1; min-width:0;">
+            <div class="fx-row gap-sm" style="margin-bottom:2px;">
+              <div class="t-h3" style="color:var(--t);">${s.name}</div>
+              <div class="p-chip" style="background:${col(s.color)}12; color:${col(s.color)}; border-color:${col(s.color)}25;">${s.tag}</div>
             </div>
-            <div style="font-size:12px; color:var(--t3); font-weight:600;">Scheduled for ${s.disp}</div>
+            <div class="t-sub">Scheduled for ${s.disp}</div>
           </div>
         </div>
         <div style="padding:0 16px 16px; border-top:1px solid var(--bd);">
-          <div style="font-size:13px; color:var(--t2); line-height:1.6; margin-top:12px;">${s.desc}</div>
-          <div style="font-size:12px; color:var(--t3); font-style:italic; line-height:1.5; margin-top:8px; padding-top:8px; border-top:1px dashed var(--bd);">${s.why}</div>
+          <div class="t-sub" style="margin-top:12px; color:var(--t2);">${s.desc}</div>
+          <div class="t-meta" style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--bd);">${s.why}</div>
           ${macros}
         </div>
       </div>`;
     } else {
       const ii = s.items
-        ? `<ul class="il" style="margin-top:14px; border-top:1px solid var(--bd); padding-top:14px; display:block;">${s.items.map((it) => `<li class="ili" style="margin-bottom:6px; color:var(--t2); font-size:13px;">${it}</li>`).join("")}</ul>`
+        ? `<ul class="il">${s.items.map((it) => `<li class="ili">${it}</li>`).join("")}</ul>`
         : "";
       const oi = s.opts
-        ? `<div class="og" id="og_${s.id}" style="margin-top:14px; display:grid; grid-template-columns:1fr; gap:8px;">${s.opts.map((o) => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}" style="text-align:left; justify-content:flex-start; padding:12px 14px; font-weight:700;">${o.id}: ${o.label}</button>`).join("")}</div><div class="odesc" id="od_${s.id}" style="margin-top:10px; padding:10px; background:var(--bg3); border-radius:8px; font-size:12px; color:var(--t2); display:none;"></div>`
+        ? `<div class="og" id="og_${s.id}">${s.opts.map((o) => `<button class="opp" onclick="selOpt('${s.id}',this)" data-desc="${o.desc}">${o.id}: ${o.label}</button>`).join("")}</div><div class="odesc" id="od_${s.id}"></div>`
         : "";
-      
+
       const macroBadges = `
-        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <div class="macro-ribbon">
           <div class="g-chip"><span style="color:var(--gold)">🔥</span><span>${s.cal}</span></div>
           <div class="g-chip"><span style="color:var(--blue)">P</span><span>${s.p}g</span></div>
           ${s.c ? `<div class="g-chip"><span style="color:var(--green)">C</span><span>${s.c}g</span></div>` : ""}
@@ -1873,19 +1879,19 @@ function renderDiet() {
 
       const dailyMenu = todayMenu[s.id];
 
-      card = `<div class="p-card mc" data-id="${s.id}" style="padding:0; box-shadow:var(--shadow-md);">
-        <div class="mch" onclick="togCard(event,'${s.id}')" style="padding:16px; display:flex; align-items:flex-start; gap:12px;">
-          <div class="mcico" style="background:${bg(s.color)}; width:46px; height:46px; border-radius:16px; font-size:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${s.icon}</div>
-          <div class="mcnfo" style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-              <div class="mcnm" style="font-weight:900; font-size:16px; color:var(--t); line-height:1.2;">${s.name}</div>
-              <div class="mctim" style="font-size:12px; color:var(--t3); font-weight:700; white-space:nowrap;">${s.disp}</div>
+      card = `<div class="neo-card d-card mc" data-id="${s.id}">
+        <div class="d-head mch" onclick="togCard(event,'${s.id}')">
+          <div class="d-ico mcico" style="background:${bg(s.color)};">${s.icon}</div>
+          <div class="fx-col gap-xs mcnfo" style="flex:1; min-width:0;">
+            <div class="fx-row fx-between fx-wrap" style="gap:10px;">
+              <div class="t-h3 mcnm" style="color:var(--t);">${s.name}</div>
+              <div class="t-sub mctim">${s.disp}</div>
             </div>
-            <div class="mcsb" style="font-size:12px; color:var(--t3); margin-top:0;">${s.sub}</div>
+            <div class="t-sub mcsb">${s.sub}</div>
             ${macroBadges}
           </div>
         </div>
-        <div class="mcrt" style="padding:0 16px 16px; display:flex; gap:8px; align-items:center;">
+        <div class="d-body mcrt">
           <button class="btn-skip" id="skp_${s.id}" onclick="skipMeal(event,'${s.id}')">✕</button>
           <button class="btn-done" id="chk_${s.id}" onclick="togMeal(event,'${s.id}')">✓</button>
         </div>
@@ -1937,13 +1943,13 @@ function buildWorkoutHTML(type) {
   const isRest = type === "rest";
   const wd = isRest
     ? {
-        name: "Active Recovery",
-        days: "Sunday",
-        color: "rest",
-        cal: 200,
-        tip: "Active recovery burns calories without straining joints. Morning fasted walk is the #1 priority today.",
-        sections: REST_EX.sections,
-      }
+      name: "Active Recovery",
+      days: "Sunday",
+      color: "rest",
+      cal: 200,
+      tip: "Active recovery burns calories without straining joints. Morning fasted walk is the #1 priority today.",
+      sections: REST_EX.sections,
+    }
     : WORKOUTS[type];
   if (!EX[type]) EX[type] = {};
   const allEx = getAllEx(type);
@@ -1955,7 +1961,7 @@ function buildWorkoutHTML(type) {
           <div class="sec-lbl">${sec.name}</div>
           <div class="sec-line"></div>
         </div>
-        <div class="exlist" style="display:flex; flex-direction:column; gap:10px;">`;
+        <div class="fx-col gap-md">`;
     sec.exercises.forEach((ex) => {
       const i = exIdx++;
       if (!EX[type][i]) EX[type][i] = { done: 0, completed: false };
@@ -1963,12 +1969,12 @@ function buildWorkoutHTML(type) {
       const setDots =
         ex.s > 1
           ? `<div class="set-row-new" id="sr_${type}_${i}">${Array.from(
-              { length: ex.s },
-              (_, si) =>
-                `<div class="set-dot-new${EX[type][i].done > si ? " dn" : ""}" onclick="togSet('${type}',${i},${si})">${si + 1}</div>`,
-            ).join("")}</div>`
+            { length: ex.s },
+            (_, si) =>
+              `<div class="set-dot-new${EX[type][i].done > si ? " dn" : ""}" onclick="togSet('${type}',${i},${si})">${si + 1}</div>`,
+          ).join("")}</div>`
           : "";
-      const voiceBtn = `<button class="btn-haptic" onclick="speakEx('${ex.n}. ${ex.d.split("·")[0]}')" style="background:var(--bg3); border:1px solid var(--bd); color:var(--gold); width:32px; height:32px; border-radius:10px; font-size:14px; display:flex; align-items:center; justify-content:center;">🔊</button>`;
+      const voiceBtn = `<button class="btn-haptic fx-row fx-center" onclick="speakEx('${ex.n}. ${ex.d.split("·")[0]}')" style="background:var(--bg3); border:1px solid var(--bd); color:var(--gold); width:32px; height:32px; border-radius:10px; font-size:14px;">🔊</button>`;
       const ck =
         ex.s === 1
           ? `<button class="exck${EX[type][i].completed ? " dn" : ""}" id="ek_${type}_${i}" onclick="togSingle('${type}',${i})" style="width:40px; height:40px; border-radius:12px; font-size:18px;">✓</button>`
@@ -1977,17 +1983,17 @@ function buildWorkoutHTML(type) {
         ? `<img src="${ex.img}" loading="lazy" style="width:100%;height:100%;border-radius:8px;object-fit:contain;background:var(--bg);border:1px solid var(--bd);padding:2px;">`
         : "";
 
-      secHTML += `<div class="p-card ex-card-new${EX[type][i].completed ? " done-ex" : ""}" id="exc_${type}_${i}">
+      secHTML += `<div class="neo-card ex-card-new${EX[type][i].completed ? " done-ex" : ""}" id="exc_${type}_${i}">
         <div class="ex-img-wrap">${imgSrc}</div>
-        <div class="ex-info-new">
-          <div class="ex-title-new" style="display:flex; align-items:flex-start; gap:8px;">
+        <div class="ex-info-new fx-col">
+          <div class="fx-row gap-sm" style="align-items:flex-start;">
             <div class="ex-num-new">${i + 1}</div>
-            <div class="exnm" style="font-size:16px; font-weight:800; color:var(--t); line-height:1.2;">${ex.n}</div>
+            <div class="t-h3 exnm" style="color:var(--t);">${ex.n}</div>
           </div>
-          <div class="exdt" style="font-size:12px; margin-top:4px; opacity:0.8;">${ex.d}</div>
-          <div style="display:flex; gap:6px; margin-top:10px;">
-            <div class="extbadge" style="font-size:10px; ${tb}">${ex.t}</div>
-            ${ex.s > 1 ? `<div style="font-size:10px; font-weight:800; color:var(--t3); background:var(--bg3); padding:3px 8px; border-radius:12px; border:1px solid var(--bd)">${ex.s} Sets</div>` : ""}
+          <div class="t-sub exdt" style="margin-top:4px; opacity:0.8;">${ex.d}</div>
+          <div class="fx-row gap-sm" style="margin-top:10px;">
+            <div class="extbadge" style="${tb}">${ex.t}</div>
+            ${ex.s > 1 ? `<div class="p-chip" style="color:var(--t3); background:var(--bg3); border:1px solid var(--bd)">${ex.s} Sets</div>` : ""}
           </div>
         </div>
         <div class="ex-actions-new">
@@ -2074,21 +2080,22 @@ function buildWorkoutHTML(type) {
           icon: "⚡",
         };
         const lbl = typeLabels[t] || t;
-        return `<div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow-sm);">
-            <div style="font-size:20px; background:${tc.c}15; width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; border:1px solid ${tc.c}25;">${tc.icon}</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:900;color:var(--t)">${lbl}</div>
-              <div style="font-size:11px;color:var(--t3);margin-top:2px; font-weight:700;">${cnt} ex · <span style="color:${tc.c}">${setCounts[t]} sets</span></div>
+        return `
+          <div class="neo-card fx-row gap-sm" style="padding:12px 14px; margin:0;">
+            <div class="d-ico" style="background:${tc.c}15; border:1px solid ${tc.c}25; width:38px; height:38px; border-radius:10px;">${tc.icon}</div>
+            <div class="fx-col" style="flex:1;">
+              <div class="t-h3" style="color:var(--t)">${lbl}</div>
+              <div class="t-meta" style="margin-top:2px;">${cnt} ex · <span style="color:${tc.c}">${setCounts[t]} sets</span></div>
             </div>
           </div>`;
       })
       .join("");
     breakdownHTML = `
         <div style="border-top:1px solid var(--bd);margin-top:20px;padding-top:20px">
-          <div style="font-size:11px;font-weight:900;letter-spacing:1px;color:${wc};text-transform:uppercase;margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <div class="fx-row gap-sm" style="font-size:11px;font-weight:900;letter-spacing:1px;color:${wc};text-transform:uppercase;margin-bottom:12px;">
             <span style="background:${wc}22; padding:4px 8px; border-radius:6px;">📊</span> Exercise Breakdown
           </div>
-          <div class="breakdown-wrapper" style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;-ms-overflow-style:none;">
+          <div class="breakdown-wrapper fx-row gap-sm" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;">
             <div class="g-chip" style="background:${wc}12; border-color:${wc}25; color:${wc}"><span>🏋️</span><span>${machines} Machines</span></div>
             <div class="g-chip" style="background:rgba(139,92,246,0.1); border-color:rgba(139,92,246,0.2); color:var(--purple)"><span>🔵</span><span>${dumbbells} DBs</span></div>
             <div class="g-chip" style="background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.2); color:var(--red)"><span>🔴</span><span>${barbells} BBs</span></div>
@@ -2107,59 +2114,59 @@ function buildWorkoutHTML(type) {
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   const quoteHTML = `
-      <div style="text-align:center; padding:40px 20px; border-top:1px dashed var(--bd); margin-top:30px; opacity:0.8; background:linear-gradient(to bottom, transparent, var(--bg3)); border-radius:0 0 24px 24px;">
-        <div style="font-size:16px; font-style:italic; font-family:'Manrope',sans-serif; font-weight:800; color:var(--t2); line-height:1.6;">"${randomQuote}"</div>
-        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-top:12px; font-weight:900; color:var(--gold);">FitOS Motivation · Keep Pushing</div>
+      <div class="fx-col fx-center" style="padding:40px 20px; border-top:1px dashed var(--bd); margin-top:30px; opacity:0.8; background:linear-gradient(to bottom, transparent, var(--bg3)); border-radius:0 0 24px 24px;">
+        <div class="t-h3" style="font-style:italic; color:var(--t2); line-height:1.6;">"${randomQuote}"</div>
+        <div class="t-sub" style="text-transform:uppercase; letter-spacing:1px; margin-top:12px; color:var(--gold);">FitOS Motivation · Keep Pushing</div>
       </div>`;
 
   if (isRest) {
-    return `<div class="p-card wo-header" style="border-top:6px solid var(--t3); background:var(--bg2); margin-bottom:20px; padding:32px 24px; text-align:center; box-shadow:var(--shadow-lg);">
+    return `<div class="neo-card wo-header" style="border-top:6px solid var(--t3); text-align:center;">
             <div style="font-size:52px; margin-bottom:16px; animation: float 3s ease-in-out infinite;">🌙</div>
             <div class="wo-day" style="color:var(--t); font-size:32px; font-weight:900; letter-spacing:-1.2px;">Recovery Mode</div>
             <div class="wo-meta" style="font-size:13px; font-weight:700; color:var(--t3); margin-top:6px; text-transform:uppercase; letter-spacing:1px;">Sunday · Active Rest & Reset</div>
             <div style="background:var(--bg3); padding:20px; border-radius:20px; font-size:14px; font-style:italic; border:1px solid var(--bd); max-width:400px; margin:24px auto; line-height:1.6; color:var(--t2);">
               "${wd.tip}"
             </div>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:32px;">
-                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">💧</div><div style="font-size:11px; font-weight:900; color:var(--t3);">HYDRATE</div></div>
-                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">🥗</div><div style="font-size:11px; font-weight:900; color:var(--t3);">CLEAN DIET</div></div>
-                <div style="text-align:center;"><div style="font-size:28px; margin-bottom:6px;">🧘</div><div style="font-size:11px; font-weight:900; color:var(--t3);">STRETCH</div></div>
+            <div class="fx-row fx-center fx-between" style="margin-top:32px;">
+                <div class="fx-col fx-center"><div style="font-size:28px; margin-bottom:6px;">💧</div><div class="t-sub">HYDRATE</div></div>
+                <div class="fx-col fx-center"><div style="font-size:28px; margin-bottom:6px;">🥗</div><div class="t-sub">CLEAN DIET</div></div>
+                <div class="fx-col fx-center"><div style="font-size:28px; margin-bottom:6px;">🧘</div><div class="t-sub">STRETCH</div></div>
             </div>
           </div>
           <div style="padding:0 4px">${secHTML}</div>
           ${quoteHTML}`;
   }
 
-  return `<div class="p-card wo-header" style="border-top:6px solid ${wc}; background:var(--bg2); margin-bottom:16px; padding:18px; border-radius:22px; box-shadow:var(--shadow-lg);">
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:nowrap; min-width:0;">
-      <div class="ex-num-new" style="background:${wc}; color:white; width:40px; height:40px; font-size:18px; font-weight:900; border-radius:14px; box-shadow:0 6px 16px ${wc}33; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${wd.name.charAt(0)}</div>
-      <div style="flex:1 1 auto; min-width:0;">
+  return `<div class="neo-card wo-header" style="border-top:6px solid ${wc};">
+    <div class="fx-row gap-md" style="margin-bottom:16px; flex-wrap:nowrap; min-width:0;">
+      <div class="ex-num-new fx-center" style="background:${wc}; color:white; width:40px; height:40px; font-size:18px; font-weight:900; border-radius:14px; box-shadow:0 6px 16px ${wc}33; display:flex; flex-shrink:0;">${wd.name.charAt(0)}</div>
+      <div class="fx-col" style="flex:1 1 auto; min-width:0;">
         <div class="wo-day" style="color:var(--t); font-size:24px; font-weight:900; letter-spacing:-0.8px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${wd.name}</div>
         <div class="wo-meta" style="font-size:11px; font-weight:800; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${wd.days} · Fit Master Gym</div>
       </div>
-      <div style="font-size:10px; font-weight:900; background:var(--bg3); color:var(--t2); padding:6px 12px; border-radius:22px; border:1px solid var(--bd); text-transform:uppercase; letter-spacing:1px; white-space:nowrap;">🌅 4 AM – 6 AM</div>
+      <div class="p-chip" style="background:var(--bg3); color:var(--t2); padding:6px 12px; border:1px solid var(--bd);">🌅 4 AM – 6 AM</div>
     </div>
-    <div class="wo-tip" style="background:var(--bg3); padding:14px 18px; border-radius:18px; font-size:12px; border:1px solid var(--bd); margin-bottom:24px; font-style:italic; line-height:1.6; color:var(--t2);">"${wd.tip}"</div>
+    <div class="wo-tip t-meta" style="background:var(--bg3); padding:14px 18px; border-radius:18px; border:1px solid var(--bd); margin-bottom:24px;">"${wd.tip}"</div>
     <div class="wo-stats" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
-      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
-        <div class="ws-v" id="wod_${type}" style="color:${wc}; font-weight:900; font-size:20px; font-family:var(--mono);">${done}/${allEx.length}</div>
-        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Ex</div>
+      <div class="stat-box">
+        <div class="ws-v s-val" id="wod_${type}" style="color:${wc};">${done}/${allEx.length}</div>
+        <div class="ws-l s-lbl">Ex</div>
       </div>
-      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
-        <div class="ws-v" style="color:var(--amber); font-weight:900; font-size:20px; font-family:var(--mono);">${totalSets}</div>
-        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Sets</div>
+      <div class="stat-box">
+        <div class="ws-v s-val" style="color:var(--amber);">${totalSets}</div>
+        <div class="ws-l s-lbl">Sets</div>
       </div>
-      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
-        <div class="ws-v" style="color:var(--red); font-weight:900; font-size:20px; font-family:var(--mono);">~${wd.cal}</div>
-        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Kcal</div>
+      <div class="stat-box">
+        <div class="ws-v s-val" style="color:var(--red);">~${wd.cal}</div>
+        <div class="ws-l s-lbl">Kcal</div>
       </div>
-      <div style="text-align:center; background:var(--bg2); padding:12px 6px; border-radius:18px; border:1px solid var(--bd); box-shadow:var(--shadow-sm);">
-        <div class="ws-v" style="color:var(--green); font-weight:900; font-size:20px; font-family:var(--mono);">${Math.round(pct)}%</div>
-        <div class="ws-l" style="font-size:9px; font-weight:900; color:var(--t3); margin-top:4px; text-transform:uppercase; letter-spacing:1px;">Prog</div>
+      <div class="stat-box">
+        <div class="ws-v s-val" style="color:var(--green);">${Math.round(pct)}%</div>
+        <div class="ws-l s-lbl">Prog</div>
       </div>
     </div>
-    <div class="progbar" style="height:8px; background:var(--bg4); border-radius:20px; margin-bottom:20px; overflow:hidden; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);">
-      <div class="progfill" id="pb_${type}" style="width:${pct}%; height:100%; background:linear-gradient(90deg, ${wc}, ${wc}aa); border-radius:20px; transition:width 1s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+    <div class="c-progress-wrap" style="height:8px; margin-bottom:20px;">
+      <div class="progfill" id="pb_${type}" style="width:${pct}%; height:100%; background:linear-gradient(90deg, ${wc}, ${wc}aa); border-radius:10px; transition:width 1s ease;"></div>
     </div>
     ${breakdownHTML}
   </div>
@@ -2275,70 +2282,70 @@ function buildAllWorkouts() {
         </div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:24px">
           ${dayOrder
-            .map((di) => {
-              const dname = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
-                di
-              ];
-              const dtype = {
-                1: "back",
-                2: "chest",
-                3: "legs",
-                4: "back",
-                5: "chest",
-                6: "legs",
-                0: "rest",
-              }[di];
-              const wc = WCOL[dtype] || "var(--t3)";
-              const isToday = di === todayIdx;
-              const icons = { back: "💪", chest: "🎯", legs: "🦵", rest: "😴" };
-              return `<div style="text-align:center;padding:12px 4px;background:${isToday ? "rgba(212,168,71,0.08)" : "var(--bg2)"};border:1px solid ${isToday ? "var(--gold)" : "var(--bd)"};border-radius:14px; transition:all 0.3s ease; ${isToday ? "box-shadow:0 8px 20px rgba(198,146,10,0.15)" : ""}">
+      .map((di) => {
+        const dname = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+          di
+        ];
+        const dtype = {
+          1: "back",
+          2: "chest",
+          3: "legs",
+          4: "back",
+          5: "chest",
+          6: "legs",
+          0: "rest",
+        }[di];
+        const wc = WCOL[dtype] || "var(--t3)";
+        const isToday = di === todayIdx;
+        const icons = { back: "💪", chest: "🎯", legs: "🦵", rest: "😴" };
+        return `<div style="text-align:center;padding:12px 4px;background:${isToday ? "rgba(212,168,71,0.08)" : "var(--bg2)"};border:1px solid ${isToday ? "var(--gold)" : "var(--bd)"};border-radius:14px; transition:all 0.3s ease; ${isToday ? "box-shadow:0 8px 20px rgba(198,146,10,0.15)" : ""}">
               <div style="font-size:18px;margin-bottom:4px; filter:${isToday ? "none" : "grayscale(1) opacity(0.6)"}">${icons[dtype]}</div>
               <div style="font-size:10px;font-weight:900;color:${isToday ? "var(--gold)" : "var(--t2)"}">${dname}</div>
               <div style="font-size:9px;color:var(--t3);margin-top:2px;font-weight:800;text-transform:uppercase;letter-spacing:0.3px">${dtype === "rest" ? "Rest" : dtype}</div>
               ${isToday ? `<div style="width:5px;height:5px;background:var(--gold);border-radius:50%;margin:6px auto 0; box-shadow:0 0 8px var(--gold)"></div>` : ""}
             </div>`;
-            })
-            .join("")}
+      })
+      .join("")}
         </div>
 
         <!-- Each workout type card -->
         ${types
-          .map((type) => {
-            const wd =
-              type === "rest"
-                ? {
-                    name: "Active Recovery",
-                    days: "Sunday",
-                    cal: 200,
-                    sections: REST_EX.sections,
-                  }
-                : WORKOUTS[type];
-            const wc = WCOL[type] || "var(--t3)";
-            const allEx = getAllEx(type);
-            const totalSets = allEx.reduce((a, e) => a + (e.s || 1), 0);
-            const counts = {},
-              setCounts = {};
-            allEx.forEach((ex) => {
-              const t = ex.t || "other";
-              counts[t] = (counts[t] || 0) + 1;
-              setCounts[t] = (setCounts[t] || 0) + (ex.s || 1);
-            });
+      .map((type) => {
+        const wd =
+          type === "rest"
+            ? {
+              name: "Active Recovery",
+              days: "Sunday",
+              cal: 200,
+              sections: REST_EX.sections,
+            }
+            : WORKOUTS[type];
+        const wc = WCOL[type] || "var(--t3)";
+        const allEx = getAllEx(type);
+        const totalSets = allEx.reduce((a, e) => a + (e.s || 1), 0);
+        const counts = {},
+          setCounts = {};
+        allEx.forEach((ex) => {
+          const t = ex.t || "other";
+          counts[t] = (counts[t] || 0) + 1;
+          setCounts[t] = (setCounts[t] || 0) + (ex.s || 1);
+        });
 
-            const muscleChips = Object.entries(counts)
-              .map(([t, cnt]) => {
-                const tc = WCOL[t] || "var(--t2)";
-                return `<div class="g-chip" style="color:${tc}; border-color:${tc}33"><span>${cnt}</span><span style="opacity:0.7">${t}</span></div>`;
-              })
-              .join("");
+        const muscleChips = Object.entries(counts)
+          .map(([t, cnt]) => {
+            const tc = WCOL[t] || "var(--t2)";
+            return `<div class="g-chip" style="color:${tc}; border-color:${tc}33"><span>${cnt}</span><span style="opacity:0.7">${t}</span></div>`;
+          })
+          .join("");
 
-            const exRows = wd.sections
-              .map((sec) => {
-                const exList = sec.exercises
-                  .map((ex, i) => {
-                    const imgSrc = ex.img
-                      ? `<div style="width:44px; height:44px; min-width:44px; border-radius:10px; overflow:hidden; background:var(--bg3); border:1px solid var(--bd); flex-shrink:0;"><img src="${ex.img}" loading="lazy" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>`
-                      : "";
-                    return `<div style="padding:10px 14px; display:flex; align-items:flex-start; gap:10px; border-top:1px solid var(--bd); box-sizing:border-box; max-width:100%;">
+        const exRows = wd.sections
+          .map((sec) => {
+            const exList = sec.exercises
+              .map((ex, i) => {
+                const imgSrc = ex.img
+                  ? `<div style="width:44px; height:44px; min-width:44px; border-radius:10px; overflow:hidden; background:var(--bg3); border:1px solid var(--bd); flex-shrink:0;"><img src="${ex.img}" loading="lazy" style="width:100%;height:100%;object-fit:contain;border-radius:9px;"></div>`
+                  : "";
+                return `<div style="padding:10px 14px; display:flex; align-items:flex-start; gap:10px; border-top:1px solid var(--bd); box-sizing:border-box; max-width:100%;">
                 <div style="font-size:9px; font-weight:900; color:var(--gold); min-width:18px; padding-top:2px; text-align:center;">${i + 1}</div>
                 ${imgSrc}
                 <div style="flex:1; min-width:0;">
@@ -2347,16 +2354,16 @@ function buildAllWorkouts() {
                   <div style="display:inline-block; font-size:9px; font-weight:700; padding:2px 8px; border-radius:8px; background:rgba(198,146,10,.07); color:var(--gold); margin-top:4px;">${ex.t}</div>
                 </div>
               </div>`;
-                  })
-                  .join("");
-                return `<div style="margin-bottom:8px">
+              })
+              .join("");
+            return `<div style="margin-bottom:8px">
               <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:var(--t2); text-transform:uppercase; padding:10px 14px; background:rgba(0,0,0,0.02)">${sec.name}</div>
               ${exList}
             </div>`;
-              })
-              .join("");
+          })
+          .join("");
 
-            return `<div class="p-card mc" id="allc_${type}" style="padding:0; margin-bottom:14px; cursor:pointer; overflow:hidden;">
+        return `<div class="p-card mc" id="allc_${type}" style="padding:0; margin-bottom:14px; cursor:pointer; overflow:hidden;">
             <div class="mch" onclick="window.togAllCard('${type}')" style="padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; -webkit-user-select:none; user-select:none;">
               <div style="background:${wc}18; color:${wc}; width:48px; height:48px; min-width:48px; border-radius:13px; font-size:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${type === "back" ? "💪" : type === "chest" ? "🎯" : type === "rest" ? "😴" : "🦵"}</div>
               <div style="flex:1; min-width:0;">
@@ -2372,8 +2379,8 @@ function buildAllWorkouts() {
             </div>
             <div class="mcb" style="border-top:1px solid var(--bd); display:none; max-height:70vh; overflow-y:auto; -webkit-overflow-scrolling:touch;">${exRows}</div>
           </div>`;
-          })
-          .join("")}
+      })
+      .join("")}
       </div>`;
 
   document.getElementById("allworkoutscontent").innerHTML = html;
@@ -2454,14 +2461,14 @@ function loadStore() {
       saveStore(store);
       return store;
     }
-  } catch (e) {}
+  } catch (e) { }
   return { weightLog: [], dailyLog: {}, challengeStarted: false, challengeStartDate: null };
 }
 
 function saveStore(store) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify(store));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function getToday(store) {
@@ -2627,19 +2634,19 @@ function buildProgressTab() {
           <div class="wt-chart-title">⚖️ Weight Trend — Last ${chartLog.length} Logs</div>
           <div class="wt-bars">
             ${chartLog
-              .map((e) => {
-                const h = Math.max(
-                  4,
-                  Math.round(((maxW - e.weight) / (maxW - minW)) * 70 + 10),
-                );
-                const shortDate = e.date.slice(5).replace("-", "/");
-                return `<div class="wt-bar-col">
+        .map((e) => {
+          const h = Math.max(
+            4,
+            Math.round(((maxW - e.weight) / (maxW - minW)) * 70 + 10),
+          );
+          const shortDate = e.date.slice(5).replace("-", "/");
+          return `<div class="wt-bar-col">
                 <div class="wt-bar-val">${e.weight}</div>
                 <div class="wt-bar" style="height:${h}px"></div>
                 <div class="wt-bar-lbl">${shortDate}</div>
               </div>`;
-              })
-              .join("")}
+        })
+        .join("")}
           </div>
         </div>`;
   } else {
@@ -2781,14 +2788,13 @@ function buildProgressTab() {
         <div class="sh" style="margin-bottom:10px">📅 Last 7 Days — Daily Log</div>
         ${dailyRows || '<div style="color:var(--t3);font-size:12px;text-align:center;padding:16px">Start checking off meals & water to see your log!</div>'}
 
-        ${
-          log.length
-            ? `
+        ${log.length
+      ? `
           <div class="sh" style="margin:14px 0 8px">⚖️ All Weight Entries</div>
           <div class="wlog-list">${logRows}</div>
         `
-            : ""
-        }
+      : ""
+    }
       `;
 }
 
@@ -2900,7 +2906,7 @@ function buildWater() {
   const g = $("wgrid");
   if (!g) return;
   const w = S.water || 0;
-  
+
   // Hydration status logic
   let status = "Keep going! 💧";
   let color = "var(--t3)";
@@ -2921,15 +2927,15 @@ function buildWater() {
 
       <div class="wt-grid">
         ${Array.from({ length: 16 })
-          .map(
-            (_, i) => `
+      .map(
+        (_, i) => `
           <button class="wt-glass ${i < w ? "filled" : ""}" onclick="addWater(${i < w ? -1 : 1})" data-index="${i}">
             <div class="wt-glass-icon">${i < w ? "🌊" : "🧊"}</div>
             <div class="wt-glass-fill"></div>
           </button>
         `,
-          )
-          .join("")}
+      )
+      .join("")}
       </div>
 
       <div class="wt-status" style="text-align:center; margin-bottom:12px; font-weight:800; font-size:14px; color:${color}; animation: float-sm 3s ease-in-out infinite;">${status}</div>
@@ -3080,13 +3086,13 @@ pStyle.innerHTML = `
       .topbar {
         backdrop-filter: blur(20px) saturate(180%) !important;
         -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        background: rgba(253, 250, 244, 0.95) !important;
+        background: rgba(17, 17, 17, 0.85) !important;
         z-index: 99998 !important;
       }
       .botnav {
         backdrop-filter: blur(20px) saturate(180%) !important;
         -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        background: rgba(253, 250, 244, 0.98) !important;
+        background: rgba(17, 17, 17, 0.95) !important;
         z-index: 99999 !important;
         pointer-events: all !important;
       }
@@ -3101,7 +3107,7 @@ pStyle.innerHTML = `
         display: flex; flex-direction: column; gap: 8px; z-index: 99990; pointer-events: none;
       }
       .ftoast {
-        background: rgba(10, 22, 40, 0.95); color: #FFF;
+        background: rgba(10, 22, 40, 0.95); color: #ffffffff;
         padding: 12px 24px; border-radius: 30px;
         font-size: 14px; font-weight: 700; font-family: 'Manrope', sans-serif;
         box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
