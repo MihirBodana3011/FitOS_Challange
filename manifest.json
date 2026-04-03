@@ -1,0 +1,16 @@
+{
+  "name": "FitOS Challenge",
+  "short_name": "FitOS",
+  "description": "Premium 90-Day Challenge Tracker",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ff6b1a",
+  "icons": [
+    {
+      "src": "./icons/fitos_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

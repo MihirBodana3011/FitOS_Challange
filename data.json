@@ -1,0 +1,763 @@
+{
+  "DAY_NAMES": [
+    "sun",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat"
+  ],
+  "DAY_SHORT": [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
+  "DAY_WORKOUT_TYPE": {
+    "mon": "pull",
+    "tue": "push",
+    "wed": "power",
+    "thu": "pull",
+    "fri": "push",
+    "sat": "power",
+    "sun": "rest"
+  },
+  "WORKOUTS": {
+    "pull": {
+      "label": "Back + Biceps",
+      "short": "PULL DAY",
+      "color": "#ff6b1a",
+      "days": "Mon & Thu",
+      "groups": [
+        {
+          "name": "Warm-Up",
+          "icon": "\ud83d\udd25",
+          "exercises": [
+            {
+              "id": "wu1",
+              "name": "Jumping Jacks",
+              "sets": 2,
+              "reps": 30,
+              "logWeight": false
+            },
+            {
+              "id": "wu2",
+              "name": "Arm Circles",
+              "sets": 2,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "wu3",
+              "name": "Torso Twists",
+              "sets": 2,
+              "reps": 15,
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Back",
+          "icon": "\ud83c\udfaf",
+          "exercises": [
+            {
+              "id": "b1",
+              "name": "Lat Pulldown",
+              "sets": 4,
+              "reps": 12
+            },
+            {
+              "id": "b2",
+              "name": "Bent-over Barbell Row",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "b3",
+              "name": "Seated Cable Row",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "b4",
+              "name": "Single Arm Cable Row",
+              "sets": 3,
+              "reps": 12,
+              "note": "Each side"
+            },
+            {
+              "id": "b5",
+              "name": "Straight Arm Pulldown",
+              "sets": 3,
+              "reps": 15
+            },
+            {
+              "id": "b6",
+              "name": "Machine Reverse Fly",
+              "sets": 3,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Biceps",
+          "icon": "\ud83d\udcaa",
+          "exercises": [
+            {
+              "id": "bi1",
+              "name": "Barbell Curl",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "bi2",
+              "name": "Hammer Curl",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "bi3",
+              "name": "Preacher Curl",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "bi4",
+              "name": "Concentration Curl",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "bi5",
+              "name": "Rope Hammer Curl",
+              "sets": 3,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Forearms",
+          "icon": "\ud83e\udd1b",
+          "exercises": [
+            {
+              "id": "f1",
+              "name": "Barbell Wrist Curl",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "f2",
+              "name": "Reverse Wrist Curl",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Cardio Finish",
+          "icon": "\ud83c\udfc3",
+          "exercises": [
+            {
+              "id": "c1",
+              "name": "Stair Climber",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            },
+            {
+              "id": "c2",
+              "name": "Treadmill Incline Walk",
+              "sets": 1,
+              "reps": null,
+              "time": "15 min",
+              "logWeight": false
+            },
+            {
+              "id": "c3",
+              "name": "Cross Trainer",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            }
+          ]
+        }
+      ]
+    },
+    "push": {
+      "label": "Chest + Triceps + Abs",
+      "short": "PUSH DAY",
+      "color": "#38bdf8",
+      "days": "Tue & Fri",
+      "groups": [
+        {
+          "name": "Warm-Up",
+          "icon": "\ud83d\udd25",
+          "exercises": [
+            {
+              "id": "wu1",
+              "name": "Jumping Jacks",
+              "sets": 2,
+              "reps": 30,
+              "logWeight": false
+            },
+            {
+              "id": "wu2",
+              "name": "Arm Circles",
+              "sets": 2,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "wu3",
+              "name": "Torso Twists",
+              "sets": 2,
+              "reps": 15,
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Chest",
+          "icon": "\ud83c\udfaf",
+          "exercises": [
+            {
+              "id": "ch1",
+              "name": "Flat Bench Press",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "ch2",
+              "name": "Incline DB Press",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "ch3",
+              "name": "Decline Chest Press",
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "id": "ch4",
+              "name": "Pec Deck Fly",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "ch5",
+              "name": "Flat DB Fly",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "ch6",
+              "name": "Cable Crossover",
+              "sets": 3,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Triceps",
+          "icon": "\ud83d\udcaa",
+          "exercises": [
+            {
+              "id": "tr1",
+              "name": "Cable Pushdowns",
+              "sets": 4,
+              "reps": 12
+            },
+            {
+              "id": "tr2",
+              "name": "Overhead DB Extension",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "tr3",
+              "name": "Skull Crushers (EZ Bar)",
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "id": "tr4",
+              "name": "Bench Dips",
+              "sets": 3,
+              "reps": 15,
+              "logWeight": false
+            },
+            {
+              "id": "tr5",
+              "name": "Rope Pushdowns",
+              "sets": 3,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Abs",
+          "icon": "\ud83d\udd32",
+          "exercises": [
+            {
+              "id": "ab1",
+              "name": "Cable Crunches",
+              "sets": 4,
+              "reps": 15
+            },
+            {
+              "id": "ab2",
+              "name": "Hanging Knee Raises",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "ab3",
+              "name": "Plank",
+              "sets": 3,
+              "reps": null,
+              "time": "60 sec",
+              "logWeight": false
+            },
+            {
+              "id": "ab4",
+              "name": "Russian Twists",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "ab5",
+              "name": "Bicycle Crunches",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "ab6",
+              "name": "Leg Raises",
+              "sets": 3,
+              "reps": 15,
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Cardio Finish",
+          "icon": "\ud83c\udfc3",
+          "exercises": [
+            {
+              "id": "c1",
+              "name": "Stair Climber",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            },
+            {
+              "id": "c2",
+              "name": "Treadmill Incline Walk",
+              "sets": 1,
+              "reps": null,
+              "time": "15 min",
+              "logWeight": false
+            },
+            {
+              "id": "c3",
+              "name": "Cross Trainer",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            }
+          ]
+        }
+      ]
+    },
+    "power": {
+      "label": "Legs + Shoulders",
+      "short": "POWER DAY",
+      "color": "#a78bfa",
+      "days": "Wed & Sat",
+      "groups": [
+        {
+          "name": "Warm-Up",
+          "icon": "\ud83d\udd25",
+          "exercises": [
+            {
+              "id": "wu1",
+              "name": "Cycling (Warm-up)",
+              "sets": 1,
+              "reps": null,
+              "time": "5 min",
+              "logWeight": false
+            },
+            {
+              "id": "wu2",
+              "name": "Jumping Jacks",
+              "sets": 2,
+              "reps": 30,
+              "logWeight": false
+            },
+            {
+              "id": "wu3",
+              "name": "Mobility Work",
+              "sets": 1,
+              "reps": null,
+              "time": "5 min",
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Quads",
+          "icon": "\ud83e\uddb5",
+          "exercises": [
+            {
+              "id": "q1",
+              "name": "Barbell Back Squat",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "q2",
+              "name": "Sumo Squat",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "q3",
+              "name": "Leg Press",
+              "sets": 4,
+              "reps": 12
+            },
+            {
+              "id": "q4",
+              "name": "Hack Squat",
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "id": "q5",
+              "name": "Leg Extensions",
+              "sets": 3,
+              "reps": 15
+            },
+            {
+              "id": "q6",
+              "name": "Walking Lunges",
+              "sets": 3,
+              "reps": 12,
+              "note": "Each leg"
+            },
+            {
+              "id": "q7",
+              "name": "Box Step-ups",
+              "sets": 3,
+              "reps": 12,
+              "note": "Each leg",
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Hamstrings / Glutes",
+          "icon": "\ud83c\udf51",
+          "exercises": [
+            {
+              "id": "h1",
+              "name": "Lying Leg Curls",
+              "sets": 4,
+              "reps": 12
+            },
+            {
+              "id": "h2",
+              "name": "Seated Leg Curls",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "h3",
+              "name": "Romanian Deadlift",
+              "sets": 3,
+              "reps": 10
+            },
+            {
+              "id": "h4",
+              "name": "Good Mornings",
+              "sets": 3,
+              "reps": 12,
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Calves",
+          "icon": "\ud83e\uddb6",
+          "exercises": [
+            {
+              "id": "ca1",
+              "name": "Standing Calf Raise",
+              "sets": 4,
+              "reps": 20
+            },
+            {
+              "id": "ca2",
+              "name": "Seated Calf Raise",
+              "sets": 3,
+              "reps": 20
+            },
+            {
+              "id": "ca3",
+              "name": "Leg Press Calf Raise",
+              "sets": 3,
+              "reps": 20
+            }
+          ]
+        },
+        {
+          "name": "Shoulders",
+          "icon": "\ud83c\udfaf",
+          "exercises": [
+            {
+              "id": "sh1",
+              "name": "Overhead Shoulder Press",
+              "sets": 4,
+              "reps": 10
+            },
+            {
+              "id": "sh2",
+              "name": "Dumbbell Lateral Raise",
+              "sets": 4,
+              "reps": 15
+            },
+            {
+              "id": "sh3",
+              "name": "Front Raise",
+              "sets": 3,
+              "reps": 12
+            },
+            {
+              "id": "sh4",
+              "name": "Face Pulls (Cable)",
+              "sets": 3,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Cardio Finish",
+          "icon": "\ud83c\udfc3",
+          "exercises": [
+            {
+              "id": "c1",
+              "name": "Stair Climber",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            },
+            {
+              "id": "c2",
+              "name": "Treadmill Incline Walk",
+              "sets": 1,
+              "reps": null,
+              "time": "15 min",
+              "logWeight": false
+            },
+            {
+              "id": "c3",
+              "name": "Cross Trainer",
+              "sets": 1,
+              "reps": null,
+              "time": "10 min",
+              "logWeight": false
+            }
+          ]
+        }
+      ]
+    },
+    "rest": {
+      "label": "Rest & Recovery",
+      "short": "REST DAY",
+      "color": "#22c55e",
+      "days": "Sunday",
+      "groups": [
+        {
+          "name": "Active Recovery",
+          "icon": "\ud83c\udf3f",
+          "exercises": [
+            {
+              "id": "r1",
+              "name": "Fasted Walk",
+              "sets": 1,
+              "reps": null,
+              "time": "20–30 min",
+              "logWeight": false
+            },
+            {
+              "id": "r2",
+              "name": "Stretching / Mobility",
+              "sets": 1,
+              "reps": null,
+              "time": "15–20 min",
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Home Abs",
+          "icon": "\ud83d\udd32",
+          "exercises": [
+            {
+              "id": "ra1",
+              "name": "Crunches",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "ra2",
+              "name": "Leg Raises",
+              "sets": 3,
+              "reps": 15,
+              "logWeight": false
+            },
+            {
+              "id": "ra3",
+              "name": "Plank",
+              "sets": 3,
+              "reps": null,
+              "time": "60 sec",
+              "logWeight": false
+            }
+          ]
+        },
+        {
+          "name": "Home Legs",
+          "icon": "\ud83e\uddb5",
+          "exercises": [
+            {
+              "id": "rl1",
+              "name": "Bodyweight Squats",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            },
+            {
+              "id": "rl2",
+              "name": "Walking Lunges",
+              "sets": 3,
+              "reps": 15,
+              "logWeight": false
+            },
+            {
+              "id": "rl3",
+              "name": "Glute Bridge",
+              "sets": 3,
+              "reps": 20,
+              "logWeight": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "WEEKLY_MEALS": {
+    "sun": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Soya Chunks Curry (100g dry) + 2 Jowar Roti + Curd (1 bowl) + Kachumber Salad",
+      "dinner": "Moong Dal Chilla (2 pcs) + Mint Chutney + Cucumber Slices"
+    },
+    "mon": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Rajma Masala (1.5 katori) + 2 Jowar Roti + Curd (1 bowl) + Onion Salad",
+      "dinner": "Rava & Veggie Chilla (2 pcs) + Peanut Chutney + Salad"
+    },
+    "tue": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Dal Tadka (2 katori) + Soya Granules Bhurji (50g) + 2 Roti + Curd (1 bowl)",
+      "dinner": "Besan (Gram Flour) Chilla (2 pcs) + Green Chutney + Sautéed Spinach"
+    },
+    "wed": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Chole (Chickpea Curry 1.5 katori) + 2 Roti + Curd (1 bowl) + Salad",
+      "dinner": "Masoor Dal Chilla (2 pcs) + Mint Chutney + Steamed Veggies"
+    },
+    "thu": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Black Chana Curry (1.5 katori) + 2 Jowar Roti + Curd (1 bowl) + Salad",
+      "dinner": "Rava & Oats Chilla (2 pcs) + Roasted Peanut Dip + Cucumber"
+    },
+    "fri": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Palak Dal (2 katori) + Soya Bowl (50g) + 2 Roti + Cucumber Raita (Curd)",
+      "dinner": "Green Moong Dal Chilla (2 pcs Pesarattu) + Mint Chutney + Salad"
+    },
+    "sat": {
+      "pregym": "½ Banana + 1 Glass Milk (250ml)",
+      "lunch": "Soya Keema Matar (100g) + Dal (1 katori) + 2 Roti + Curd (1 bowl)",
+      "dinner": "Paneer Bhurji (100g - Weekend Treat) + 1 Roti + Salad"
+    }
+  },
+  "MEAL_CONFIG": {
+    "lunch": {
+      "label": "Main Lunch",
+      "time": "12:00 PM",
+      "icon": "\ud83c\udf71",
+      "bg": "#0d1a00",
+      "cal": 580,
+      "protein": 52,
+      "carbs": 55,
+      "fat": 14,
+      "note": "Biggest meal · Max protein absorption"
+    },
+    "pregym": {
+      "label": "Pre-Gym Snack",
+      "time": "01:45 PM",
+      "icon": "\ud83c\udf4c",
+      "bg": "#1a0a00",
+      "cal": 140,
+      "protein": 10,
+      "carbs": 18,
+      "fat": 4,
+      "note": "Quick fuel · Easy to digest before gym"
+    },
+    "dinner": {
+      "label": "Dinner",
+      "time": "09:30 PM",
+      "icon": "\ud83c\udf7d\ufe0f",
+      "bg": "#0a0a1a",
+      "cal": 430,
+      "protein": 40,
+      "carbs": 32,
+      "fat": 11,
+      "note": "Pre-shift fuel · Heavy protein"
+    }
+  },
+  "DAILY_TIMELINE": [
+    { "t": "11:00 AM", "a": "⏰ ALARM", "d": "Wake up — Time to dominate" },
+    { "t": "11:05 AM", "id": "weight_rem", "a": "⚖️ LOG WEIGHT", "d": "9:00 AM Check-in" },
+    { "t": "11:15 AM", "id": "supp_jeera1", "a": "🌿 Jeera/Saunf/Ajwain + Lemon", "d": "Detox drink — sip slowly" },
+    { "t": "11:30 AM", "id": "supp_acv1", "a": "🍎 Apple Cider Vinegar R1", "d": "1 tbsp in warm water" },
+    { "t": "11:45 AM", "id": "supp_isab1", "a": "🌾 Isabgol Round 1", "d": "1 tsp in water — fiber boost" },
+    { "t": "12:00 PM", "id": "lunch", "a": "🍱 MAIN LUNCH", "d": "High Protein Veg — biggest meal" },
+    { "t": "01:45 PM", "id": "pregym", "a": "🍌 Pre-Gym Snack", "d": "½ Banana + 1 Glass Milk" },
+    { "t": "02:00 PM", "a": "🏋️ GYM WORKOUT", "d": "02:00 PM to 04:00 PM — BEAST MODE" },
+    { "t": "05:00 PM", "id": "supp_jeera2", "a": "🌿 Jeera/Saunf/Ajwain + Lemon", "d": "Post-gym detox" },
+    { "t": "05:15 PM", "id": "supp_acv2", "a": "🍎 Apple Cider Vinegar R2", "d": "1 tbsp in warm water" },
+    { "t": "05:30 PM", "id": "supp_isab2", "a": "🌾 Isabgol Round 2", "d": "1 tsp in water" },
+    { "t": "06:30 PM", "a": "🏢 JOB STARTS", "d": "Night shift begins — stay sharp" },
+    { "t": "09:30 PM", "id": "dinner", "a": "🍽️ DINNER", "d": "Pre-shift fuel — heavy protein" },
+    { "t": "12:30 AM", "id": "supp_gt", "a": "🍵 Green Tea + Lemon", "d": "Metabolism boost — last drink" }
+  ]
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#0a0a0a"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="FitOS"/>
+<title>FitOS — 90-Day Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<!-- ═══ SETUP SCREEN ═══ -->
+<div id="setup">
+  <div class="setup-box">
+    <div class="setup-logo">FitOS</div>
+    <div class="setup-sub">90-Day Challenge Setup</div>
+    <div class="form-group">
+      <label class="form-label">Your Name</label>
+      <input class="form-input" id="s-name" type="text" placeholder="Mihir" autocomplete="off"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Start Weight (kg)</label>
+        <input class="form-input" id="s-weight" type="number" placeholder="85" step="0.1" min="30" max="250"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Target Weight (kg)</label>
+        <input class="form-input" id="s-target-weight" type="number" placeholder="70" step="0.1" min="30" max="250"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Challenge Start Date</label>
+      <input class="form-input" id="s-date" type="date"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Daily Water Goal (glasses)</label>
+      <input class="form-input" id="s-water-goal" type="number" placeholder="10" min="4" max="20"/>
+    </div>
+    <button class="setup-btn" onclick="setupSave()">🔥 START 90-DAY CHALLENGE</button>
+    <div class="setup-note">Sab data phone pe save hoga · Offline bhi chalega · Kabhi delete mat karna</div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app" style="display:none">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">FitOS</div>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="day-badge" id="day-badge">DAY —</div>
+  </div>
+
+  <!-- Pages -->
+  <div class="main" id="main-scroll">
+    <div class="page active" id="page-home"></div>
+    <div class="page" id="page-workout"></div>
+    <div class="page" id="page-diet"></div>
+    <div class="page" id="page-water"></div>
+    <div class="page" id="page-progress"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></button>
+    <button class="nav-btn" data-page="workout"><div class="nav-icon">🏋️</div><div class="nav-label">Train</div></button>
+    <button class="nav-btn" data-page="diet"><div class="nav-icon">🍱</div><div class="nav-label">Diet</div></button>
+    <button class="nav-btn" data-page="water"><div class="nav-icon">💧</div><div class="nav-label">Water</div></button>
+    <button class="nav-btn" data-page="progress"><div class="nav-icon">📈</div><div class="nav-label">Progress</div></button>
+  </nav>
+</div>
+
+<div id="toast"></div>
+<div id="modal" class="modal hidden"><div class="modal-overlay" onclick="closeModal()"></div><div class="modal-box" id="modal-box"></div></div>
+
+<script src="app.js?v=2.0" charset="UTF-8"></script>
+</body>
+</html>
