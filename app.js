@@ -147,10 +147,10 @@ function formatDate(d) {
 }
 function getDayNum() {
   var p = DB.profile();
-  if (!p.startDate) return 1;
+  if (!p.startDate) return 0;
   var start = new Date(p.startDate + 'T00:00:00');
   var now = new Date();
-  if (isNaN(start.getTime())) return 1;
+  if (isNaN(start.getTime())) return 0;
   var diff = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
   return Math.min(Math.max(diff, 1), 90);
 }
@@ -294,6 +294,11 @@ function renderHome() {
   var woVal = wo.isRest ? '🌿' : (wo.done + '<span style="font-size:.65rem;color:var(--sub)">/' + wo.total + '</span>');
   var woLabel = wo.isRest ? 'REST DAY' : '🏋️ WORKOUT';
 
+  var dayNum = getDayNum();
+  var isChallengeActive = dayNum > 0;
+  var pct = isChallengeActive ? Math.round((dayNum / 90) * 100) : 0;
+  var ms = getTodayMealSupplementProgress();
+
   var mealPct = ms.totalMeals > 0 ? Math.round((ms.meals / ms.totalMeals) * 100) : 0;
   var mealColor = mealPct >= 100 ? 'var(--green)' : mealPct > 0 ? 'var(--gold)' : 'var(--sub)';
   var suppPct = ms.totalSupp > 0 ? Math.round((ms.supp / ms.totalSupp) * 100) : 0;
@@ -301,7 +306,7 @@ function renderHome() {
 
   var notifAlert = "";
   if (window.Notification && Notification.permission !== 'granted') {
-    notifAlert = '<div onclick="requestNotifPermission()" class="haptic-press" style="margin:8px 16px;background:rgba(255,107,26,0.15);border:1px dashed var(--fire);border-radius:12px;padding:12px;text-align:center;cursor:pointer;">' +
+    notifAlert = '<div onclick="requestNotifPermission()" class="haptic-press" style="margin:16px 16px 24px 16px;background:rgba(255,107,26,0.15);border:1px dashed var(--fire);border-radius:12px;padding:12px;text-align:center;cursor:pointer;">' +
       '<div style="font-size:.7rem;font-weight:700;color:var(--fire);letter-spacing:1px;text-transform:uppercase;">🔔 ENABLE STRICT REMINDERS</div>' +
       '<div style="font-size:.6rem;color:var(--sub);margin-top:2px;">Get alerts for meals, water & weight logs</div>' +
       '</div>';
@@ -315,12 +320,24 @@ function renderHome() {
     '<circle cx="36" cy="36" r="30" fill="none" stroke="#ff6b1a" stroke-width="5"' +
     ' stroke-dasharray="' + (2 * Math.PI * 30) + '" stroke-dashoffset="' + (2 * Math.PI * 30 * (1 - pct / 100)) + '"' +
     ' transform="rotate(-90 36 36)"/>' +
-    '<text x="36" y="42" text-anchor="middle" fill="#fff" font-family="Bebas Neue" font-size="16">' + pct + '%</text>' +
+    '<text x="36" y="42" text-anchor="middle" fill="#fff" font-family="Bebas Neue" font-size="16">' + (isChallengeActive ? pct + '%' : '—') + '</text>' +
     '</svg>' +
     '<div class="ring-info">' +
-    '<div class="ring-day-num">DAY ' + dayNum + '</div>' +
-    '<div class="ring-day-of">STILL GOING STRONG</div>' +
-    '<div class="ring-progress-bar"><div class="ring-progress-fill" style="width:' + pct + '%"></div></div>' +
+    (isChallengeActive ? 
+      '<div class="ring-day-num">DAY ' + dayNum + '</div>' +
+      '<div class="ring-day-of">STILL GOING STRONG</div>' +
+      '<div class="ring-progress-bar"><div class="ring-progress-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="challenge-actions">' +
+        '<button class="challenge-btn restart-btn" onclick="event.stopPropagation();restartChallenge()">🔄 RESTART</button>' +
+        '<button class="challenge-btn reset-btn" onclick="event.stopPropagation();resetChallenge()">⚠️ RESET</button>' +
+      '</div>'
+      : 
+      '<div class="ring-day-num" style="font-size:1.8rem;">CHALLENGE READY</div>' +
+      '<div class="ring-day-of">TAP BELOW TO START DAY 1</div>' +
+      '<div class="challenge-actions">' +
+        '<button class="challenge-btn start-btn" onclick="event.stopPropagation();startChallenge()">🚀 START CHALLENGE</button>' +
+      '</div>'
+    ) +
     '</div>' +
     '</div>' +
 
@@ -516,7 +533,7 @@ function updateHomeStats() {
   if (currentPage !== 'home') return;
   var d = today();
   var dayNum = getDayNum();
-  var pct = Math.round((dayNum / 90) * 100);
+  var pct = dayNum > 0 ? Math.round((dayNum / 90) * 100) : 0;
   var ms = getTodayMealSupplementProgress();
 
   // Update Ring
@@ -570,6 +587,9 @@ function saveWt() {
     DB.addWeight(today(), v);
     closeModal();
     showToast('⚖️ Weight logged!');
+    // Automatic BMI recalculation logic
+    if (currentPage === 'progress') renderProgress();
+    
     // Surgical Update
     if (currentPage === 'home') {
       var chips = document.querySelectorAll('.stat-chip');
@@ -635,17 +655,24 @@ function renderWorkoutDay(dStr, wo, wkData, isDone) {
       var done = ed.done || false;
       var badge = ex.time ? ex.time : (ex.sets + 'x' + (ex.reps || '?'));
       var setsHtml = '';
-      if (ex.logWeight !== false) {
+      if (ex.sets > 0) {
         for (var s = 1; s <= ex.sets; s++) {
           var sw = (ed.setWeights || {})[s] || '';
-          setsHtml += '<div class="set-row"><div class="set-num">Set ' + s + '</div><div class="set-reps">' + (ex.reps ? ex.reps + ' reps' : ex.time) + '</div><input class="set-weight-input" type="number" placeholder="kg" value="' + sw + '" onchange="saveSetWeight(\'' + dStr + '\',\'' + ex.id + '\',' + s + ',this.value)" onclick="event.stopPropagation()"/></div>';
+          var isSetDone = (ed.setDone || {})[s] || false;
+          var showWeight = ex.logWeight !== false;
+          
+          setsHtml += '<div class="set-row">' +
+            '<div class="set-check' + (isSetDone ? ' done' : '') + '" id="chk-' + ex.id + '-' + s + '" onclick="event.stopPropagation();toggleSetDone(\'' + dStr + '\',\'' + ex.id + '\',' + s + ')">✓</div>' +
+            '<div class="set-num">Set ' + s + '</div>' +
+            '<div class="set-reps">' + (ex.reps ? ex.reps + ' reps' : ex.time) + '</div>' +
+            (showWeight ? '<input class="set-weight-input" type="number" placeholder="kg" value="' + sw + '" onchange="saveSetWeight(\'' + dStr + '\',\'' + ex.id + '\',' + s + ',this.value)" onclick="event.stopPropagation()"/>' : '<div style="width:70px;"></div>') +
+            '</div>';
         }
       }
       return '<div class="exercise-row stagger-item' + (done ? ' ex-done' : '') + '" id="ex-' + dStr + '-' + ex.id + '" style="animation-delay:' + (idx * 0.05) + 's;">' +
-        '<div class="ex-header haptic-press" onclick="toggleExercise(\'' + dStr + '\',\'' + ex.id + '\')">' +
-        '<div class="ex-check">' + (done ? '✓' : '') + '</div>' +
+        '<div class="ex-header haptic-press" onclick="toggleExerciseBody(\'' + dStr + '\',\'' + ex.id + '\')">' +
         '<div class="ex-name">' + ex.name + '</div>' +
-        '<div class="ex-badge">' + badge + '</div>' +
+        '<div class="ex-badge">' + (done ? '✓ ' : '') + badge + '</div>' +
         '<div class="ex-expand" id="exp-' + dStr + '-' + ex.id + '">▼</div>' +
         '</div>' +
         '<div class="ex-body" id="body-' + dStr + '-' + ex.id + '">' + setsHtml + '</div>' +
@@ -656,7 +683,6 @@ function renderWorkoutDay(dStr, wo, wkData, isDone) {
 
   return '<div class="wk-header">' +
     '<div class="wk-header-left"><div class="wk-type" style="color:var(--fire)">' + wo.short + '</div><div class="wk-name">' + wo.label + '</div></div>' +
-    '<button class="wk-complete-btn' + (isDone ? ' done-state' : '') + '" onclick="markWorkoutDone(\'' + dStr + '\')" ' + (isDone ? 'disabled' : '') + '>' + (isDone ? '✓ DONE' : 'COMPLETE') + '</button>' +
     '</div>' + groupsHtml;
 }
 
@@ -664,18 +690,64 @@ function renderRestDay() {
   return '<div class="rest-day-card"><span class="rest-emoji">🌿</span><div class="rest-day-title">REST & RECOVERY</div><div class="rest-day-desc">Active recovery or home stretching recommended.</div></div>';
 }
 
-function toggleExercise(dStr, exId) {
-  var exData = DB.getWorkout(dStr).exercises || {};
-  var cur = exData[exId] || {};
-  var nowDone = !cur.done;
-  DB.setExercise(dStr, exId, { done: nowDone });
-  var row = document.getElementById('ex-' + dStr + '-' + exId);
+function toggleExerciseBody(dStr, exId) {
   var body = document.getElementById('body-' + dStr + '-' + exId);
   var exp = document.getElementById('exp-' + dStr + '-' + exId);
-  if (row) { row.classList.toggle('ex-done', nowDone); var chk = row.querySelector('.ex-check'); if (chk) chk.textContent = nowDone ? '✓' : ''; }
-  if (body) { if (nowDone) body.classList.remove('open'); else body.classList.toggle('open'); if (exp) exp.textContent = body.classList.contains('open') ? '▲' : '▼'; }
-  if (nowDone) showToast('💪 Exercise done!');
+  if (body) {
+    body.classList.toggle('open');
+    if (exp) exp.textContent = body.classList.contains('open') ? '▲' : '▼';
+  }
 }
+
+function toggleSetDone(dStr, exId, setNum) {
+  var wkData = DB.getWorkout(dStr);
+  var exData = (wkData.exercises || {})[exId] || {};
+  var setDone = exData.setDone || {};
+  var nowSetDone = !setDone[setNum];
+  setDone[setNum] = nowSetDone;
+  
+  DB.setExercise(dStr, exId, { setDone: setDone });
+  
+  // Update set UI
+  var chk = document.getElementById('chk-' + exId + '-' + setNum);
+  if (chk) chk.classList.toggle('done', nowSetDone);
+  
+  // Check if all sets are done to finish the whole exercise
+  var totalSets = 0;
+  var workouts = WORKOUTS[getWorkoutType(selectedWorkoutDay)];
+  workouts.groups.forEach(function(g) {
+    g.exercises.forEach(function(e) {
+      if (e.id === exId) totalSets = e.sets;
+    });
+  });
+  
+  var doneCount = 0;
+  for (var i = 1; i <= totalSets; i++) {
+    if (setDone[i]) doneCount++;
+  }
+  
+  var allDone = (doneCount === totalSets && totalSets > 0);
+  DB.setExercise(dStr, exId, { done: allDone });
+  
+  // Update main card visual
+  var row = document.getElementById('ex-' + dStr + '-' + exId);
+  if (row) {
+    row.classList.toggle('ex-done', allDone);
+    var badge = row.querySelector('.ex-badge');
+    if (badge) {
+      var workouts = WORKOUTS[getWorkoutType(selectedWorkoutDay)];
+      var exObj = null;
+      workouts.groups.forEach(function(g) {
+        g.exercises.forEach(function(e) { if (e.id === exId) exObj = e; });
+      });
+      var baseText = exObj.time ? exObj.time : (exObj.sets + 'x' + (exObj.reps || '?'));
+      badge.textContent = (allDone ? '✓ ' : '') + baseText;
+    }
+  }
+  
+  if (allDone) showToast('🔥 Exercise Complete!');
+}
+
 
 function saveSetWeight(dStr, exId, setNum, val) {
   var wkData = DB.getWorkout(dStr);
@@ -952,23 +1024,25 @@ function generateWeightChartSVG(pts) {
 function renderProgress() {
   var prof = DB.profile();
   var weights = DB.weights();
-
-  // Create a display-ready array of weights for the chart (including start weight)
   var chartWeights = [];
-  // 1. Add start weight if available
+  
   if (prof.startWeight && prof.startDate) {
     chartWeights.push({ date: prof.startDate, kg: parseFloat(prof.startWeight) });
   }
-  // 2. Add all logged weights (avoiding duplicates with start date)
-  for (var i = 0; i < weights.length; i++) {
-    var exists = false;
-    for (var j = 0; j < chartWeights.length; j++) { if (chartWeights[j].date === weights[i].date) exists = true; }
-    if (!exists) chartWeights.push(weights[i]);
+  var dateMap = {};
+  if (prof.startWeight && prof.startDate) {
+    dateMap[prof.startDate] = parseFloat(prof.startWeight);
   }
-  chartWeights.sort(function (a, b) { return a.date.localeCompare(b.date); });
+  for (var i = 0; i < weights.length; i++) {
+    dateMap[weights[i].date] = weights[i].kg;
+  }
+  var dates = Object.keys(dateMap).sort();
+  for (var i = 0; i < dates.length; i++) {
+    chartWeights.push({ date: dates[i], kg: dateMap[dates[i]] });
+  }
 
-  var lastWtObj = weights.length ? weights[weights.length - 1] : (prof.startWeight ? { kg: prof.startWeight } : null);
-  var firstWtObj = prof.startWeight ? { kg: prof.startWeight } : (weights.length ? weights[0] : null);
+  var lastWtObj = weights.length ? weights[weights.length - 1] : (prof.startWeight ? { kg: parseFloat(prof.startWeight) } : null);
+  var firstWtObj = prof.startWeight ? { kg: parseFloat(prof.startWeight) } : (weights.length ? weights[0] : null);
 
   var wRows = weights.slice(-15).reverse().map(function (w, i, arr) {
     var prev = arr[i + 1];
@@ -983,20 +1057,38 @@ function renderProgress() {
     return '<div class="wh-row"><div class="wh-date">' + formatDate(w.date) + ' <span style="font-size:.5rem;color:var(--sub2)">' + logTime + '</span></div><div style="flex:1;text-align:right;padding-right:16px;">' + diffHtml + '</div><div class="wh-kg">' + w.kg + ' KG</div></div>';
   }).join('');
 
-  var totalLost = (firstWtObj && lastWtObj) ? (firstWtObj.kg - lastWtObj.kg).toFixed(1) : 0;
-
-  var cal90Html = '';
-  var startD = DB.profile().startDate ? new Date(DB.profile().startDate + 'T00:00:00') : new Date();
-  var todayIdx = getDayNum() - 1;
-  for (var i = 0; i < 90; i++) {
-    var dt = new Date(startD.getTime() + i * 24 * 60 * 60 * 1000);
-    var dStr = dt.toISOString().split('T')[0];
-    var wEntry = DB.getWorkout(dStr);
-    var cls = 'cal-day';
-    if (i > todayIdx) cls += ' future';
-    else if (i === todayIdx) cls += ' today';
-    if (wEntry.completed) cls += ' workout-done';
-    cal90Html += '<div class="' + cls + '"></div>';
+  var dayNum = getDayNum();
+  var isChallengeActive = dayNum > 0;
+  var cal90Grid = '';
+  
+  if (isChallengeActive) {
+    var cal90Html = '';
+    var startD = new Date(DB.profile().startDate + 'T00:00:00');
+    var todayIdx = dayNum - 1;
+    for (var i = 0; i < 90; i++) {
+      var dt = new Date(startD.getTime() + i * 24 * 60 * 60 * 1000);
+      var dStr = dt.toISOString().split('T')[0];
+      var wEntry = DB.getWorkout(dStr);
+      var cls = 'cal-day';
+      if (i > todayIdx) cls += ' future';
+      else if (i === todayIdx) cls += ' today';
+      if (wEntry.completed) cls += ' workout-done';
+      cal90Html += '<div class="' + cls + '">' + (i + 1) + '</div>';
+    }
+    cal90Grid = '<div class="cal90">' +
+      '<div class="cal90-title">🔥 90-DAY CONSISTENCY</div>' +
+      '<div class="cal90-grid">' + cal90Html + '</div>' +
+      '<div class="cal90-legend">' +
+      '<div class="cal-leg"><div class="cal-dot" style="background:var(--fire)"></div> WORKOUT DONE</div>' +
+      '<div class="cal-leg"><div class="cal-dot" style="background:var(--green)"></div> REST DONE</div>' +
+      '</div>' +
+      '</div>';
+  } else {
+    cal90Grid = '<div class="cal90" style="text-align:center;padding:30px 20px;border:1px dashed var(--border2);background:rgba(255,107,26,0.03);border-radius:14px;margin:0 16px 8px;">' +
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:1.4rem;color:var(--fire);margin-bottom:8px;">READY FOR THE 90-DAY GAUNTLET?</div>' +
+      '<div style="font-size:.65rem;color:var(--sub);margin-bottom:15px;text-transform:uppercase;letter-spacing:1px;">Start the challenge from the home screen to track your daily consistency grid.</div>' +
+      '<button class="setup-btn haptic-press" onclick="goPage(\'home\')" style="margin-top:0;padding:10px;font-size:0.9rem;max-width:200px;margin:0 auto;">GO TO HOME</button>' +
+      '</div>';
   }
 
   var targetWt = parseFloat(prof.targetWeight || 0);
@@ -1022,14 +1114,10 @@ function renderProgress() {
     '<button class="wl-log-btn" onclick="saveProgWt()">SAVE WEIGHT</button>' +
     '</div>' +
     '</div>' +
+    cal90Grid +
     '<div class="bmi-card">' +
-    '<div class="sec-h"><div class="sec-h-title">📊 BMI CALCULATOR</div></div>' +
-    '<div class="bmi-inputs">' +
-    '<div class="bmi-input-group"><div class="bmi-label">HEIGHT (CM)</div><input class="bmi-input" id="bmi-h" type="number" placeholder="170"></div>' +
-    '<div class="bmi-input-group"><div class="bmi-label">WEIGHT (KG)</div><input class="bmi-input" id="bmi-w" type="number" value="' + (lastWtObj ? lastWtObj.kg : '') + '" placeholder="85"></div>' +
-    '</div>' +
-    '<button class="bmi-calc-btn" onclick="calcBmi()">CALCULATE BMI</button>' +
-    '<div class="bmi-result" id="bmi-res">' +
+    '<div class="sec-h"><div class="sec-h-title">📊 YOUR REAL-TIME BMI</div></div>' +
+    '<div class="bmi-result show" id="bmi-res" style="margin-top:0; padding-top:0;">' +
     '<div class="bmi-result-num" id="bmi-val">--</div>' +
     '<div class="bmi-result-cat" id="bmi-cat">--</div>' +
     '<div class="bmi-scale">' +
@@ -1041,15 +1129,17 @@ function renderProgress() {
     '<div class="bmi-marker-row"><div class="bmi-marker">18.5</div><div class="bmi-marker" style="margin-left:-5%;">25</div><div class="bmi-marker" style="margin-left:-18%;">30</div><div class="bmi-marker"></div></div>' +
     '</div>' +
     '</div>' +
-    '<div class="cal90">' +
-    '<div class="cal90-title">🔥 90-DAY CONSISTENCY</div>' +
-    '<div class="cal90-grid">' + cal90Html + '</div>' +
-    '<div class="cal90-legend"><div class="cal-leg"><div class="cal-dot" style="background:var(--fire);"></div>WORKOUT DONE</div></div>' +
-    '</div>' +
     '<div class="weight-history">' +
     '<div class="wh-title">📉 WEIGHT HISTORY <button onclick="DB.exportData()" style="float:right;background:var(--bg3);border:1px solid var(--border2);color:var(--sub);font-size:.55rem;padding:3px 8px;border-radius:6px;cursor:pointer;">EXPORT JSON</button></div>' +
     (wRows ? '<div class="wh-list">' + wRows + '</div>' : '<div class="empty-state">No weight logs yet.</div>') +
     '</div>';
+    
+  setTimeout(function() {
+    var h = parseFloat(DB.profile().height || 0);
+    var wtList = DB.weights();
+    var curW = wtList.length ? wtList[wtList.length - 1].kg : 0;
+    if (h > 0 && curW > 0) calcBmi(h, curW);
+  }, 100);
 }
 
 function saveProgWt() {
@@ -1061,15 +1151,18 @@ function saveProgWt() {
     el.value = '';
     renderProgress();
     showToast('⚖️ Weight saved!');
+    // Automatic BMI update is handled by renderProgress calling calcBmi logic via timeout
   } else {
     showToast('⚠️ Please enter a valid weight.');
   }
 }
 
-function calcBmi() {
-  var h = parseFloat(document.getElementById('bmi-h').value) / 100;
-  var w = parseFloat(document.getElementById('bmi-w').value);
-  if (!h || !w) { showToast('Enter valid Height & Weight!'); return; }
+function calcBmi(forcedH, forcedW) {
+  var h = (forcedH || parseFloat(DB.profile().height || 0)) / 100;
+  var weights = DB.weights();
+  var w = forcedW || (weights.length ? weights[weights.length - 1].kg : 0);
+  
+  if (!h || !w) return;
   var bmi = w / (h * h);
   var cat = '', color = '';
   if (bmi < 18.5) { cat = 'UNDERWEIGHT'; color = 'var(--blue)'; }
@@ -1094,13 +1187,55 @@ function setupSave() {
   var name = document.getElementById('s-name').value || 'Athlete';
   var weight = parseFloat(document.getElementById('s-weight').value);
   var targetWeight = parseFloat(document.getElementById('s-target-weight').value);
-  var startDate = document.getElementById('s-date').value || today();
+  var height = parseFloat(document.getElementById('s-height').value);
   var waterGoal = parseInt(document.getElementById('s-water-goal').value) || 10;
   if (!weight) { showToast('Enter your current weight!'); return; }
   if (!targetWeight) { showToast('Enter your target weight!'); return; }
-  DB.setProfile({ name: name, startDate: startDate, waterGoal: waterGoal, targetWeight: targetWeight, startWeight: weight });
-  DB.addWeight(startDate, weight);
+  if (!height) { showToast('Enter your height for BMI!'); return; }
+  
+  DB.setProfile({ name: name, height: height, waterGoal: waterGoal, targetWeight: targetWeight, startWeight: weight });
+  DB.addWeight(today(), weight);
   initApp();
+}
+
+function startChallenge() {
+  DB.setProfile({ startDate: today() });
+  var db = document.getElementById('day-badge');
+  if (db) {
+    db.textContent = 'DAY 1';
+    db.style.color = 'var(--fire)';
+  }
+  syncProfileWithSW(); // tell SW challenge is now active
+  renderHome();
+  showToast('🔥 Day 1 started! Stay disciplined.');
+}
+
+function resetChallenge() {
+  if (confirm('⚠️ RESET CHALLENGE? This will clear your Day count. Your history remains.')) {
+    DB.setProfile({ startDate: null });
+    var db = document.getElementById('day-badge');
+    if (db) {
+      db.textContent = 'READY';
+      db.style.color = 'var(--sub)';
+    }
+    syncProfileWithSW(); // tell SW challenge is now inactive
+    renderHome();
+    showToast('Challenge Reset. Day count cleared.');
+  }
+}
+
+function restartChallenge() {
+  if (confirm('🔄 RESTART CHALLENGE? Start again at Day 1 (Today).')) {
+    DB.setProfile({ startDate: today() });
+    var db = document.getElementById('day-badge');
+    if (db) {
+      db.textContent = 'DAY 1';
+      db.style.color = 'var(--fire)';
+    }
+    syncProfileWithSW(); // tell SW challenge restarted
+    renderHome();
+    showToast('Challenge Restarted! Day 1.');
+  }
 }
 
 function initApp() {
@@ -1109,9 +1244,15 @@ function initApp() {
   var td = document.getElementById('topbar-date');
   if (td) td.textContent = formatDate(today());
   var db = document.getElementById('day-badge');
-  if (db) db.textContent = 'DAY ' + getDayNum();
+  if (db) {
+    var dn = getDayNum();
+    db.textContent = dn > 0 ? 'DAY ' + dn : 'READY';
+    db.style.color = dn > 0 ? 'var(--fire)' : 'var(--sub)';
+  }
   initNav();
   goPage('home');
+  // Start background systems after UI is ready
+  initBackgroundMode();
 }
 
 // ═══════════════════════════════════════════════
@@ -1129,7 +1270,7 @@ function initApp() {
       MEAL_CONFIG = d.MEAL_CONFIG;
       DAILY_TIMELINE = d.DAILY_TIMELINE;
       DATA_LOADED = true;
-      if (DB.profile().startDate) initApp();
+      if (DB.profile().name) initApp();
     })
     .catch(function (e) {
       console.error('data.json load failed:', e);
@@ -1138,94 +1279,238 @@ function initApp() {
 })();
 
 // ═══════════════════════════════════════════════
-// PWA & NOTIFICATIONS
+// PWA & NOTIFICATIONS — Ultra Mode 24/7
 // ═══════════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js');
+
+var _swReg = null; // global reference to SW registration
+
+/* ── Utility: post message to SW safely ──────── */
+function postToSW(msg) {
+  if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage(msg);
+    return true;
+  }
+  return false;
+}
+
+/* ── Full SW Setup ───────────────────────────── */
+function setupServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+
+  navigator.serviceWorker.register('./sw.js?v=5').then(function (reg) {
+    _swReg = reg;
+    console.log('[FitOS] SW v5 registered:', reg.scope);
+
+    // Force SW to take control immediately
+    if (reg.waiting) reg.waiting.postMessage({ type: 'START_CLOCK' });
+    if (reg.active)  reg.active.postMessage({ type: 'START_CLOCK' });
+
+    // Wait for SW to be fully ready
+    navigator.serviceWorker.ready.then(function (readyReg) {
+      _swReg = readyReg;
+
+      // Sync user profile so SW knows if challenge is active
+      if (readyReg.active) {
+        readyReg.active.postMessage({ type: 'SYNC_PROFILE', payload: DB.profile() });
+        readyReg.active.postMessage({ type: 'START_CLOCK' });
+        readyReg.active.postMessage({ type: 'CATCH_UP' }); // check missed notifs on load
+      }
+
+      // Register Periodic Background Sync
+      // minInterval: 15 minutes — OS fires it as often as it allows
+      if ('periodicSync' in readyReg) {
+        readyReg.periodicSync.register('fitos-reminder-check', {
+          minInterval: 15 * 60 * 1000
+        }).then(function () {
+          console.log('[FitOS] Periodic sync registered (15min min interval).');
+        }).catch(function (err) {
+          console.warn('[FitOS] Periodic sync unavailable:', err.message);
+        });
+      }
+    });
+
+    // Listen for SW state changes (e.g. new SW activated)
+    reg.addEventListener('updatefound', function () {
+      var newWorker = reg.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', function () {
+          if (newWorker.state === 'activated') {
+            newWorker.postMessage({ type: 'START_CLOCK' });
+          }
+        });
+      }
+    });
+
+  }).catch(function (err) {
+    console.error('[FitOS] SW registration failed:', err);
   });
 }
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', setupServiceWorker);
+}
 
-// ═══════════════════════════════════════════════
-// STRICT MODE NOTIFICATIONS
-// ═══════════════════════════════════════════════
+/* ── Re-sync profile with SW (call on challenge start/reset) ──── */
+function syncProfileWithSW() {
+  var sent = postToSW({ type: 'SYNC_PROFILE', payload: DB.profile() });
+  if (!sent && _swReg && _swReg.active) {
+    _swReg.active.postMessage({ type: 'SYNC_PROFILE', payload: DB.profile() });
+  }
+}
 
+/* ── Permission Request — Full Modal UI ──────── */
 function requestNotifPermission() {
-  if (!window.Notification) return alert('Your browser doesn\'t support notifications.');
-  Notification.requestPermission().then(function (p) {
-    if (p === 'granted') {
-      alert('STRICT MODE ACTIVATED! Reminders are on. 🔥');
-      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
+  if (!window.Notification) {
+    showToast('❌ Browser does not support notifications.');
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    // Already granted — show test notification
+    postToSW({ type: 'TEST_NOTIF' });
+    showToast('✅ Notifications ON! Test bhej diya.');
+    return;
+  }
+  if (Notification.permission === 'denied') {
+    openModal(
+      '<div class="modal-title" style="color:var(--red)">🔕 Notifications Blocked!</div>' +
+      '<div style="font-size:.8rem;color:var(--sub);text-align:center;margin:12px 0 20px;line-height:1.6;">' +
+        'Browser ne notifications block ki hain.<br>' +
+        '<strong style="color:var(--text)">Fix karne ke steps:</strong><br>' +
+        '1. Address bar mein 🔒 icon tap karo<br>' +
+        '2. Notifications → Allow karo<br>' +
+        '3. Page reload karo' +
+      '</div>' +
+      '<button class="modal-btn" onclick="closeModal()" style="width:100%">GOT IT</button>'
+    );
+    return;
+  }
+
+  // Show full-screen permission modal
+  openModal(
+    '<div style="text-align:center;padding:8px 0;">' +
+      '<div style="font-size:2.5rem;margin-bottom:8px;">🔔</div>' +
+      '<div class="modal-title">24/7 STRICT REMINDERS</div>' +
+      '<div style="font-size:.78rem;color:var(--sub);text-align:center;margin:10px 0 20px;line-height:1.7;">' +
+        'Ye app tumhe <strong style="color:var(--fire)">har din 17+ reminders</strong> bhejegi:<br>' +
+        '⏰ Wake up • ⚖️ Weight log<br>' +
+        '💧 Hydration • 🍱 Meals<br>' +
+        '🏋️ Gym time • 🌿 Supplements<br>' +
+        '<span style="color:var(--gold);font-size:.7rem;">App band hone par bhi aayengi ✓</span>' +
+      '</div>' +
+      '<button class="modal-btn primary" style="width:100%;font-size:.85rem;padding:14px;" onclick="_doRequestPermission()">🔥 ENABLE ALL REMINDERS</button>' +
+      '<button class="modal-btn" style="width:100%;margin-top:8px;font-size:.75rem;" onclick="closeModal()">BAAD MEIN</button>' +
+    '</div>'
+  );
+}
+
+function _doRequestPermission() {
+  closeModal();
+  Notification.requestPermission().then(function (permission) {
+    if (permission === 'granted') {
+      // Immediately fire a welcome notification via SW
+      setTimeout(function () {
+        postToSW({
           type: 'SHOW_STRICTION',
-          payload: { title: 'FitOS Strict Mode ON', body: 'Discipline is the bridge between goals and accomplishment.', tag: 'welcome' }
+          payload: {
+            title: '🔥 FitOS Reminders — ACTIVE!',
+            body: 'Bhai, ab koi reminder miss nahi hogi. App band ho tab bhi pushups ke liye yaad dilaenge! 💪',
+            tag: 'welcome-notif'
+          }
         });
-      }
-      renderHome();
+        // Also restart the clock
+        postToSW({ type: 'START_CLOCK' });
+        postToSW({ type: 'SYNC_PROFILE', payload: DB.profile() });
+      }, 500);
+      showToast('✅ 24/7 Reminders Active! Har slot pe notification aayegi.');
+      renderHome(); // hide the notification banner
+    } else {
+      showToast('❌ Permission denied. Notifications off rahegi.');
     }
   });
 }
 
+/* ── In-Page Reminder Check (runs every minute while app is open) */
 function checkTimelineReminders() {
   if (!DATA_LOADED || !window.Notification || Notification.permission !== 'granted') return;
   var d = today();
   var now = new Date();
-  var nowHHMM = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-  var dayName = todayDay();
+  var h = now.getHours();
+  var m = now.getMinutes();
   var mealData = DB.getMeal(d);
   var notifLog = DB.getNotifHistory();
   var todayPrefix = d + '_';
 
-  // 1. Check Weight at 9 AM
-  if (now.getHours() === 9 && now.getMinutes() < 15) {
+  /* 1. Weight reminder at 7 AM if not logged yet */
+  if (h === 7 && m < 10) {
     var weights = DB.weights();
-    var wLoggedToday = false;
-    for (var i = 0; i < weights.length; i++) { if (weights[i].date === d) wLoggedToday = true; }
-    if (!wLoggedToday && !notifLog[todayPrefix + 'weight_rem']) {
-      sendStrictNotif('⚖️ LOG WEIGHT!', 'Your 9:00 AM check-in is pending. Weigh yourself now!', 'weight_rem');
+    var wLoggedToday = weights.some(function (w) { return w.date === d; });
+    if (!wLoggedToday && !notifLog[todayPrefix + 'weight_7am']) {
+      sendStrictNotif('⚖️ WAJAN LOG KARO!', 'Subah 7 baje ka check-in: Abhi wajan lo breakfast se pehle!', 'weight_7am');
     }
   }
 
-  // 2. Check Water every 2 hours if goal < 16
-  if (now.getMinutes() === 0 && now.getHours() % 2 === 0 && now.getHours() >= 10 && now.getHours() <= 22) {
+  /* 2. Water reminder every 2 hours, 10 AM – 10 PM */
+  if (m === 0 && h % 2 === 0 && h >= 10 && h <= 22) {
     var glasses = DB.getWater(d);
-    var goal = DB.profile().waterGoal || 16;
-    if (glasses < goal && !notifLog[todayPrefix + 'water_' + now.getHours()]) {
-      sendStrictNotif('💧 HYDRATION ALERT!', 'You\'ve only had ' + glasses + '/' + goal + ' glasses. Drink more water!', 'water_' + now.getHours());
+    var goal = DB.profile().waterGoal || 10;
+    if (glasses < Math.floor(goal * h / 22) && !notifLog[todayPrefix + 'water_h' + h]) {
+      sendStrictNotif(
+        '💧 PAANI PI BHAI! (' + h + ':00)',
+        glasses + '/' + goal + ' glasses abhi tak. Refill karo abhi!',
+        'water_h' + h
+      );
     }
   }
 
-  // 3. Check Timeline (Meals/Supps/Workout/Weight)
-  DAILY_TIMELINE.forEach(function (slot) {
-    if (isTimeMatch(slot.t) || isComingUp(slot.t, 1)) {
-      var isDone = false;
-      if (slot.id === 'weight_rem') {
-        var weights = DB.weights();
-        for (var i = 0; i < weights.length; i++) { if (weights[i].date === d) isDone = true; }
-      } else if (slot.id) {
-        isDone = mealData[slot.id] === true || mealData[slot.id] === 'skipped';
-      } else if (slot.a && slot.a.indexOf('GYM') !== -1) {
-        var wkData = DB.getWorkout(d);
-        isDone = wkData.completed === true;
-      }
-
-      var logId = todayPrefix + (slot.id || 'gym');
-      if (!isDone && !notifLog[logId]) {
-        sendStrictNotif('🍲 REMINDER: ' + slot.a, slot.d || 'Scheduled time: ' + slot.t, slot.id || 'gym');
-      }
+  /* 3. Gym reminder at 4 PM if workout not done */
+  if (h === 16 && m < 5) {
+    var wkData = DB.getWorkout(d);
+    if (!wkData.completed && !notifLog[todayPrefix + 'gym_4pm']) {
+      sendStrictNotif('🏋️ GYM TIME — AB JAO!', 'Shaam ke 4 baj gaye. Shoes pehno, gym hit karo. No excuses!', 'gym_4pm');
     }
-  });
+  }
+
+  /* 4. Daily log reminder at 11 PM */
+  if (h === 23 && m < 5) {
+    if (!notifLog[todayPrefix + 'endofday']) {
+      sendStrictNotif('📋 AJ KA LOG BHARO!', 'Raat ke 11 baj gaye. Sab log kiya? Weight, water, workout, diet sab check karo.', 'endofday');
+    }
+  }
+
+  /* 5. Challenge midday check if active */
+  var profile = DB.profile();
+  if (profile.startDate && h === 12 && m < 5) {
+    if (!notifLog[todayPrefix + 'c_midday_inapp']) {
+      var dayNum = getDayNum();
+      sendStrictNotif(
+        '🔥 CHALLENGE DAY ' + dayNum + ' — MIDDAY!',
+        'Aadha din nikal gaya. Focused raho. 90 din mein se ' + dayNum + ' ho gaye!',
+        'c_midday_inapp'
+      );
+    }
+  }
 }
 
+/* ── Send strict notification via SW ────────── */
+function sendStrictNotif(title, body, id) {
+  var d = today();
+  DB.setNotifId(d + '_' + id);
+  if (!postToSW({ type: 'SHOW_STRICTION', payload: { title: title, body: body, tag: id } })) {
+    // Fallback: direct Notification API
+    try { new Notification(title, { body: body, icon: './icons/fitos_icon.png' }); } catch (e) {}
+  }
+}
+
+/* ── isTimeMatch / isComingUp helpers ─────────── */
 function isTimeMatch(timeStr) {
   var now = new Date();
   var hh = now.getHours();
   var mm = now.getMinutes();
-  var nowStr = (hh > 12 ? hh - 12 : (hh === 0 ? 12 : hh)) + ':' + String(mm).padStart(2, '0') + ' ' + (hh >= 12 ? 'PM' : 'AM');
+  var hh12 = hh > 12 ? hh - 12 : (hh === 0 ? 12 : hh);
+  var ampm = hh >= 12 ? 'PM' : 'AM';
+  var nowStr = hh12 + ':' + String(mm).padStart(2, '0') + ' ' + ampm;
   return nowStr === timeStr;
 }
-
 function isComingUp(timeStr, mins) {
   var now = new Date();
   var parts = timeStr.split(':');
@@ -1233,23 +1518,224 @@ function isComingUp(timeStr, mins) {
   var hh = parseInt(parts[0]);
   if (timeStr.indexOf('PM') !== -1 && hh < 12) hh += 12;
   if (timeStr.indexOf('AM') !== -1 && hh === 12) hh = 0;
-  target.setHours(hh, parseInt(parts[1]), 0);
+  target.setHours(hh, parseInt(parts[1]), 0, 0);
   var diff = (target.getTime() - now.getTime()) / 60000;
   return diff > 0 && diff <= mins;
 }
 
-function sendStrictNotif(title, body, id) {
-  var d = today();
-  DB.setNotifId(d + '_' + id);
-  if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
-      type: 'SHOW_STRICTION',
-      payload: { title: title, body: body, tag: id }
-    });
-  } else {
-    try { new Notification(title, { body: body }); } catch (e) { }
+/* ── Auto-check every minute while app is open ── */
+setInterval(checkTimelineReminders, 60000);
+setTimeout(checkTimelineReminders, 3000); // also check 3s after page open
+
+// ═══════════════════════════════════════════════
+// BACKGROUND MODE ENGINE
+// ═══════════════════════════════════════════════
+
+var _bgInitDone = false;
+
+function initBackgroundMode() {
+  if (_bgInitDone) return;
+  _bgInitDone = true;
+
+  /* 1. Revive SW whenever app comes back to foreground */
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+      console.log('[FitOS] App foregrounded — reviving SW...');
+      postToSW({ type: 'START_CLOCK' });
+      postToSW({ type: 'CATCH_UP' });
+      postToSW({ type: 'SYNC_PROFILE', payload: DB.profile() });
+      // Re-register periodic sync in case it got dropped
+      _reRegisterPeriodicSync();
+    }
+  });
+
+  /* 2. keepAlive ping: fetch manifest every 20s while page is visible */
+  setInterval(function () {
+    if (document.visibilityState === 'visible' && navigator.serviceWorker && navigator.serviceWorker.controller) {
+      fetch('./manifest.json?_ka=' + Date.now(), { cache: 'no-store' }).catch(function () {});
+    }
+  }, 20000);
+
+  /* 3. On first load, check if we need to show background setup prompt */
+  _checkBackgroundSetupNeeded();
+}
+
+function _reRegisterPeriodicSync() {
+  if (!_swReg) return;
+  navigator.serviceWorker.ready.then(function (reg) {
+    if ('periodicSync' in reg) {
+      reg.periodicSync.register('fitos-reminder-check', {
+        minInterval: 15 * 60 * 1000
+      }).catch(function () {});
+    }
+  });
+}
+
+/* ── Check if setup is done already ───────────── */
+function _checkBackgroundSetupNeeded() {
+  // Show banner only if: never shown before, OR notification not yet granted
+  var dismissed = localStorage.getItem('fitos_bg_setup_done');
+  var notifGranted = window.Notification && Notification.permission === 'granted';
+  if (!dismissed && !notifGranted) {
+    setTimeout(function () {
+      showBackgroundSetupModal();
+    }, 1500); // slight delay so app loads first
   }
 }
 
-setInterval(checkTimelineReminders, 60000);
-setTimeout(checkTimelineReminders, 3000);
+/* ── Background Setup — Full screen step-by-step modal ──── */
+function showBackgroundSetupModal() {
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+  var installNote = '';
+  if (!isStandalone) {
+    if (isAndroid) {
+      installNote = '<div style="background:rgba(255,107,26,0.15);border:1px solid var(--fire);border-radius:10px;padding:12px;margin-bottom:14px;font-size:.75rem;color:var(--fire);text-align:center;">' +
+        '<strong>&#9888;&#65039; Pehle Install Karo!</strong><br>' +
+        '<span style="color:var(--sub)">Chrome → ⋮ Menu → "Add to Home Screen" → Install<br>Phir Home Screen se kholo</span>' +
+        '</div>';
+    } else {
+      installNote = '<div style="background:rgba(255,107,26,0.15);border:1px solid var(--fire);border-radius:10px;padding:12px;margin-bottom:14px;font-size:.75rem;color:var(--fire);text-align:center;">' +
+        '<strong>&#9888;&#65039; PWA Install Required</strong><br>' +
+        '<span style="color:var(--sub)">Home Screen pe add karo background ke liye</span>' +
+        '</div>';
+    }
+  }
+
+  var androidBatterySteps = isAndroid ? (
+    '<div style="margin-top:14px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:10px;padding:12px;">' +
+    '<div style="font-size:.7rem;font-weight:700;color:#38bdf8;letter-spacing:1px;margin-bottom:8px;">&#9889; BATTERY OPTIMIZATION OFF KARO</div>' +
+    '<div style="font-size:.72rem;color:var(--sub);line-height:1.8;">' +
+    '1. Phone <strong style="color:var(--text)">Settings</strong> → open karo<br>' +
+    '2. <strong style="color:var(--text)">Apps</strong> → FitOS dhundho<br>' +
+    '3. <strong style="color:var(--text)">Battery</strong> → "Unrestricted" select karo<br>' +
+    '4. <strong style="color:var(--text)">Background Activity</strong> → On karo' +
+    '</div>' +
+    '</div>'
+  ) : '';
+
+  openModal(
+    '<div style="text-align:center;">' +
+      '<div style="font-size:2.2rem;margin-bottom:4px;">&#128241;</div>' +
+      '<div class="modal-title" style="font-size:1rem;">BACKGROUND MODE SETUP</div>' +
+      '<div style="font-size:.7rem;color:var(--sub);margin:4px 0 14px;">App band hone par bhi notifications aayengi</div>' +
+    '</div>' +
+    installNote +
+    '<div style="display:flex;flex-direction:column;gap:8px;">' +
+      '<div class="bg-step-card">' +
+        '<div class="bg-step-num">1</div>' +
+        '<div class="bg-step-text">' +
+          '<div class="bg-step-title">&#128276; Notifications Allow Karo</div>' +
+          '<div class="bg-step-desc">Sab reminders ke liye zaroori hai</div>' +
+        '</div>' +
+        '<div id="notif-status-dot" class="bg-status-dot ' + (window.Notification && Notification.permission === 'granted' ? 'done' : 'pending') + '"></div>' +
+      '</div>' +
+      '<div class="bg-step-card">' +
+        '<div class="bg-step-num">2</div>' +
+        '<div class="bg-step-text">' +
+          '<div class="bg-step-title">&#128241; Home Screen pe Add Karo</div>' +
+          '<div class="bg-step-desc">Chrome → ⋮ → "Add to Home Screen"</div>' +
+        '</div>' +
+        '<div class="bg-status-dot ' + (isStandalone ? 'done' : 'pending') + '"></div>' +
+      '</div>' +
+      '<div class="bg-step-card">' +
+        '<div class="bg-step-num">3</div>' +
+        '<div class="bg-step-text">' +
+          '<div class="bg-step-title">&#9889; Battery Optimization OFF Karo</div>' +
+          '<div class="bg-step-desc">Settings → Apps → FitOS → Battery → Unrestricted</div>' +
+        '</div>' +
+        '<div class="bg-status-dot pending"></div>' +
+      '</div>' +
+    '</div>' +
+    androidBatterySteps +
+    '<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;">' +
+      '<button class="modal-btn primary" style="width:100%;padding:13px;font-size:.85rem;" onclick="_bgSetupEnableNotif()">' +
+        '&#128276; STEP 1: NOTIFICATIONS ENABLE KARO' +
+      '</button>' +
+      '<button class="modal-btn" style="width:100%;font-size:.75rem;" onclick="_bgSetupDismiss()">' +
+        'PEHLE INSTALL KARUNGA &#10140;' +
+      '</button>' +
+    '</div>'
+  );
+}
+
+function _bgSetupEnableNotif() {
+  closeModal();
+  if (!window.Notification) {
+    showToast('Browser me notifications support nahi hai.');
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    // Already granted, send a test notif and show next steps
+    postToSW({ type: 'TEST_NOTIF' });
+    showToast('✅ Notifications ON hain! Test notification bheja.');
+    localStorage.setItem('fitos_bg_setup_done', '1');
+    _showBatteryOptModal();
+    return;
+  }
+  Notification.requestPermission().then(function (perm) {
+    if (perm === 'granted') {
+      // Send welcome notif immediately
+      setTimeout(function () {
+        postToSW({
+          type: 'SHOW_STRICTION',
+          payload: {
+            title: '&#128293; FitOS Background Mode ACTIVE!',
+            body: 'App band hone par bhi notifications aayengi. Abhi battery optimization off karo! ⚡',
+            tag: 'bg-setup-done'
+          }
+        });
+      }, 800);
+      // Restart everything
+      postToSW({ type: 'START_CLOCK' });
+      postToSW({ type: 'SYNC_PROFILE', payload: DB.profile() });
+      _reRegisterPeriodicSync();
+      localStorage.setItem('fitos_bg_setup_done', '1');
+      renderHome();
+      _showBatteryOptModal(); // show step 3 immediately after
+    } else {
+      showToast('❌ Permission deny ki. Settings se manually allow karo.');
+    }
+  });
+}
+
+function _bgSetupDismiss() {
+  closeModal();
+  localStorage.setItem('fitos_bg_setup_done', '1');
+}
+
+/* ── Battery optimization guide modal ────────── */
+function _showBatteryOptModal() {
+  setTimeout(function () {
+    openModal(
+      '<div style="text-align:center;margin-bottom:12px;">' +
+        '<div style="font-size:2rem;">&#9889;</div>' +
+        '<div class="modal-title">LAST STEP — BATTERY</div>' +
+        '<div style="font-size:.7rem;color:var(--sub);margin-top:4px;">Yahi ek step app ko truly background mein rakhega</div>' +
+      '</div>' +
+      '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;">' +
+        '<div style="font-size:.72rem;color:var(--text);line-height:2;">' +
+          '<div>&#128241; <strong>Phone Settings</strong> open karo</div>' +
+          '<div>&#128269; <strong>"Apps"</strong> ya "Application Manager" dhundho</div>' +
+          '<div>&#128081; <strong>"FitOS"</strong> select karo</div>' +
+          '<div>&#9889; <strong>"Battery"</strong> tap karo</div>' +
+          '<div>&#9989; <strong>"Unrestricted"</strong> ya "No Restrictions" select karo</div>' +
+          '<div>&#128276; <strong>"Background Activity"</strong> → ON karo</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:10px;font-size:.68rem;color:var(--sub);text-align:center;line-height:1.6;">' +
+        'Samsung: Settings → Battery → Battery Usage Limits → FitOS exclude karo<br>' +
+        'Mi/Redmi: Settings → Battery Saver → FitOS → No Restrictions<br>' +
+        'OnePlus: Battery → Battery Optimization → FitOS → Don\'t Optimize' +
+      '</div>' +
+      '<button class="modal-btn primary" style="width:100%;margin-top:14px;" onclick="closeModal();showToast(\'✅ Setup Complete! Ab notifications aayengi.\')">&#10003; HO GAYA, SAMAJH GAYA!</button>'
+    );
+  }, 400);
+}
+
+/* ── Publicly callable: open background setup modal from settings ─ */
+function openBackgroundSetup() {
+  showBackgroundSetupModal();
+}

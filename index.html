@@ -9,16 +9,19 @@
 <meta name="apple-mobile-web-app-title" content="FitOS"/>
 <title>FitOS — 90-Day Challenge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="app.css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app.css?v=1.1">
+<link rel="stylesheet" href="desktop.css" media="screen and (min-width: 1024px)">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="./icons/fitos_icon.png">
+<link rel="apple-touch-icon" href="./icons/fitos_icon.png">
 </head>
 <body>
 
 <!-- ═══ SETUP SCREEN ═══ -->
 <div id="setup">
   <div class="setup-box">
-    <div class="setup-logo">FitOS</div>
+    <div class="setup-logo">FitOs</div>
     <div class="setup-sub">90-Day Challenge Setup</div>
     <div class="form-group">
       <label class="form-label">Your Name</label>
@@ -35,15 +38,15 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">Challenge Start Date</label>
-      <input class="form-input" id="s-date" type="date"/>
+      <label class="form-label">Height (cm)</label>
+      <input class="form-input" id="s-height" type="number" placeholder="170" min="50" max="250"/>
     </div>
     <div class="form-group">
       <label class="form-label">Daily Water Goal (glasses)</label>
       <input class="form-input" id="s-water-goal" type="number" placeholder="10" min="4" max="20"/>
     </div>
-    <button class="setup-btn" onclick="setupSave()">🔥 START 90-DAY CHALLENGE</button>
-    <div class="setup-note">Sab data phone pe save hoga · Offline bhi chalega · Kabhi delete mat karna</div>
+    <button class="setup-btn haptic-press" onclick="setupSave()">🔥 START 90-DAY CHALLENGE</button>
+    <!-- Setup info removed -->
   </div>
 </div>
 
@@ -52,7 +55,7 @@
   <!-- Topbar -->
   <div class="topbar">
     <div class="topbar-left">
-      <div class="topbar-logo">FitOS</div>
+      <div class="topbar-logo">FitOs</div>
       <div class="topbar-date" id="topbar-date"></div>
     </div>
     <div class="day-badge" id="day-badge">DAY —</div>

@@ -1,16 +1,55 @@
 {
-  "name": "FitOS Challenge",
+  "name": "FitOS — 90-Day Challenge",
   "short_name": "FitOS",
-  "description": "Premium 90-Day Challenge Tracker",
-  "start_url": "./index.html",
+  "description": "Premium 90-Day Fitness Challenge Tracker with 24/7 Background Reminders",
+  "start_url": "./index.html?source=pwa",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0a",
   "theme_color": "#ff6b1a",
+  "scope": "./",
+  "prefer_related_applications": false,
+  "categories": ["health", "fitness", "lifestyle"],
   "icons": [
     {
       "src": "./icons/fitos_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/fitos_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/fitos_icon_512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/fitos_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log Weight",
+      "short_name": "Weight",
+      "description": "Log today's weight",
+      "url": "./index.html?page=home",
+      "icons": [{ "src": "./icons/fitos_icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Today's Workout",
+      "short_name": "Workout",
+      "description": "View today's workout",
+      "url": "./index.html?page=workout",
+      "icons": [{ "src": "./icons/fitos_icon.png", "sizes": "192x192" }]
     }
   ]
 }

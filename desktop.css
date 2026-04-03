@@ -1,0 +1,498 @@
+/* ════════════════════════════════════════════════════════════════════
+   FITOS — DESKTOP (1024px+)
+   Core trick: html font-size scales ALL rem values up uniformly.
+   Then fix px-based margins so cards fill the available screen width.
+   Mobile (app.css) is 100% untouched.
+════════════════════════════════════════════════════════════════════ */
+
+@media screen and (min-width: 1024px) {
+
+/* ══ 1. SCALE UP ROOT FONT — scales ALL rem typography automatically ══ */
+html {
+  font-size: 18px !important; /* up from 14px mobile → all rem values scale 1.28x */
+}
+
+/* ══ 2. DESKTOP VARIABLES ══════════════════════════════════════════ */
+:root {
+  --sb: 230px;        /* sidebar width */
+  --tb: 64px;         /* topbar height */
+  --nav-h: 0px;       /* kill mobile nav height offset */
+  --gutter: 28px;     /* content side padding */
+}
+
+/* ══ 3. FULL SCREEN BODY ══════════════════════════════════════════ */
+html, body {
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  display: block !important;
+  background: #080808 !important;
+}
+
+/* ══ 4. SETUP SCREEN ══════════════════════════════════════════════ */
+#setup {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+  background: radial-gradient(ellipse at 50% 40%, #1e1308 0%, #080808 70%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.setup-box {
+  max-width: 540px !important;
+  width: 90% !important;
+}
+
+/* ══ 5. APP SHELL — CSS Grid ══════════════════════════════════════ */
+#app {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  overflow: hidden !important;
+  display: grid !important;
+  grid-template-columns: var(--sb) 1fr !important;
+  grid-template-rows: var(--tb) 1fr !important;
+  grid-template-areas:
+    "sidebar topbar"
+    "sidebar main" !important;
+  background: #080808 !important;
+}
+
+/* ══ 6. TOPBAR ════════════════════════════════════════════════════ */
+.topbar {
+  grid-area: topbar !important;
+  background: #0e0e0e !important;
+  border-bottom: 1px solid #222 !important;
+  padding: 0 var(--gutter) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: var(--tb) !important;
+  z-index: 50 !important;
+}
+
+/* Hide FitOS logo from topbar — it's shown in sidebar */
+.topbar .topbar-logo { display: none !important; }
+
+/* DATE — bold, large, readable on desktop */
+.topbar-date {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+}
+
+.day-badge {
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 2px !important;
+  padding: 8px 20px !important;
+}
+
+/* ══ 7. SIDEBAR ═══════════════════════════════════════════════════ */
+.bottom-nav {
+  grid-area: sidebar !important;
+  position: static !important;
+  inset: unset !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  gap: 2px !important;
+  padding: 0 0 28px !important;
+  background: #0e0e0e !important;
+  border: none !important;
+  border-right: 1px solid #222 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  z-index: 50 !important;
+  overflow: hidden !important;
+}
+
+/* Sidebar logo */
+.bottom-nav::before {
+  content: 'FitOS';
+  display: block !important;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  font-size: 2.4rem !important;
+  letter-spacing: -1.5px !important;
+  background: linear-gradient(135deg, #ff6b1a 0%, #f5c517 55%, #ff8c42 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  padding: 22px 22px 18px !important;
+  border-bottom: 1px solid #1e1e1e !important;
+  margin-bottom: 14px !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Sidebar nav buttons — stacked vertically */
+.nav-btn {
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  padding: 14px 22px !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  transition: background 0.15s !important;
+  border-right: 3px solid transparent !important;
+}
+.nav-btn:hover { background: rgba(255,107,26,0.06) !important; transform: none !important; }
+.nav-btn.active {
+  background: rgba(255,107,26,0.1) !important;
+  border-right: 3px solid var(--fire) !important;
+  transform: none !important;
+}
+.nav-btn::after { display: none !important; }
+.nav-icon {
+  font-size: 1.3rem !important;
+  filter: grayscale(1) opacity(0.4) !important;
+  transform: none !important;
+  flex-shrink: 0 !important;
+}
+.nav-btn.active .nav-icon {
+  filter: drop-shadow(0 0 8px rgba(255,107,26,0.7)) !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+.nav-label {
+  font-size: 0.78rem !important;
+  letter-spacing: 1.5px !important;
+  color: var(--sub) !important;
+  transform: none !important;
+  font-weight: 700 !important;
+}
+.nav-btn.active .nav-label {
+  color: var(--fire) !important;
+  transform: none !important;
+}
+
+/* ══ 8. MAIN SCROLL AREA ══════════════════════════════════════════ */
+.main {
+  grid-area: main !important;
+  display: block !important;
+  width: 100% !important;
+  height: calc(100vh - var(--tb)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: var(--gutter) var(--gutter) 60px !important;
+  background: #0a0a0a !important;
+  box-sizing: border-box !important;
+}
+
+.main::-webkit-scrollbar { width: 6px !important; display: block !important; }
+.main::-webkit-scrollbar-thumb { background: rgba(255,107,26,0.3) !important; border-radius: 10px !important; }
+.main::-webkit-scrollbar-track { background: transparent !important; }
+
+/* ══ 9. PAGES ════════════════════════════════════════════════════ */
+.page { display: none !important; opacity: 1 !important; transform: none !important; }
+.page.active { display: block !important; opacity: 1 !important; transform: none !important; }
+
+/* ══ 10. REMOVE 16px SIDE MARGINS — let .main padding do the job ═ */
+/* Every card/section in app.css has margin: Xpx 16px.
+   On desktop the .main already has 28px side padding, cards go edge-to-edge */
+.challenge-ring-card,
+.quick-stats,
+.week-strip,
+.workout-banner,
+.home-actions,
+.week-overview,
+.section,
+.day-tabs,
+.wk-header,
+.muscle-group,
+.macro-bar-card,
+.water-display,
+.glasses-grid,
+.water-week-chart,
+.progress-stats,
+.weight-chart,
+.weight-log-card,
+.bmi-card,
+.cal90,
+.weight-history,
+.bmi-card {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Inline-styled notification alert */
+[style*="margin:16px 16px"],
+[style*="margin: 16px 16px"],
+[style*="margin:8px 16px"],
+[style*="margin: 8px 16px"],
+[style*="margin:4px 16px"],
+[style*="margin: 4px 16px"],
+[style*="margin:0 16px 6px"],
+[style*="margin:0 16px 8px"],
+[style*="margin:0 16px 12px"] {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ══ 11. CARD PADDING — bigger on desktop ════════════════════════ */
+.challenge-ring-card { padding: 30px 36px !important; border-radius: 20px !important; }
+.stat-chip            { padding: 18px 14px !important; border-radius: 16px !important; }
+.week-strip           { padding: 16px 14px !important; border-radius: 18px !important; }
+.workout-banner       { padding: 20px 24px !important; border-radius: 18px !important; }
+.action-btn           { padding: 16px 20px !important; border-radius: 14px !important; }
+.macro-bar-card       { padding: 24px 28px !important; border-radius: 20px !important; gap: 28px !important; }
+.meal-card            { border-radius: 16px !important; margin-bottom: 10px !important; }
+.meal-header          { padding: 18px 20px !important; }
+.meal-macros          { padding: 0 20px 14px !important; }
+.supp-row             { padding: 14px 18px !important; border-radius: 14px !important; }
+.water-display        { padding: 40px 36px !important; border-radius: 22px !important; }
+.glass-item           { padding: 14px 6px !important; border-radius: 14px !important; }
+.water-week-chart     { padding: 20px 22px !important; border-radius: 16px !important; }
+.weight-chart         { padding: 22px 24px !important; border-radius: 18px !important; min-height: 310px !important; }
+.weight-log-card      { padding: 20px 22px !important; border-radius: 16px !important; }
+.wl-input             { padding: 14px 16px !important; border-radius: 12px !important; }
+.bmi-card             { padding: 22px 24px !important; border-radius: 18px !important; }
+.cal90                { padding: 22px 24px !important; border-radius: 18px !important; }
+.weight-history       { padding: 20px 22px !important; border-radius: 16px !important; }
+.progress-stats .prog-stat { padding: 18px 14px !important; border-radius: 16px !important; }
+.wk-header            { padding: 22px 26px !important; border-radius: 18px !important; }
+.exercise-row         { border-radius: 14px !important; margin-bottom: 8px !important; }
+.ex-header            { padding: 16px 18px !important; }
+.ex-body              { padding: 10px 18px 18px !important; }
+.set-row              { margin-bottom: 12px !important; gap: 14px !important; }
+.rest-day-card        { padding: 56px 40px !important; border-radius: 20px !important; }
+.wh-row               { padding: 12px 0 !important; }
+
+/* ══ 12. KEY SIZES (rem-based, already scaled — just tweak specific px)  ════ */
+.quick-stats { display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 14px !important; overflow: visible !important; }
+.stat-chip   { flex: unset !important; min-width: unset !important; }
+
+.glasses-grid { grid-template-columns: repeat(10, 1fr) !important; gap: 12px !important; }
+.cal90-grid   { grid-template-columns: repeat(18, 1fr) !important; gap: 5px !important; }
+#weight-svg   { height: 260px !important; }
+.wh-list      { max-height: 360px !important; }
+.chart-bars   { height: 100px !important; }
+
+/* ══ 13. PROGRESS PAGE — 2-column grid with CSS order fix ═══════ */
+/* DOM order: progress-stats → weight-chart → weight-log-card → cal90 → bmi-card → weight-history */
+/* We want: stats(full) → chart(full) → [weight-log | bmi-card] → cal90(full) → history(full) */
+
+#page-progress.active {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 18px 20px !important;
+  align-items: start !important;
+}
+
+/* Full-width items */
+#page-progress.active .progress-stats { grid-column: 1 / -1 !important; order: 1 !important; }
+#page-progress.active .weight-chart   { grid-column: 1 / -1 !important; order: 2 !important; }
+#page-progress.active .weight-log-card{ order: 3 !important; } /* col 1 */
+#page-progress.active .bmi-card       { order: 4 !important; } /* col 2 — moved next to weight-log */
+#page-progress.active .cal90          { grid-column: 1 / -1 !important; order: 5 !important; } /* moved below the 2 cards */
+#page-progress.active .weight-history { grid-column: 1 / -1 !important; order: 6 !important; }
+
+/* section headers (like BMI heading) inside progress */
+#page-progress.active .sec-h { padding: 0 0 12px !important; }
+
+/* ══ 14. TOAST ════════════════════════════════════════════════════ */
+#toast {
+  position: fixed !important;
+  bottom: 28px !important;
+  left: 50% !important;
+  transform: translateX(calc(-50% + var(--sb) / 2)) !important;
+  z-index: 9999 !important;
+  font-size: 0.85rem !important;
+  padding: 12px 24px !important;
+  border-radius: 24px !important;
+}
+#toast.show {
+  opacity: 1 !important;
+  transform: translateX(calc(-50% + var(--sb) / 2)) translateY(0) !important;
+}
+
+/* ══ 15. MODAL ════════════════════════════════════════════════════ */
+.modal:not(.hidden) {
+  position: fixed !important;
+  left: var(--sb) !important;
+  top: var(--tb) !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.modal-box {
+  border-radius: 22px !important;
+  max-width: 520px !important;
+  width: 90% !important;
+  padding: 36px !important;
+}
+
+/* ══ SAFETY ═══════════════════════════════════════════════════════ */
+#setup[style*="display: none"],
+#app[style*="display: none"] { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PREMIUM DESKTOP ANIMATIONS
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ── */
+@keyframes desktopFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes desktopRingPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,26,0); }
+  50%       { box-shadow: 0 0 40px 10px rgba(255,107,26,0.12); }
+}
+
+@keyframes desktopShimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* ── Card entrance animation — staggered per child ── */
+.page.active > *,
+.page.active .section > * {
+  animation: desktopFadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both !important;
+}
+
+.page.active > *:nth-child(1)  { animation-delay: 0.04s !important; }
+.page.active > *:nth-child(2)  { animation-delay: 0.08s !important; }
+.page.active > *:nth-child(3)  { animation-delay: 0.12s !important; }
+.page.active > *:nth-child(4)  { animation-delay: 0.16s !important; }
+.page.active > *:nth-child(5)  { animation-delay: 0.20s !important; }
+.page.active > *:nth-child(6)  { animation-delay: 0.24s !important; }
+.page.active > *:nth-child(7)  { animation-delay: 0.28s !important; }
+.page.active > *:nth-child(8)  { animation-delay: 0.32s !important; }
+
+/* ── Hover lift effect on all cards ── */
+.challenge-ring-card,
+.stat-chip,
+.week-strip,
+.workout-banner,
+.action-btn,
+.meal-card,
+.supp-row,
+.exercise-row,
+.water-display,
+.glass-item,
+.weight-chart,
+.weight-log-card,
+.bmi-card,
+.cal90,
+.weight-history,
+.macro-bar-card,
+.water-week-chart,
+.prog-stat {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.stat-chip:hover,
+.action-btn:hover,
+.glass-item:hover,
+.supp-row:hover,
+.exercise-row:hover,
+.meal-card:hover,
+.prog-stat:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5) !important;
+}
+
+.workout-banner:hover,
+.week-strip:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4) !important;
+}
+
+.weight-log-card:hover,
+.bmi-card:hover,
+.weight-chart:hover,
+.weight-history:hover,
+.water-week-chart:hover,
+.macro-bar-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,107,26,0.08) !important;
+}
+
+/* ── Challenge ring card — ambient pulse ── */
+.challenge-ring-card {
+  animation: desktopFadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both, desktopRingPulse 4s ease-in-out infinite !important;
+  animation-delay: 0.04s, 1.5s !important;
+}
+
+/* ── Water display glow ── */
+.water-display:hover {
+  box-shadow: 0 10px 40px rgba(56,189,248,0.12), 0 0 0 1px rgba(56,189,248,0.1) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ── 90-day grid cells — scale on hover ── */
+.cal-day {
+  transition: transform 0.15s ease !important;
+}
+.cal-day:hover {
+  transform: scale(1.25) !important;
+  z-index: 2 !important;
+  position: relative !important;
+}
+
+/* ── Sidebar nav item — smooth accent line slide ── */
+.nav-btn {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.nav-btn::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) scaleY(0) !important;
+  width: 3px !important;
+  height: 60% !important;
+  background: var(--fire) !important;
+  border-radius: 0 3px 3px 0 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.nav-btn:hover::before { transform: translateY(-50%) scaleY(0.5) !important; }
+.nav-btn.active::before { transform: translateY(-50%) scaleY(1) !important; }
+
+/* ── Day badge shimmer when challenge active ── */
+.day-badge:not(:empty) {
+  background-size: 200% auto !important;
+}
+
+} /* END @media 1024px */
