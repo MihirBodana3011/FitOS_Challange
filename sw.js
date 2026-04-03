@@ -90,7 +90,7 @@ const DAILY_SCHEDULE = [
     title: '💧 FINAL WATER CHECK',
     body:  'Aaj ka paani ka goal achieve hua? Last chance! Check karo.' },
 
-  { h: 22, m: 30, tag: 'gt',         challenge: false, urgent: false,
+  { h: 23, m: 59, tag: 'gt',         challenge: false, urgent: false,
     title: '🍵 Green Tea Before Bed',
     body:  'Sone se pehle ek cup green tea. Cool-down mode ON.' },
 
@@ -185,7 +185,7 @@ async function checkAndFire() {
     const now = new Date();
     const h = now.getHours();
     const m = now.getMinutes();
-    const todayKey = now.toISOString().split('T')[0]; // "2026-04-04"
+    const todayKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
 
     // Load challenge status from IndexedDB
     const profile = await dbGet('profile') || {};
@@ -236,8 +236,8 @@ async function cleanOldLogs(todayKey) {
       req.onerror = () => resolve([]);
     });
 
-    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
-      .toISOString().split('T')[0];
+    const tda = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+    const threeDaysAgo = tda.getFullYear() + '-' + String(tda.getMonth() + 1).padStart(2, '0') + '-' + String(tda.getDate()).padStart(2, '0');
 
     for (const key of keys) {
       if (typeof key === 'string' && key.startsWith('firedLog_')) {
@@ -286,7 +286,7 @@ function scheduleNextMinute() {
 async function catchUpMissedNotifs() {
   try {
     const now = new Date();
-    const todayKey = now.toISOString().split('T')[0];
+    const todayKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     const profile = await dbGet('profile') || {};
     const isChallengeActive = !!(profile.startDate);
     const firedLog = await dbGet('firedLog_' + todayKey) || {};

@@ -137,13 +137,40 @@ var DB = {
 // ═══════════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════════
-function today() { return new Date().toISOString().split('T')[0]; }
+function toLocalDate(d) {
+  var date = d || new Date();
+  var y = date.getFullYear();
+  var m = String(date.getMonth() + 1).padStart(2, '0');
+  var day = String(date.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+function today() { return toLocalDate(); }
 function todayDay() { return DAY_NAMES[new Date().getDay()]; }
 function formatDate(d) {
   if (!d) return '---';
   var dt = new Date(d + 'T00:00:00');
   if (isNaN(dt.getTime())) return d;
   return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' });
+}
+function updateTopBar() {
+  var td = document.getElementById('topbar-date');
+  if (td) {
+    var now = new Date();
+    // Manual format to get exactly HH:MM AM/PM style
+    var hh = now.getHours();
+    var mm = now.getMinutes();
+    var ampm = hh >= 12 ? 'P.M' : 'A.M';
+    hh = hh % 12;
+    hh = hh ? hh : 12;
+    var timeStr = String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + ' ' + ampm;
+    td.innerHTML = formatDate(today()) + ' <span style="margin-left:8px; opacity:0.8; font-family:JetBrains Mono,monospace; font-size:0.85em;">' + timeStr + '</span>';
+  }
+  var db = document.getElementById('day-badge');
+  if (db) {
+    var dn = getDayNum();
+    db.textContent = dn > 0 ? 'DAY ' + dn : 'READY';
+    db.style.color = dn > 0 ? 'var(--fire)' : 'var(--sub)';
+  }
 }
 function getDayNum() {
   var p = DB.profile();
@@ -258,7 +285,7 @@ function weekStripHTML() {
   var html = '<div class="week-strip">';
   for (var i = 0; i < 7; i++) {
     var dt = new Date(startOfWeek.getTime() + i * 86400000);
-    var dStr = dt.toISOString().split('T')[0];
+    var dStr = toLocalDate(dt);
     var dayName = DAY_NAMES[i]; // DAY_NAMES array: [sun,mon,...]
     var wType = getWorkoutType(dayName);
     var color = TYPE_COLORS[wType] || '#555';
@@ -625,14 +652,14 @@ function renderWorkout(day) {
 
   var dDt = new Date();
   dDt.setDate(dDt.getDate() - dDt.getDay() + DAY_NAMES.indexOf(day));
-  var dStr = dDt.toISOString().split('T')[0];
+  var dStr = toLocalDate(dDt);
   var wkData = DB.getWorkout(dStr);
   var isDone = wkData.completed || false;
 
   var tabsHtml = DAY_NAMES.map(function (d) {
     var dtT = new Date();
     dtT.setDate(dtT.getDate() - dtT.getDay() + DAY_NAMES.indexOf(d));
-    var dsT = dtT.toISOString().split('T')[0];
+    var dsT = toLocalDate(dtT);
     var dwT = DB.getWorkout(dsT);
     var cls = 'day-tab';
     if (d === day) cls += ' active';
@@ -798,7 +825,7 @@ function renderDiet() {
     { t: '05:30 PM', icon: '\ud83c\udf3e', label: 'Isabgol Round 2', desc: '1 tsp in water', id: 'supp_isab2', type: 'supp' },
     { t: '06:30 PM', icon: '\ud83c\udfe2', label: 'JOB STARTS', desc: 'Night shift begins - stay sharp' },
     { t: '09:30 PM', icon: '\ud83c\udf7d', label: 'DINNER', desc: 'Pre-shift fuel - heavy protein', id: 'dinner', type: 'meal' },
-    { t: '12:30 AM', icon: '\ud83c\udf75', label: 'Green Tea + Lemon', desc: 'Metabolism boost - last drink', id: 'supp_gt', type: 'supp' }
+    { t: '11:59 PM', icon: '\ud83c\udf75', label: 'Green Tea + Lemon', desc: 'Metabolism boost - last drink', id: 'supp_gt', type: 'supp' }
   ];
 
   var timelineHtml = '';
@@ -1067,7 +1094,7 @@ function renderProgress() {
     var todayIdx = dayNum - 1;
     for (var i = 0; i < 90; i++) {
       var dt = new Date(startD.getTime() + i * 24 * 60 * 60 * 1000);
-      var dStr = dt.toISOString().split('T')[0];
+      var dStr = toLocalDate(dt);
       var wEntry = DB.getWorkout(dStr);
       var cls = 'cal-day';
       if (i > todayIdx) cls += ' future';
@@ -1200,11 +1227,7 @@ function setupSave() {
 
 function startChallenge() {
   DB.setProfile({ startDate: today() });
-  var db = document.getElementById('day-badge');
-  if (db) {
-    db.textContent = 'DAY 1';
-    db.style.color = 'var(--fire)';
-  }
+  updateTopBar();
   syncProfileWithSW(); // tell SW challenge is now active
   renderHome();
   showToast('🔥 Day 1 started! Stay disciplined.');
@@ -1213,11 +1236,7 @@ function startChallenge() {
 function resetChallenge() {
   if (confirm('⚠️ RESET CHALLENGE? This will clear your Day count. Your history remains.')) {
     DB.setProfile({ startDate: null });
-    var db = document.getElementById('day-badge');
-    if (db) {
-      db.textContent = 'READY';
-      db.style.color = 'var(--sub)';
-    }
+    updateTopBar();
     syncProfileWithSW(); // tell SW challenge is now inactive
     renderHome();
     showToast('Challenge Reset. Day count cleared.');
@@ -1227,11 +1246,7 @@ function resetChallenge() {
 function restartChallenge() {
   if (confirm('🔄 RESTART CHALLENGE? Start again at Day 1 (Today).')) {
     DB.setProfile({ startDate: today() });
-    var db = document.getElementById('day-badge');
-    if (db) {
-      db.textContent = 'DAY 1';
-      db.style.color = 'var(--fire)';
-    }
+    updateTopBar();
     syncProfileWithSW(); // tell SW challenge restarted
     renderHome();
     showToast('Challenge Restarted! Day 1.');
@@ -1241,14 +1256,8 @@ function restartChallenge() {
 function initApp() {
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
-  var td = document.getElementById('topbar-date');
-  if (td) td.textContent = formatDate(today());
-  var db = document.getElementById('day-badge');
-  if (db) {
-    var dn = getDayNum();
-    db.textContent = dn > 0 ? 'DAY ' + dn : 'READY';
-    db.style.color = dn > 0 ? 'var(--fire)' : 'var(--sub)';
-  }
+  updateTopBar();
+  setInterval(updateTopBar, 30000); 
   initNav();
   goPage('home');
   // Start background systems after UI is ready

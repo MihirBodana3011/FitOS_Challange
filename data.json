@@ -758,6 +758,6 @@
     { "t": "05:30 PM", "id": "supp_isab2", "a": "🌾 Isabgol Round 2", "d": "1 tsp in water" },
     { "t": "06:30 PM", "a": "🏢 JOB STARTS", "d": "Night shift begins — stay sharp" },
     { "t": "09:30 PM", "id": "dinner", "a": "🍽️ DINNER", "d": "Pre-shift fuel — heavy protein" },
-    { "t": "12:30 AM", "id": "supp_gt", "a": "🍵 Green Tea + Lemon", "d": "Metabolism boost — last drink" }
+    { "t": "11:59 PM", "id": "supp_gt", "a": "🍵 Green Tea + Lemon", "d": "Metabolism boost — last drink" }
   ]
 }
