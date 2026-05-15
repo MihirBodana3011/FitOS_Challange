@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="FitOS" />
-  <title>FitOS — 90-Day Challenge</title>
+  <title>FitOS — Elite Fitness Evolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&family=Oswald:wght@700&display=swap"
@@ -20,7 +20,7 @@
   <link rel="apple-touch-icon" href="./icons/fitos_icon.png">
   <script>
     // Hard Reset for PWA: Clear all caches and unregister SW one-time
-    const REFRESH_VERSION = 'v12';
+    const REFRESH_VERSION = 'v30';
     if (localStorage.getItem('fitos_refresh_ver') !== REFRESH_VERSION) {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(regs => {
@@ -63,60 +63,16 @@
     <div class="setup-box tilt-card">
       <div class="setup-header">
         <div class="setup-banner">FitOs</div>
-        <div class="setup-sub">ELITE PERFORMANCE PROTOCOL</div>
+        <div class="setup-sub">STEP-BY-STEP GUIDED SETUP</div>
       </div>
-      
 
-      <div class="form-group">
-        <label class="form-label">PILOT NAME</label>
-        <input class="form-input" id="s-name" type="text" placeholder="ENTER NAME..." autocomplete="off" />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">CURRENT MASS (KG)</label>
-          <input class="form-input" id="s-weight" type="number" placeholder="85" step="0.1" min="30" max="250" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">TARGET MASS (KG)</label>
-          <input class="form-input" id="s-target-weight" type="number" placeholder="70" step="0.1" min="30" max="250" />
+      <div class="setup-chat">
+        <div class="chat-log" id="setup-log"></div>
+        <div class="setup-chat-footer">
+          <div class="chat-input-box" id="setup-input-box"></div>
+          <button class="setup-btn haptic-press" id="setup-next" onclick="nextSetupStep()">NEXT</button>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">BIOLOGICAL AGE</label>
-          <input class="form-input" id="s-age" type="number" placeholder="25" min="10" max="120" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">GENDER_ID</label>
-          <select class="form-input custom-select" id="s-gender" aria-label="Gender selection">
-            <option value="male">MALE</option>
-            <option value="female">FEMALE</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">HEIGHT (CM)</label>
-        <input class="form-input" id="s-height" type="number" placeholder="170" min="50" max="250" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">HYDRATION_QUOTA (GLASSES)</label>
-        <input class="form-input" id="s-water-goal" type="number" placeholder="10" min="4" max="20" />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">CURRENT BODY_FAT (%)</label>
-          <input class="form-input" id="s-bodyfat" type="number" placeholder="20" step="0.1" min="3" max="50" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">PROTOCOL_MOOD</label>
-          <select class="form-input custom-select" id="s-goal-mode">
-            <option value="cut">SHRED (CUT)</option>
-            <option value="bulk">MAINTAIN/GAIN (BULK)</option>
-          </select>
-        </div>
-      </div>
-      <button class="setup-btn haptic-press" onclick="setupSave()">⚡ INITIATE PROTOCOL</button>
-      <!-- Setup info removed -->
     </div>
   </div>
 
@@ -153,6 +109,7 @@
       <div class="page" id="page-diet"></div>
       <div class="page" id="page-water"></div>
       <div class="page" id="page-progress"></div>
+      <div class="page" id="page-profile"></div>
     </div>
 
     <!-- Bottom Nav -->
@@ -176,6 +133,10 @@
       <button class="nav-btn" data-page="progress">
         <div class="nav-icon">📈</div>
         <div class="nav-label">Progress</div>
+      </button>
+          <button class="nav-btn" data-page="profile">
+        <div class="nav-icon">👤</div>
+        <div class="nav-label">Profile</div>
       </button>
     </nav>
   </div>

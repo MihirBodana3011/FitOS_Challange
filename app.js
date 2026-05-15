@@ -48,19 +48,27 @@ var NeuralCore = {
     return Math.round(w / (1.0278 - (0.0278 * r)));
   },
 
-  // Predict weight in N days based on recent trend (past 7-14 days)
+  // Predict weight in N days based on recent trend (past 14 days linear regression)
   predictWeight: function (days) {
     var weights = DB.weights();
     if (weights.length < 3) return null;
 
-    // Simple linear trend based on first and last log in the window
-    var start = weights[0];
-    var end = weights[weights.length - 1];
-    var dayDiff = (end.t - start.t) / (1000 * 60 * 60 * 24);
-    if (dayDiff < 1) return end.kg;
+    var now = Date.now();
+    var window14 = weights.filter(function(w) { return (now - w.t) <= 14 * 24 * 60 * 60 * 1000; });
+    if (window14.length < 3) window14 = weights.slice(-7);
 
-    var ratePerDay = (end.kg - start.kg) / dayDiff;
-    return (end.kg + (ratePerDay * days)).toFixed(1);
+    var sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    var n = window14.length;
+    var firstT = window14[0].t;
+    for (var i = 0; i < n; i++) {
+        var x = (window14[i].t - firstT) / (1000 * 60 * 60 * 24);
+        var y = window14[i].kg;
+        sumX += x; sumY += y; sumXY += x * y; sumXX += x * x;
+    }
+    var slope = (n * sumXY - sumX * sumY) / ((n * sumXX - sumX * sumX) || 1);
+    
+    var end = weights[weights.length - 1];
+    return (end.kg + (slope * days)).toFixed(1);
   },
 
   // Identify plateau (weight hasn't changed > 0.5% in 14 days despite > 90% adherence)
@@ -111,37 +119,217 @@ var NeuralCore = {
   },
 
   // Smart Macro Adjustment based on Goal & BF%
-  getMacroAdjustment: function () {
+  getMacroAdjustment: function (bf, lbm) {
     var p = DB.profile();
-    var bf = parseFloat(p.bodyFat || 20);
-    var goal = p.goalMode || 'cut';
-
+    var goal = p.goalMode || 'lose';
     var adj = { cal: 0, protein: 0 };
-    if (goal === 'cut') {
+    if (goal === 'lose') {
       adj.cal = -500;
-      adj.protein = bf > 25 ? 1.8 : 2.2; // Higher protein for leaner people on cut
+      adj.protein = bf > 25 ? 1.8 : 2.2;
+    } else if (goal === 'gain') {
+      adj.cal = 400;
+      adj.protein = 2.0;
     } else {
-      adj.cal = 300;
+      adj.cal = 0;
       adj.protein = 2.0;
     }
     return adj;
+  },
+
+  getDynamicDailyMacros: function () {
+    var p = DB.profile();
+    var age = p.age || 25;
+    var gender = p.gender || 'male';
+    var h_cm = p.height || 170;
+    var h_m = h_cm / 100;
+    var weights = DB.weights();
+    var w = weights.length ? weights[weights.length - 1].kg : parseFloat(p.weight) || 75;
+    
+    var bmi = w / (h_m * h_m);
+    var gFactor = (gender === 'male' ? 1 : 0);
+    var bfr = (1.20 * bmi) + (0.23 * age) - (10.8 * gFactor) - 5.4;
+    if (age < 18) { bfr = (1.51 * bmi) - (0.70 * age) - (3.6 * gFactor) + 1.4; }
+    bfr = Math.max(3, Math.min(50, bfr));
+    
+    var lbm = w * (1 - (bfr / 100));
+    var bmr = (10 * w) + (6.25 * h_cm) - (5 * age) + (gender === 'male' ? 5 : -161);
+    
+    var workStart = this.parseTime(p.workStart);
+    var workEnd = this.parseTime(p.workEnd);
+    var gymStart = this.parseTime(p.gymStart);
+    var gymEnd = this.parseTime(p.gymEnd);
+    
+    var workHours = 0;
+    if (workStart && workEnd) {
+      workHours = (workEnd.h * 60 + workEnd.m - (workStart.h * 60 + workStart.m)) / 60;
+      if (workHours < 0) workHours += 24;
+    }
+    var gymHours = 0;
+    if (gymStart && gymEnd) {
+      gymHours = (gymEnd.h * 60 + gymEnd.m - (gymStart.h * 60 + gymStart.m)) / 60;
+      if (gymHours < 0) gymHours += 24;
+    }
+    
+    var activityFactor = 1.3;
+    if (workHours >= 10) activityFactor += 0.15;
+    else if (workHours >= 8) activityFactor += 0.1;
+    if (gymHours >= 1) activityFactor += 0.15;
+    else if (gymHours > 0) activityFactor += 0.1;
+
+    var tdee = Math.round(bmr * activityFactor);
+    
+    var adj = this.getMacroAdjustment(bfr, lbm);
+    var targetCal = Math.max(1200, Math.round(tdee + adj.cal));
+    var targetProtein = Math.round(lbm * adj.protein);
+    var targetFat = Math.round((targetCal * 0.25) / 9);
+    var targetCarbs = Math.max(0, Math.round((targetCal - (targetProtein * 4) - (targetFat * 9)) / 4));
+    
+    var goals = { tdee: tdee, cal: targetCal, protein: targetProtein, carbs: targetCarbs, fat: targetFat };
+    
+    return {
+      goals: goals,
+      meals: {
+        pregym: { cal: Math.round(targetCal * 0.08), protein: Math.round(targetProtein * 0.05), carbs: Math.round(targetCarbs * 0.15), fat: 0 },
+        postworkout: { cal: Math.round(targetCal * 0.15), protein: Math.round(targetProtein * 0.20), carbs: Math.round(targetCarbs * 0.20), fat: Math.round(targetFat * 0.15) },
+        lunch: { cal: Math.round(targetCal * 0.35), protein: Math.round(targetProtein * 0.35), carbs: Math.round(targetCarbs * 0.40), fat: Math.round(targetFat * 0.40) },
+        dinner: { cal: Math.round(targetCal * 0.25), protein: Math.round(targetProtein * 0.25), carbs: Math.round(targetCarbs * 0.20), fat: Math.round(targetFat * 0.30) },
+        supp_snack: { cal: Math.round(targetCal * 0.17), protein: Math.round(targetProtein * 0.15), carbs: Math.round(targetCarbs * 0.05), fat: Math.round(targetFat * 0.15) }
+      }
+    };
+  },
+
+  generateMeals: function(profile) {
+    var diet = profile.dietPreference || 'veg';
+    var goal = profile.goalMode || 'lose';
+
+    // Base rotating arrays
+    var pregym_opts = ['1 Fruit (Banana/Apple) + Black Coffee', 'Handful of almonds + Black Coffee', 'Rice Cake with Peanut Butter', '1/2 Apple + Espresso', 'Banana + Green Tea'];
+    var postworkout_opts = ['Protein Shake + Handful of nuts', 'Greek Yogurt + Berries', 'Whey Protein + 1 Banana', 'Milk + Roasted Chana', 'Protein Shake + 2 Dates'];
+    var snack_opts = ['Handful of Roasted Makhana', 'Handful of Peanuts', 'Protein Bar / Energy Ball', 'Mixed Seeds + Green Tea', '1 Apple + Walnuts'];
+
+    // Goal and Diet specific arrays
+    var lunch_opts = [];
+    var dinner_opts = [];
+
+    if (goal === 'lose') {
+      if (diet === 'veg') {
+        lunch_opts = ['Tofu Salad + Light Dal + Quinoa', 'Moong Dal Chilla + Mint Chutney', 'Oats Khichdi + Curd', 'Paneer Tikka Salad', 'Brown Rice + Rajma (Low Cal)'];
+        dinner_opts = ['Sautéed Veggies + Paneer Bhurji (No Oil)', 'Pumpkin Soup + Veg Salad', 'Lauki Sabzi + 1 Multigrain Roti', 'Grilled Tofu + Steamed Greens', 'Clear Veg Soup + Moong Sprouts Salad'];
+      } else if (diet === 'eggetarian') {
+        lunch_opts = ['4 Egg Whites + Light Dal + Complex Carbs', 'Egg White Omelette + Whole Wheat Bread', 'Boiled Eggs Salad + Quinoa', 'Egg Curry (Less Oil) + Brown Rice', 'Scrambled Egg Whites + Spinach'];
+        dinner_opts = ['3 Egg Whites Scramble + Large Salad', 'Egg Drop Soup + Sautéed Veggies', 'Boiled Eggs + Green Beans', 'Egg White Bhurji + 1 Roti', 'Egg Salad + Cucumber'];
+      } else { // nonveg
+        lunch_opts = ['Grilled Chicken Breast + Green Veggies + Light Carbs', 'Chicken Tikka Salad', 'Fish Curry (Low Oil) + Brown Rice', 'Chicken Soup + 1 Roti', 'Tuna Salad + Quinoa'];
+        dinner_opts = ['Baked Fish + Large Salad', 'Sautéed Chicken + Steamed Greens', 'Clear Chicken Soup + Sautéed Veggies', 'Grilled Fish + Asparagus', 'Chicken Meatballs + Zoodles'];
+      }
+    } else if (goal === 'gain') {
+      pregym_opts = ['2 Bananas + Peanut Butter Toast + Coffee', 'Oatmeal + Honey + Coffee', 'Rice Cakes + Almond Butter + Espresso', '2 Dates + Pre-workout', 'Sweet Potato + Black Coffee'];
+      postworkout_opts = ['Whey Protein + Banana + Dates', 'Mass Gainer Shake', 'Milk + 2 Bananas + Peanut Butter', 'Whey Protein + Oats', 'Protein Shake + Rice Crispies'];
+      snack_opts = ['Paneer Sandwich', '4 Boiled Eggs', 'Greek Yogurt + Granola', 'Peanut Butter Toast', 'Mixed Nuts + Dried Fruits'];
+      if (diet === 'veg') {
+        lunch_opts = ['Full-Fat Paneer Curry + Rice + Dal (High Cal)', 'Soya Chunks Pulao + Raita', 'Aloo Paratha + Curd + Butter', 'Rajma Rice + Ghee', 'Chhole Bhature (Baked) + Lassi'];
+        dinner_opts = ['Soya Chunks + Roti + Ghee + Veggies', 'Paneer Tikka Masala + Naan', 'Dal Makhani + Rice', 'Malai Kofta + Roti', 'Matar Paneer + Pulao'];
+      } else if (diet === 'eggetarian') {
+        lunch_opts = ['4 Whole Eggs Curry + Rice + Dal', 'Egg Fried Rice + Ghee', '5 Boiled Eggs + Potatoes', 'Egg Paratha + Curd', 'Egg Biryani'];
+        dinner_opts = ['4 Whole Eggs Omelette + Roti + Ghee', 'Egg Bhurji + Double Roti + Butter', 'Egg Curry + Naan', 'Sautéed Eggs + Sweet Potato', 'Shakshuka + Bread'];
+      } else { // nonveg
+        lunch_opts = ['Chicken Thighs + Double Portion Rice', 'Mutton Curry + Rice + Ghee', 'Chicken Biryani + Raita', 'Fish Pulao + Extra Carbs', 'Beef/Chicken Steak + Mashed Potatoes'];
+        dinner_opts = ['Chicken Curry + Roti + Ghee', 'Butter Chicken + Naan', 'Grilled Salmon + Rice', 'Minced Meat Curry + Roti', 'Creamy Chicken + Pasta'];
+      }
+    } else { // maintain
+      snack_opts = ['Mixed Fruits + Greek Yogurt', 'Handful of Nuts', 'Roasted Chana', '1 Fruit + Peanut Butter', 'Boiled Corn'];
+      if (diet === 'veg') {
+        lunch_opts = ['Paneer/Tofu + Complex Carbs + Mixed Salad', 'Dal + Rice + Mixed Veggies', 'Chole + 2 Roti + Salad', 'Soya Chunks Pulao', 'Veg Sandwich + Soup'];
+        dinner_opts = ['Light Dal/Paneer + Cooked Vegetables', 'Sautéed Tofu + Quinoa', 'Veg Khichdi', 'Paneer Bhurji + 1 Roti', 'Grilled Veggies + Hummus'];
+      } else if (diet === 'eggetarian') {
+        lunch_opts = ['2 Whole Eggs & 2 Whites + Complex Carbs + Salad', 'Egg Curry + Rice', 'Omelette + 2 Roti', 'Egg Sandwich', 'Boiled Eggs + Pulao'];
+        dinner_opts = ['Egg Curry + Cooked Vegetables', 'Egg Bhurji + 1 Roti', 'Scrambled Eggs + Spinach', 'Boiled Eggs + Salad', 'Egg Drop Soup + Bread'];
+      } else { // nonveg
+        lunch_opts = ['Chicken Breast/Fish + Complex Carbs + Mixed Salad', 'Chicken Curry + Rice', 'Grilled Fish + Potatoes', 'Chicken Wrap', 'Tuna Sandwich'];
+        dinner_opts = ['Light Fish/Chicken + Cooked Vegetables', 'Chicken Stew + 1 Roti', 'Grilled Salmon + Salad', 'Sautéed Chicken + Quinoa', 'Chicken Soup + Veggies'];
+      }
+    }
+
+    var days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    var weeklyMeals = {};
+
+    for (var i = 0; i < days.length; i++) {
+      weeklyMeals[days[i]] = {
+        pregym: pregym_opts[i % pregym_opts.length],
+        postworkout: postworkout_opts[i % postworkout_opts.length],
+        lunch: lunch_opts[i % lunch_opts.length],
+        dinner: dinner_opts[i % dinner_opts.length],
+        supp_snack: snack_opts[i % snack_opts.length]
+      };
+    }
+
+    return weeklyMeals;
+  },
+  
+  parseTime: function(tStr) {
+    if (!tStr) return {h: 0, m: 0};
+    var p = tStr.split(':');
+    return { h: parseInt(p[0]) || 0, m: parseInt(p[1]) || 0 };
+  },
+
+  formatTime: function(h, m) {
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var hr12 = h % 12 || 12;
+    return hr12 + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+  },
+
+  addMinutes: function(time, mins) {
+    var totalMins = time.h * 60 + time.m + mins;
+    if (totalMins < 0) totalMins += 24 * 60;
+    var h = Math.floor(totalMins / 60) % 24;
+    var m = totalMins % 60;
+    return { h: h, m: m };
+  },
+
+  generateTimelineAndSchedule: function(profile) {
+    var gymTime = this.parseTime(profile.gymStart || '18:00');
+    var workTime = this.parseTime(profile.workStart || '09:00');
+    
+    var wakeTime;
+    if (gymTime.h < workTime.h) {
+        wakeTime = this.addMinutes(gymTime, -60);
+    } else {
+        wakeTime = this.addMinutes(workTime, -120);
+    }
+    
+    var breakfastTime = this.addMinutes(wakeTime, 60);
+    var lunchTime = this.addMinutes(workTime, 240);
+    var preGymTime = this.addMinutes(gymTime, -30);
+    var postGymTime = this.addMinutes(gymTime, 90);
+    var dinnerTime = this.addMinutes(postGymTime, 90);
+    var sleepTime = this.addMinutes(wakeTime, 16 * 60);
+
+    var tl = [
+      { t: this.formatTime(wakeTime.h, wakeTime.m), a: '☀️ WAKE UP', d: 'Start the day with a glass of warm water', type: 'info' },
+      { t: this.formatTime(breakfastTime.h, breakfastTime.m), a: '🍳 BREAKFAST', d: 'High protein breakfast', type: 'info' },
+      { t: this.formatTime(lunchTime.h, lunchTime.m), id: 'lunch', a: '🍱 LUNCH', d: 'Main midday meal', type: 'meal' },
+      { t: this.formatTime(this.addMinutes(lunchTime, 180).h, this.addMinutes(lunchTime, 180).m), id: 'snack', a: '🥜 SNACK', d: 'Low calorie protein snack', type: 'meal' },
+      { t: this.formatTime(preGymTime.h, preGymTime.m), id: 'pregym', a: '🍌 PRE-WORKOUT', d: 'Pre-workout energy', type: 'meal' },
+      { t: this.formatTime(gymTime.h, gymTime.m), a: '🏋️ GYM', d: 'High intensity training', type: 'info' },
+      { t: this.formatTime(postGymTime.h, postGymTime.m), id: 'postworkout', a: '🥛 POST-WORKOUT', d: 'Recovery meal', type: 'meal' },
+      { t: this.formatTime(dinnerTime.h, dinnerTime.m), id: 'dinner', a: '🍽️ DINNER', d: 'Light protein rich dinner', type: 'meal' },
+      { t: this.formatTime(sleepTime.h, sleepTime.m), a: '😴 SLEEP', d: 'Recovery sleep', type: 'info' }
+    ];
+
+    var schedule = [
+      { h: wakeTime.h, m: wakeTime.m, tag: 'wake_up', challenge: false, urgent: true, title: '☀️ Good Morning', body: 'Time to wake up and hydrate!' },
+      { h: preGymTime.h, m: preGymTime.m, tag: 'pregym', challenge: false, urgent: true, title: '🍌 Pre-Workout', body: 'Get ready for the gym. Eat your pre-workout meal.' },
+      { h: gymTime.h, m: gymTime.m, tag: 'gym', challenge: false, urgent: true, title: '🏋️ Gym Time', body: 'Time to train! Beast mode ON.' },
+      { h: postGymTime.h, m: postGymTime.m, tag: 'postworkout', challenge: false, urgent: false, title: '🥛 Post-Workout', body: 'Great session. Get your protein recovery in.' },
+      { h: lunchTime.h, m: lunchTime.m, tag: 'lunch', challenge: false, urgent: true, title: '🍱 Lunch', body: 'Time for your main meal.' },
+      { h: dinnerTime.h, m: dinnerTime.m, tag: 'dinner', challenge: false, urgent: true, title: '🍽️ Dinner', body: 'Have a light protein dinner.' },
+      { h: sleepTime.h, m: sleepTime.m, tag: 'log_check', challenge: false, urgent: true, title: '📋 Daily Log', body: 'Did you log your progress today?' }
+    ];
+    
+    return { timeline: tl, schedule: schedule };
   }
 };
 
-var DAILY_SUPPLEMENTS = {
-  "supp_fatburner": "<strong>Usage:</strong> 1 Tablet with warm water 30-45 mins before gym.<br><strong>Benefits:</strong> Stimulates fat oxidation, controls cravings, and boosts metabolic rate using Green Coffee, Guggul, and Pippali.",
-  "supp_centrum": "<strong>Usage:</strong> 1 Tablet with lunch.<br><strong>Benefits:</strong> Supports immunity, muscle function, and heart health with 24 essential vitamins and minerals plus Grape Seed Extract.",
-  "supp_tslim": "<strong>Usage:</strong> 1 Tablet at 12:15 PM with lunch.<br><strong>Benefits:</strong> Helps control appetite before the evening window and supports fat metabolism.",
-  "supp_jeera1": "<strong>Usage:</strong> 1 cup warm drink with lemon, jeera, saunf, and ajwain.<br><strong>Benefits:</strong> Detox support and digestion boost.",
-  "supp_acv1": "<strong>Usage:</strong> 1 tbsp in 250ml warm water, ideally 90 min after lunch.<br><strong>Benefits:</strong> Improves insulin sensitivity and supports fat loss.",
-  "supp_isab1": "<strong>Usage:</strong> 1 tsp in water.<br><strong>Benefits:</strong> High fiber for digestive health and satiety.",
-  "supp_jeera2": "<strong>Usage:</strong> 1 cup warm drink.<br><strong>Benefits:</strong> Afternoon digestion support.",
-  "supp_acv2": "<strong>Usage:</strong> 1 tbsp in 250ml warm water.<br><strong>Benefits:</strong> Supports blood sugar stability before dinner.",
-  "supp_isab2": "<strong>Usage:</strong> 1 tsp in lukewarm water before dinner.<br><strong>Benefits:</strong> High fiber to help control hunger and support bowel regularity.",
-  "supp_snack": "<strong>Usage:</strong> 30g roasted chana or 20g makhana during office break.<br><strong>Benefits:</strong> Low-calorie protein snack to manage hunger.",
-  "supp_gt": "<strong>Usage:</strong> 1 cup plain green tea, no sugar.<br><strong>Benefits:</strong> Calorie-free metabolism support and night-time hydration.",
-  "pregym": "1 medium banana + black coffee no sugar, no milk"
-};
 
 function todayDay() {
   if (!DATA_LOADED) return DAY_SHORT[new Date().getDay()].toLowerCase();
@@ -151,47 +339,25 @@ function todayDay() {
 function getDayNum() { return DATA_LOADED ? DB.get('dayNum') || 0 : 0; }
 function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 
-var DAILY_MOTIVATIONS = [
-  "The night isn't for sleeping. It's for grinding. Push harder.",
-  "They sleep. You outwork them. Beast mode activated.",
-  "Pain is temporary. Quitting lasts forever. Don't stop.",
-  "It's 4 AM. Nobody is watching. This is where champions are made.",
-  "Exhausted? Good. That means you're changing.",
-  "Your mind will quit 100 times before your body does. Keep going.",
-  "Discipline will take you places motivation can't.",
-  "Sweat is just fat crying. Make it pour.",
-  "You didn't wake up this early to be average.",
-  "Night shift. Early gym. Total domination.",
-  "Doubt is only a thought. Action is reality.",
-  "No alarms. Your goals should wake you up.",
-  "Tiredness is a mindset. Dominate it.",
-  "Comfort is the enemy of greatness.",
-  "Every rep is a step away from who you were.",
-  "You cannot cheat the grind. It knows how much you've invested.",
-  "Embrace the darkness. That's where you grow.",
-  "Results happen when no one is watching.",
-  "Your body is a weapon. Sharpen it.",
-  "Fall in love with the suffering.",
-  "Be unbroken. Be relentless. Be unstoppable.",
-  "You're not surviving the night shift. You're conquering it.",
-  "Stop waiting for motivation. Build discipline.",
-  "Weakness is a choice. Choose strength.",
-  "The heavier it gets, the stronger you become.",
-  "Let your success make the noise.",
-  "Turn the pain into power.",
-  "Vibrate higher. Lift heavier. Grind longer.",
-  "Excuses don't burn calories.",
-  "Your future self is watching you right now. Make them proud.",
-  "Blood, sweat, and respect. First two you give. Last one you earn.",
-  "If it doesn't challenge you, it doesn't change you."
-];
+
 
 // ═══════════════════════════════════════════════
 // DATABASE (UNIFIED USER-WISE DATE-WISE)
 // ═══════════════════════════════════════════════
+var _memCache = {};
 var DB = {
-  _g: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
-  _s: function (k, v) { localStorage.setItem(k, JSON.stringify(v)); },
+  _g: function (k) {
+    if (_memCache[k] !== undefined) return _memCache[k];
+    try {
+      var v = JSON.parse(localStorage.getItem(k));
+      _memCache[k] = v;
+      return v;
+    } catch (e) { return null; }
+  },
+  _s: function (k, v) {
+    _memCache[k] = v;
+    localStorage.setItem(k, JSON.stringify(v));
+  },
   get: function (k) { return this._g(k); },
   set: function (k, v) { this._s(k, v); },
 
@@ -410,26 +576,7 @@ function formatDate(d) {
   if (isNaN(dt.getTime())) return d;
   return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' });
 }
-function updateTopBar() {
-  var td = document.getElementById('topbar-date');
-  if (td) {
-    var now = new Date();
-    // Manual format to get exactly HH:MM AM/PM style
-    var hh = now.getHours();
-    var mm = now.getMinutes();
-    var ampm = hh >= 12 ? 'P.M' : 'A.M';
-    hh = hh % 12;
-    hh = hh ? hh : 12;
-    var timeStr = String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0') + ' ' + ampm;
-    td.innerHTML = formatDate(today()) + ' <span style="margin-left:8px; opacity:0.8; font-family:JetBrains Mono,monospace; font-size:0.85em;">' + timeStr + '</span>';
-  }
-  var db = document.getElementById('day-badge');
-  if (db) {
-    var dn = getDayNum();
-    db.textContent = dn > 0 ? 'DAY ' + dn : 'READY';
-    db.style.color = dn > 0 ? 'var(--fire)' : 'var(--sub)';
-  }
-}
+
 function getDayNum() {
   var p = DB.profile();
   if (!p.startDate) return 0;
@@ -437,7 +584,7 @@ function getDayNum() {
   var now = new Date();
   if (isNaN(start.getTime())) return 0;
   var diff = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
-  return Math.min(Math.max(diff, 1), 90);
+  return Math.max(diff, 1);
 }
 function getWorkoutType(dayName) { return DAY_WORKOUT_TYPE[dayName] || 'rest'; }
 function todayWorkoutType() { return getWorkoutType(todayDay()); }
@@ -460,7 +607,7 @@ function calcStreak() {
   var streak = 0;
   var d = new Date();
   var MEAL_IDS = ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'];
-  for (var i = 0; i < 90; i++) {
+  for (var i = 0; i < 365; i++) {
     var dStr = toLocalDate(d);
     var meals = DB.getMeal(dStr);
     var hasActivity = false;
@@ -594,6 +741,7 @@ function _showPage(page) {
   else if (page === 'diet') renderDiet();
   else if (page === 'water') renderWater();
   else if (page === 'progress') renderProgress();
+  else if (page === 'profile') renderProfile();
 }
 function initNav() {
   document.querySelectorAll('.nav-btn').forEach(function (btn) {
@@ -739,13 +887,10 @@ function getTodayWorkoutProgress() {
 
 function getTodayMealSupplementProgress() {
   var MEAL_IDS = ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'];
-  var SUPP_IDS = ['supp_fatburner', 'supp_jeera1', 'supp_tslim', 'supp_centrum', 'supp_acv1', 'supp_isab2', 'supp_gt'];
   var mealData = DB.getMeal(today());
   var mealDone = 0;
   MEAL_IDS.forEach(function (id) { if (mealData[id] === true) mealDone++; });
-  var suppDone = 0;
-  SUPP_IDS.forEach(function (id) { if (mealData[id] === true) suppDone++; });
-  return { meals: mealDone, totalMeals: MEAL_IDS.length, supp: suppDone, totalSupp: SUPP_IDS.length };
+  return { meals: mealDone, totalMeals: MEAL_IDS.length, supp: 0, totalSupp: 0 };
 }
 
 function updateHomeWorkoutCard() {
@@ -847,8 +992,6 @@ function renderHome() {
 
     // Streak
     var streak = calcStreak();
-
-    var pct = Math.round((dayNum / 90) * 100);
     var wo = getTodayWorkoutProgress();
     var sp = getTodaySetsProgress();
     var ms = getTodayMealSupplementProgress();
@@ -860,9 +1003,7 @@ function renderHome() {
     var woVal = wo.isRest ? '🌿' : (wo.done + '<span style="font-size:.65rem;color:var(--sub)">/' + wo.total + '</span>');
     var woLabel = wo.isRest ? 'REST DAY' : '🏋️ WORKOUT';
 
-    var isChallengeActive = dayNum > 0;
-    var pct = isChallengeActive ? Math.round((dayNum / 90) * 100) : 0;
-    var daysLeft = Math.max(0, 90 - dayNum);
+    var pct = dayNum > 0 ? Math.min(Math.round((dayNum / 100) * 100), 100) : 0;
 
     var mealPct = ms.totalMeals > 0 ? Math.round((ms.meals / ms.totalMeals) * 100) : 0;
     var mealColor = mealPct >= 100 ? 'var(--green)' : mealPct > 0 ? 'var(--gold)' : 'var(--sub)';
@@ -896,37 +1037,19 @@ function renderHome() {
     document.getElementById('page-home').innerHTML =
       notifAlert +
 
-      // Quick Stats Chips
+      // Essential Stats
       '<div class="quick-stats">' +
-      // Water chip — shows glasses
       '<div class="stat-chip tilt-card" onclick="quickWaterAdd()">' +
       '<div class="stat-val" style="color:var(--blue)">' + w + '<span style="font-size:.65rem">/' + goal + '</span></div>' +
       '<div class="stat-label">💧 WATER</div>' +
       '</div>' +
-      // Weight chip — shows kg
-      '<div class="stat-chip tilt-card" onclick="editWeight()">' +
-      '<div class="stat-val" style="color:var(--gold)">' + (lastWt || '<span style="font-size:.8rem;color:var(--sub)">TAP</span>') + '</div>' +
-      '<div class="stat-label">⚖️ KG</div>' +
-      '</div>' +
-      // Workout chip
       '<div class="stat-chip tilt-card" onclick="goPage(\'workout\')">' +
       '<div class="stat-val" style="color:' + woColor + '">' + woVal + '</div>' +
       '<div class="stat-label">' + woLabel + '</div>' +
       '</div>' +
-      // Meals chip
       '<div class="stat-chip tilt-card" onclick="goPage(\'diet\')">' +
       '<div class="stat-val" style="color:' + mealColor + '">' + ms.meals + '<span style="font-size:.65rem;color:var(--sub)">/' + ms.totalMeals + '</span></div>' +
       '<div class="stat-label">🍱 MEALS</div>' +
-      '</div>' +
-      // Supps chip
-      '<div class="stat-chip tilt-card" onclick="goPage(\'diet\')">' +
-      '<div class="stat-val" style="color:' + suppColor + '">' + ms.supp + '<span style="font-size:.65rem;color:var(--sub)">/' + ms.totalSupp + '</span></div>' +
-      '<div class="stat-label">🌿 SUPPS</div>' +
-      '</div>' +
-      // Sets chip
-      '<div class="stat-chip tilt-card" onclick="goPage(\'workout\')">' +
-      '<div class="stat-val" style="color:' + setsColor + '">' + setsVal + '</div>' +
-      '<div class="stat-label">💪 SETS</div>' +
       '</div>' +
       '</div>' +
 
@@ -954,45 +1077,82 @@ function renderDynamicDietStats() {
   var age = parseInt(p.age) || 25;
   var gender = p.gender || 'male';
 
+  var profile = DB.profile();
+  var workStart = parseTimeString(profile.workStart);
+  var workEnd = parseTimeString(profile.workEnd);
+  var gymStart = parseTimeString(profile.gymStart);
+  var gymEnd = parseTimeString(profile.gymEnd);
+  var workHours = getTimeDurationHours(workStart, workEnd);
+  var gymHours = getTimeDurationHours(gymStart, gymEnd);
+  var activityFactor = 1.3;
+  if (workHours >= 10) activityFactor += 0.15;
+  else if (workHours >= 8) activityFactor += 0.1;
+  if (gymHours >= 1) activityFactor += 0.15;
+  else if (gymHours > 0) activityFactor += 0.1;
   var bmr = (10 * wt) + (6.25 * ht) - (5 * age);
   bmr = gender === 'male' ? (bmr + 5) : (bmr - 161);
-  var tdee = Math.round(bmr * 1.55); // Active
+  var tdee = Math.round(bmr * activityFactor);
 
   var dayD = todayDay();
-  var dm = (typeof DAILY_MACROS !== 'undefined') ? DAILY_MACROS[dayD] : null;
-  var intake = 0;
-  if (dm) {
-    ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'].forEach(function (id) {
-      if (dm[id]) intake += (dm[id].cal || 0);
-    });
-  }
-  
-  var targetCal = intake > 0 ? intake : (tdee - 500);
-  var deficit = tdee - targetCal;
+  var dynMacros = NeuralCore.getDynamicDailyMacros();
+  var dm = dynMacros.meals;
+  var intake = dynMacros.goals.cal;
 
-  var lossPerWeek = (deficit * 7) / 7700; // in kg
-  var weeksLeft = (wt > targetWt && lossPerWeek > 0) ? Math.ceil((wt - targetWt) / lossPerWeek) : 0;
-  var timelineStr = weeksLeft > 0 ? (weeksLeft + ' WKS') : 'GOAL';
+  var goalMode = profile.goalMode || 'lose';
+  var goalTarget = tdee;
+  if (goalMode === 'gain') goalTarget = tdee + 400;
+  else if (goalMode === 'maintain') goalTarget = tdee;
+  else goalTarget = tdee - 500;
+
+  var targetCal = intake > 0 ? intake : goalTarget;
+  var actualDiff = targetCal - tdee;
+  var absDiff = Math.abs(actualDiff);
+  var defectLabel = absDiff;
+  var conditionText = actualDiff === 0 ? 'MAINTAIN' : (actualDiff > 0 ? 'SURPLUS' : 'DEFICIT');
+
+  var weeklyRate = (absDiff * 7) / 7700;
+  var weeksLeft = 0;
+  var timelineStr = 'GOAL';
+
+  if (goalMode === 'lose') {
+    if (wt <= targetWt) {
+      timelineStr = 'GOAL';
+    } else if (actualDiff < 0 && weeklyRate > 0) {
+      weeksLeft = Math.ceil((wt - targetWt) / weeklyRate);
+    } else {
+      timelineStr = 'OFF TRACK';
+    }
+  } else if (goalMode === 'gain') {
+    if (wt >= targetWt) {
+      timelineStr = 'GOAL';
+    } else if (actualDiff > 0 && weeklyRate > 0) {
+      weeksLeft = Math.ceil((targetWt - wt) / weeklyRate);
+    } else {
+      timelineStr = 'OFF TRACK';
+    }
+  } else {
+    timelineStr = actualDiff === 0 ? 'ON TRACK' : (actualDiff > 0 ? 'SURPLUS' : 'DEFICIT');
+  }
+  if (weeksLeft > 0) timelineStr = weeksLeft + ' WKS';
 
   var cards = '<div class="diet-stats-grid" style="margin-top:10px;">';
   cards += '<div class="stat-chip tilt-card"><div class="stat-val" style="color:var(--fire)">' + tdee + '</div><div class="stat-label">🔥 TDEE</div></div>';
-  cards += '<div class="stat-chip tilt-card"><div class="stat-val" style="color:var(--red)">-' + deficit + '</div><div class="stat-label">🔻 DEFICIT</div></div>';
+  cards += '<div class="stat-chip tilt-card"><div class="stat-val" style="color:' + (actualDiff >= 0 ? 'var(--green)' : 'var(--red)') + '">' + defectLabel + '</div><div class="stat-label">' + conditionText + '</div></div>';
   cards += '<div class="stat-chip tilt-card"><div class="stat-val" style="color:var(--gold)">' + targetCal + '</div><div class="stat-label">🍽️ INTAKE</div></div>';
-  cards += '<div class="stat-chip tilt-card"><div class="stat-val" style="color:var(--blue)">' + timelineStr + '</div><div class="stat-label">⏳ LOSS TIMELINE</div></div>';
   cards += '</div>';
   return cards;
 }
 
 function scheduleHTML() {
   var mealData = DB.getMeal(today());
-  var rows = DAILY_TIMELINE;
+  var rows = getDietTimeline();
 
   return rows.map(function (r, idx) {
     var status = mealData[r.id];
     var isDone = status === true;
     var isSkipped = status === 'skipped';
 
-    if (!r.id && r.a && r.a.indexOf('GYM') !== -1) {
+    if (!r.id && r.label && r.label.indexOf('GYM') !== -1) {
       var wProg = getTodayWorkoutProgress();
       if (!wProg.isRest && wProg.done >= wProg.total && wProg.total > 0) {
         isDone = true;
@@ -1009,12 +1169,11 @@ function scheduleHTML() {
 
     var isExpanded = r.id && (EXPANDED_MEAL_ID === r.id);
     var dayName = todayDay();
-    var detailText = (r.id && WEEKLY_MEALS[dayName]) ? WEEKLY_MEALS[dayName][r.id] : '';
+    var detailText = (r.id && WEEKLY_MEALS[dayName]) ? personalizeMenuText(WEEKLY_MEALS[dayName][r.id] || '') : '';
     var expandHtml = (isExpanded && detailText) ? '<div class="meal-expanded-content">' + detailText + '</div>' : '';
 
-    var clickAction = r.id ? 'toggleMealDetail(\'' + r.id + '\')' : (r.name && r.name.indexOf('GYM') !== -1 ? 'goPage(\'workout\')' : '');
-    // Using a more robust check for GYM workout
-    if (!r.id && r.a && r.a.indexOf('GYM') !== -1) clickAction = "goPage('workout')";
+    var clickAction = r.id ? 'toggleMealDetail(\'' + r.id + '\')' : (r.label && r.label.indexOf('GYM') !== -1 ? 'goPage(\'workout\')' : '');
+    if (!r.id && r.label && r.label.indexOf('GYM') !== -1) clickAction = "goPage('workout')";
 
     var rowId = 'row-home-' + (r.id || idx);
     var windowTag = getSmartWindowTag(r.t);
@@ -1022,11 +1181,12 @@ function scheduleHTML() {
 
     return '<div id="' + rowId + '" onclick="' + clickAction + '" class="stagger-item haptic-press tilt-card" style="animation-delay:' + (idx * 0.05) + 's;cursor:pointer;background:' + bgColor + ';border:1px solid ' + borderColor + ';border-radius:10px;margin-bottom:6px;padding:12px;display:flex;flex-direction:column;gap:4px;transition:transform 0.3s cubic-bezier(0.3, 1, 0.3, 1);">' +
       windowHtml +
-      '<div style="display:flex;align-items:center;gap:8px;">' +
-      '<div style="min-width:68px;font-size:.6rem;font-family:JetBrains Mono,monospace;color:var(--sub);line-height:1.3;">' + r.t + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+      '<div style="min-width:62px;font-size:.6rem;font-family:JetBrains Mono,monospace;color:var(--sub);line-height:1.3;">' + r.t + '</div>' +
+      '<div style="font-size:1.1rem;flex-shrink:0;">' + (r.icon || '📍') + '</div>' +
       '<div style="flex:1;min-width:0;">' +
-      '<div id="title-home-' + r.id + '" style="font-size:.78rem;font-weight:600;color:' + textColor + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + r.a + '</div>' +
-      '<div style="font-size:.62rem;color:var(--sub);margin-top:1px;">' + r.d + '</div>' +
+      '<div id="title-home-' + r.id + '" style="font-size:.78rem;font-weight:600;color:' + textColor + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + r.label + '</div>' +
+      '<div style="font-size:.62rem;color:var(--sub);margin-top:1px;">' + r.desc + '</div>' +
       '</div>' +
       btns +
       '</div>' +
@@ -1241,7 +1401,7 @@ function updateHomeStats() {
   if (currentPage !== 'home') return;
   var d = today();
   var dayNum = getDayNum();
-  var pct = dayNum > 0 ? Math.round((dayNum / 90) * 100) : 0;
+  var pct = dayNum > 0 ? Math.min(Math.round((dayNum / 100) * 100), 100) : 0;
   var ms = getTodayMealSupplementProgress();
 
   // Update Ring
@@ -1256,12 +1416,6 @@ function updateHomeStats() {
     var mColor = mPct >= 100 ? 'var(--green)' : mPct > 0 ? 'var(--gold)' : 'var(--sub)';
     chips[3].querySelector('.stat-val').style.color = mColor;
     chips[3].querySelector('.stat-val').innerHTML = ms.meals + '<span style="font-size:.65rem;color:var(--sub)">/' + ms.totalMeals + '</span>';
-
-    // Supp Chip
-    var sPct = ms.totalSupp > 0 ? Math.round((ms.supp / ms.totalSupp) * 100) : 0;
-    var sColor = sPct >= 100 ? 'var(--green)' : sPct > 0 ? '#a78bfa' : 'var(--sub)';
-    chips[4].querySelector('.stat-val').style.color = sColor;
-    chips[4].querySelector('.stat-val').innerHTML = ms.supp + '<span style="font-size:.65rem;color:var(--sub)">/' + ms.totalSupp + '</span>';
   }
 }
 
@@ -1271,7 +1425,8 @@ function updateDietStats() {
   var mealData = DB.getMeal(d);
   var totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
   var dayD = todayDay();
-  var dm = DAILY_MACROS[dayD] || {};
+  var dynMacros = NeuralCore.getDynamicDailyMacros();
+  var dm = dynMacros.meals;
   var mealConfigs = {
     pregym: dm.pregym || MEAL_CONFIG['pregym'],
     postworkout: dm.postworkout || MEAL_CONFIG['postworkout'],
@@ -1287,15 +1442,8 @@ function updateDietStats() {
     }
   });
 
-  var goals = { cal: 1350, protein: 120, carbs: 110, fat: 35 };
-  if (typeof DAILY_MACROS !== 'undefined' && DAILY_MACROS[dayD]) {
-    var dm = DAILY_MACROS[dayD];
-    var g = { cal: 0, protein: 0, carbs: 0, fat: 0 };
-    ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'].forEach(function (id) {
-      if (dm[id]) { g.cal+=(dm[id].cal||0); g.protein+=(dm[id].protein||0); g.carbs+=(dm[id].carbs||0); g.fat+=(dm[id].fat||0); }
-    });
-    if (g.cal > 0) goals = g;
-  }
+  var goals = dynMacros.goals;
+
 
   var pctCal = Math.min((totalCal / goals.cal) * 100, 100) || 0;
   var pctPro = Math.min((totalPro / goals.protein) * 100, 100) || 0;
@@ -1659,7 +1807,8 @@ function renderDiet() {
   var totalCal = 0, totalPro = 0, totalCarb = 0, totalFat = 0;
 
   var dayD = todayDay();
-  var dm = DAILY_MACROS[dayD] || {};
+  var dynMacros = NeuralCore.getDynamicDailyMacros();
+  var dm = dynMacros.meals;
 
   var mealConfigs = {
     pregym: dm.pregym || MEAL_CONFIG['pregym'],
@@ -1676,26 +1825,7 @@ function renderDiet() {
     }
   });
 
-  var TL = [
-    { t: '2:30 AM', icon: '🏁', label: 'JOB ENDS', desc: 'Job finished — hydrate with 1 glass lukewarm water' },
-    { t: '2:45 AM', icon: '💊', label: 'Dr. Morepen Fat Burner', desc: 'Take with half banana — not on empty stomach', id: 'supp_fatburner', type: 'supp' },
-    { t: '3:00 AM', icon: '🍌', label: 'PRE-WORKOUT MEAL', desc: '1 medium banana + black coffee (no sugar, no milk)', id: 'pregym', type: 'meal' },
-    { t: '4:00 AM', icon: '🏋️', label: 'GYM TRAINING', desc: 'High intensity training (1 hr)' },
-    { t: '5:00 AM', icon: '🚶', label: 'TREADMILL WALK', desc: '1 hr walk at 4.5–5 km/hr' },
-    { t: '6:00 AM', icon: '🥛', label: 'POST-WORKOUT RECOVERY', desc: '200ml warm low-fat milk + 30g roasted chana', id: 'postworkout', type: 'meal' },
-    { t: '6:15 AM', icon: '😴', label: 'RECOVERY SLEEP', desc: '6 hours of recovery sleep' },
-    { t: '12:00 PM', icon: '⏰', label: 'WAKE UP', desc: 'Start the day with a detox drink' },
-    { t: '12:05 PM', icon: '🌿', label: 'DETOX DRINK', desc: 'Warm water with lemon, jeera, saunf, and ajwain', id: 'supp_jeera1', type: 'supp' },
-    { t: '12:15 PM', icon: '💊', label: 'T-Slim Tablet', desc: 'Take with water before lunch', id: 'supp_tslim', type: 'supp' },
-    { t: '12:15 PM', icon: '💊', label: 'Centrum Men Multivitamin', desc: 'Take with lunch', id: 'supp_centrum', type: 'supp' },
-    { t: '1:00 PM', icon: '🍱', label: 'MAIN LUNCH', desc: 'Dal + cooked soya chunks + salad + roti', id: 'lunch', type: 'meal' },
-    { t: '2:30 PM', icon: '🍎', label: 'Apple Cider Vinegar', desc: '1 tbsp ACV in warm water', id: 'supp_acv1', type: 'supp' },
-    { t: '4:00 PM', icon: '🌾', label: 'Isabgol', desc: '1 tsp in lukewarm water before dinner', id: 'supp_isab2', type: 'supp' },
-    { t: '5:00 PM', icon: '🍽️', label: 'DINNER', desc: 'Soya chunks + veggies, no roti', id: 'dinner', type: 'meal' },
-    { t: '6:30 PM', icon: '🏢', label: 'JOB STARTS', desc: 'Keep a 1 litre water bottle with you' },
-    { t: '9:30 PM', icon: '🥜', label: 'OFFICE BREAK SNACK', desc: '30g roasted chana or 20g makhana', id: 'supp_snack', type: 'supp' },
-    { t: '12:00 AM', icon: '🍵', label: 'Green Tea', desc: 'Plain, no sugar', id: 'supp_gt', type: 'supp' }
-  ];
+  var TL = getDietTimeline();
 
   var timelineHtml = '';
   for (var ri = 0; ri < TL.length; ri++) {
@@ -1747,7 +1877,7 @@ function renderDiet() {
     var onclickStr = hasAction ? ' onclick="toggleItemStatus(\'' + row.id + '\');"' : '';
 
     var isExpanded = row.id && (EXPANDED_MEAL_ID === row.id);
-    var detailText = row.id ? (WEEKLY_MEALS[dayD] && WEEKLY_MEALS[dayD][row.id] ? WEEKLY_MEALS[dayD][row.id] : (DAILY_SUPPLEMENTS[row.id] || '')) : '';
+    var detailText = row.id ? (WEEKLY_MEALS[dayD] && WEEKLY_MEALS[dayD][row.id] ? personalizeMenuText(WEEKLY_MEALS[dayD][row.id]) : personalizeMenuText(DAILY_SUPPLEMENTS[row.id] || '')) : '';
     var expandHtml = (isExpanded && detailText) ? '<div class="meal-expanded-content" style="margin-left:20px;">' + detailText + '</div>' : '';
 
     var rowId = 'row-diet-' + (row.id || ri);
@@ -1767,22 +1897,7 @@ function renderDiet() {
   }
 
   // Dynamic Goal Calculation with Fallback
-  var goals = { cal: 1350, protein: 120, carbs: 110, fat: 35 };
-  if (typeof DAILY_MACROS !== 'undefined' && DAILY_MACROS[dayD]) {
-    var dm = DAILY_MACROS[dayD];
-    var g = { cal: 0, protein: 0, carbs: 0, fat: 0 };
-    ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'].forEach(function (id) {
-      if (dm[id]) {
-        g.cal += (dm[id].cal || 0);
-        g.protein += (dm[id].protein || 0);
-        g.carbs += (dm[id].carbs || 0);
-        g.fat += (dm[id].fat || 0);
-      }
-    });
-
-    // Removed TDEE override so target purely represents daily foods
-    if (g.cal > 0) goals = g;
-  }
+  var goals = dynMacros.goals;
 
   var pctCal = Math.min((totalCal / goals.cal) * 100, 100) || 0;
   var pctPro = Math.min((totalPro / goals.protein) * 100, 100) || 0;
@@ -1791,14 +1906,15 @@ function renderDiet() {
 
   var days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   var tableRows = '';
+  var weeklyMeals = NeuralCore.generateMeals(DB.profile());
   for (var di = 0; di < days.length; di++) {
     var dayK = days[di];
-    var dm = WEEKLY_MEALS[dayK] || {};
+    var dm = weeklyMeals[dayK] || {};
     var preG = dm.pregym || '---';
-    var postW = (dm.postworkout || '---').replace(/<strong>.*?<\/strong>/g, '').trim();
-    var lunchText = (dm.lunch || '---').replace(/<strong>.*?<\/strong>/g, '').trim();
-    var dinnerText = (dm.dinner || '---').replace(/<strong>.*?<\/strong>/g, '').trim();
-    var snackText = (dm.supp_snack || '---');
+    var postW = dm.postworkout || '---';
+    var lunchText = dm.lunch || '---';
+    var dinnerText = dm.dinner || '---';
+    var snackText = dm.supp_snack || '---';
 
     tableRows += '<tr><td>' + dayK.toUpperCase() + '</td><td>' + preG + '</td><td>' + postW + '</td><td>' + lunchText + '</td><td>' + dinnerText + '</td><td>' + snackText + '</td></tr>';
   }
@@ -1807,16 +1923,13 @@ function renderDiet() {
     // Completion summary banner
     (function () {
       var MEAL_IDS = ['pregym', 'postworkout', 'lunch', 'dinner', 'supp_snack'];
-      var SUPP_IDS = ['supp_fatburner', 'supp_jeera1', 'supp_tslim', 'supp_centrum', 'supp_acv1', 'supp_isab2', 'supp_gt'];
-      var mDone = 0, sDone = 0;
+      var mDone = 0;
       MEAL_IDS.forEach(function (id) { if (mealData[id] === true) mDone++; });
-      SUPP_IDS.forEach(function (id) { if (mealData[id] === true) sDone++; });
-      var allMDone = mDone >= MEAL_IDS.length; var allSDone = sDone >= SUPP_IDS.length;
-      var bannerColor = (allMDone && allSDone) ? 'var(--green)' : (mDone > 0 || sDone > 0) ? 'var(--gold)' : 'var(--sub)';
-      var emoji = (allMDone && allSDone) ? '🏆' : (mDone > 0 || sDone > 0) ? '⚡' : '🎯';
-      return '<div style="margin:8px 16px 4px;padding:10px 14px;background:' + (allMDone && allSDone ? 'rgba(34,197,94,0.1)' : 'rgba(245,197,23,0.08)') + ';border:1px solid ' + bannerColor + '44;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">' +
+      var allMDone = mDone >= MEAL_IDS.length;
+      var bannerColor = allMDone ? 'var(--green)' : (mDone > 0 ? 'var(--gold)' : 'var(--sub)');
+      var emoji = allMDone ? '🏆' : (mDone > 0 ? '⚡' : '🎯');
+      return '<div style="margin:8px 16px 4px;padding:10px 14px;background:' + (allMDone ? 'rgba(34,197,94,0.1)' : 'rgba(245,197,23,0.08)') + ';border:1px solid ' + bannerColor + '44;border-radius:12px;display:flex;align-items:center;justify-content:space-between;">' +
         '<span style="font-size:.65rem;font-weight:900;color:' + bannerColor + ';letter-spacing:1px;">' + emoji + ' MEALS: ' + mDone + '/' + MEAL_IDS.length + '</span>' +
-        '<span style="font-size:.65rem;font-weight:900;color:' + bannerColor + ';letter-spacing:1px;">SUPPS: ' + sDone + '/' + SUPP_IDS.length + '</span>' +
         '<span style="font-size:.65rem;font-weight:700;color:' + (totalCal > 0 ? 'var(--fire)' : 'var(--sub)') + ';">🔥 ' + totalCal + ' KCAL</span>' +
         '</div>';
     })() +
@@ -1840,7 +1953,7 @@ function renderDiet() {
     '</div>' +
     '</div>' +
     '</div>' +
-    '<div class="section"><div class="sec-h"><div class="sec-h-title">TODAY\'S DIET &amp; SUPPLEMENTS</div></div>' + timelineHtml + '</div>' +
+    '<div class="section"><div class="sec-h"><div class="sec-h-title">TODAY\'S DIET PLAN</div></div>' + timelineHtml + '</div>' +
     '<div class="section" style="margin-top:12px;"><div class="sec-h"><div class="sec-h-title">WEEKLY MENU REF</div></div><div class="menu-ref-wrap"><table class="menu-table"><thead><tr><th>DAY</th><th>PRE-GYM</th><th>POST-WORKOUT</th><th>LUNCH</th><th>DINNER</th><th>OFFICE SNACK</th></tr></thead><tbody>' + tableRows + '</tbody></table></div></div>' +
     '<div style="padding:10px 0;font-size:.65rem;color:var(--sub);text-align:center;">Tap any item to mark complete</div>';
 }
@@ -1895,27 +2008,42 @@ function renderWater() {
   var avg7 = (totalW7 / 7).toFixed(1);
   var avg7L = (parseFloat(avg7) * ML_PER_GLASS / 1000).toFixed(2);
 
-  document.getElementById('page-water').innerHTML =
-    '<div class="water-display tilt-card">' +
-    '<div class="water-big-num">' + cur + '</div>' +
-    '<div style="font-size:1.1rem; font-weight:700; color:var(--blue); letter-spacing:1px; margin-top:2px;">' + curL + ' L</div>' +
-    '<div style="font-size:.65rem;font-weight:900;color:' + hydColor + ';letter-spacing:2px;margin:4px 0 2px;">' + hydEmoji + ' ' + hydStatus + '</div>' +
-    '<div class="water-goal-label">GLASSES TODAY (GOAL: ' + goal + ' glasses / ' + goalL + ' L)</div>' +
-    '<div class="water-bar"><div class="water-bar-fill" style="width:' + pct + '%"></div></div>' +
-    '<div class="water-controls">' +
-    '<button class="water-btn" onclick="DB.setWater(\'' + t + '\',' + (cur - 1) + '); renderWater();">-</button>' +
-    '<div class="water-val-display">' + Math.round(cur) + ' <span style="font-size:.65rem;color:var(--sub);">' + curL + 'L</span></div>' +
-    '<button class="water-btn" onclick="DB.setWater(\'' + t + '\',' + (cur + 1) + '); renderWater();">+</button>' +
-    '</div>' +
-    '</div>' +
-    '<div class="section" style="margin-top:12px;">' +
-    '<div class="sec-h"><div class="sec-h-title">🚰 HYDRATION TRACKER</div></div>' +
-    '<div class="glasses-grid">' + glassesHtml + '</div>' +
-    '</div>' +
-    '<div class="section" style="margin-top:12px;">' +
-    '<div class="sec-h"><div class="sec-h-title">📊 PAST 7 DAYS</div><div style="font-size:.6rem;color:var(--blue);margin-left:auto;font-weight:800;">AVG: ' + avg7 + ' glasses / ' + avg7L + ' L</div></div>' +
-    '<div class="water-week-chart"><div class="chart-bars">' + chartHtml + '</div></div>' +
-    '</div>';
+  var pw = document.getElementById('page-water');
+  var isRendered = document.getElementById('water-big-num-id');
+
+  if (!isRendered) {
+    pw.innerHTML =
+      '<div class="water-display tilt-card">' +
+      '<div class="water-big-num" id="water-big-num-id">' + cur + '</div>' +
+      '<div id="water-l-id" style="font-size:1.1rem; font-weight:700; color:var(--blue); letter-spacing:1px; margin-top:2px;">' + curL + ' L</div>' +
+      '<div id="water-status-id" style="font-size:.65rem;font-weight:900;color:' + hydColor + ';letter-spacing:2px;margin:4px 0 2px;">' + hydEmoji + ' ' + hydStatus + '</div>' +
+      '<div class="water-goal-label">GLASSES TODAY (GOAL: ' + goal + ' glasses / ' + goalL + ' L)</div>' +
+      '<div class="water-bar"><div id="water-bar-fill-id" class="water-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="water-controls">' +
+      '<button class="water-btn" onclick="DB.setWater(\'' + t + '\', DB.getWater(\'' + t + '\') - 1); renderWater();">-</button>' +
+      '<div class="water-val-display" id="water-val-display-id">' + Math.round(cur) + ' <span style="font-size:.65rem;color:var(--sub);">' + curL + 'L</span></div>' +
+      '<button class="water-btn" onclick="DB.setWater(\'' + t + '\', DB.getWater(\'' + t + '\') + 1); renderWater();">+</button>' +
+      '</div>' +
+      '</div>' +
+      '<div class="section" style="margin-top:12px;">' +
+      '<div class="sec-h"><div class="sec-h-title">🚰 HYDRATION TRACKER</div></div>' +
+      '<div class="glasses-grid" id="glasses-grid-id">' + glassesHtml + '</div>' +
+      '</div>' +
+      '<div class="section" style="margin-top:12px;">' +
+      '<div class="sec-h"><div class="sec-h-title">📊 PAST 7 DAYS</div><div id="water-avg-id" style="font-size:.6rem;color:var(--blue);margin-left:auto;font-weight:800;">AVG: ' + avg7 + ' glasses / ' + avg7L + ' L</div></div>' +
+      '<div class="water-week-chart"><div class="chart-bars" id="chart-bars-id">' + chartHtml + '</div></div>' +
+      '</div>';
+  } else {
+    document.getElementById('water-big-num-id').innerText = cur;
+    document.getElementById('water-l-id').innerText = curL + ' L';
+    document.getElementById('water-status-id').innerHTML = hydEmoji + ' ' + hydStatus;
+    document.getElementById('water-status-id').style.color = hydColor;
+    document.getElementById('water-bar-fill-id').style.width = pct + '%';
+    document.getElementById('water-val-display-id').innerHTML = Math.round(cur) + ' <span style="font-size:.65rem;color:var(--sub);">' + curL + 'L</span>';
+    document.getElementById('glasses-grid-id').innerHTML = glassesHtml;
+    document.getElementById('water-avg-id').innerHTML = 'AVG: ' + avg7 + ' glasses / ' + avg7L + ' L';
+    document.getElementById('chart-bars-id').innerHTML = chartHtml;
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -2077,25 +2205,13 @@ function renderProgress() {
 
   // Days remaining
   var dayNum = getDayNum();
-  var daysLeft = Math.max(0, 90 - dayNum);
   var streak = calcStreak();
 
   document.getElementById('page-progress').innerHTML =
     // 1. MAS Score card (filled async by renderHealthMetrics)
     '<div id="bio-hud-container"></div>' +
 
-    // 2. Weight Progress - stats grid (now 8 cards: 3+3+2)
-    '<div class="section">' +
-    '<div class="sec-h"><div class="sec-h-title">⚖️ WEIGHT PROGRESS</div></div>' +
-    '<div class="progress-stats">' +
-    '<div class="prog-stat" onclick="editWeight()" style="cursor:pointer;"><div class="prog-stat-val" style="color:var(--gold);">' + (lastWtObj ? lastWtObj.kg : '--') + '</div><div class="prog-stat-lbl">CURRENT (KG)</div></div>' +
-    '<div class="prog-stat" onclick="editTarget()" style="cursor:pointer;"><div class="prog-stat-val" style="color:var(--blue);">' + (targetWt || '--') + '</div><div class="prog-stat-lbl">TARGET (KG)</div></div>' +
-    '<div class="prog-stat"><div class="prog-stat-val" style="color:var(--red);">' + needsToLose + '</div><div class="prog-stat-lbl">TO LOSE (KG)</div></div>' +
-    '<div class="prog-stat" onclick="editHeight()" style="cursor:pointer;"><div class="prog-stat-val" style="color:var(--green);">' + (prof.height || '--') + '</div><div class="prog-stat-lbl">HEIGHT (CM)</div></div>' +
-    '<div class="prog-stat" onclick="editGender()" style="cursor:pointer;"><div class="prog-stat-val" style="color:var(--purple); font-size:1rem;">' + (prof.gender || 'male').toUpperCase() + '</div><div class="prog-stat-lbl">GENDER</div></div>' +
-    '<div class="prog-stat" onclick="editAge()" style="cursor:pointer;"><div class="prog-stat-val" style="color:var(--gold);">' + (prof.age || '--') + '</div><div class="prog-stat-lbl">AGE</div></div>' +
-    '</div>' +
-    '</div>' +
+
 
     // Total lost badge
     (totalLost ? '<div style="margin:2px 16px 14px;padding:10px 16px;background:' + (parseFloat(totalLost) > 0 ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)') + ';border:1px solid ' + totalLostColor + '44;border-radius:12px;display:flex;align-items:center;justify-content:center;">' +
@@ -2243,14 +2359,7 @@ function saveWeight() {
   }
 }
 
-function editTarget() {
-  var prof = DB.profile();
-  openModal(
-    '<div class="modal-title">🎯 EDIT TARGET WEIGHT</div>' +
-    '<input class="modal-input" id="edit-target" type="number" step="0.1" value="' + (prof.targetWeight || 65) + '" placeholder="Target weight in kg..."/>' +
-    '<button class="modal-btn primary" onclick="saveTarget()">SAVE TARGET</button>'
-  );
-}
+
 function saveTarget() {
   var v = parseFloat(document.getElementById('edit-target').value);
   if (v > 20 && v < 300) {
@@ -2263,14 +2372,7 @@ function saveTarget() {
   }
 }
 
-function editHeight() {
-  var prof = DB.profile();
-  openModal(
-    '<div class="modal-title">📏 EDIT HEIGHT</div>' +
-    '<input class="modal-input" id="edit-h" type="number" value="' + (prof.height || 170) + '" placeholder="Height in cm..."/>' +
-    '<button class="modal-btn primary" onclick="saveHeight()">SAVE</button>'
-  );
-}
+
 function saveHeight() {
   var v = parseFloat(document.getElementById('edit-h').value);
   if (v > 50 && v < 250) {
@@ -2281,18 +2383,7 @@ function saveHeight() {
   }
 }
 
-function editGender() {
-  var prof = DB.profile();
-  var isMale = (prof.gender || 'male') === 'male';
-  openModal(
-    '<div class="modal-title">⚧ EDIT GENDER</div>' +
-    '<select class="modal-input" id="edit-gender" style="background:var(--bg3); color:white; border:1px solid var(--border2);">' +
-    '<option value="male" ' + (isMale ? 'selected' : '') + '>MALE</option>' +
-    '<option value="female" ' + (!isMale ? 'selected' : '') + '>FEMALE</option>' +
-    '</select>' +
-    '<button class="modal-btn primary" onclick="saveGender()">SAVE</button>'
-  );
-}
+
 function saveGender() {
   var v = document.getElementById('edit-gender').value;
   DB.setProfile({ gender: v });
@@ -2301,14 +2392,7 @@ function saveGender() {
   showToast('⚧ Gender updated!');
 }
 
-function editAge() {
-  var prof = DB.profile();
-  openModal(
-    '<div class="modal-title">🎂 EDIT AGE</div>' +
-    '<input class="modal-input" id="edit-age" type="number" value="' + (prof.age || 25) + '" placeholder="Your age..."/>' +
-    '<button class="modal-btn primary" onclick="saveAge()">SAVE</button>'
-  );
-}
+
 function saveAge() {
   var v = parseInt(document.getElementById('edit-age').value);
   if (v > 5 && v < 120) {
@@ -2732,12 +2816,13 @@ function generateAIInsights(m) {
 
   // ═══ TIER 5: METABOLIC INSIGHTS ═══
   var maintenance = Math.round(m.bmr * 1.375);
-  var deficitCurrent = Math.abs(Math.round(maintenance - ((Math.abs(weightAnalysis.weeklyDelta || 0.5) * 3500) / 7)));
+  var deficitPerDay = Math.round((Math.abs(weightAnalysis.weeklyDelta || 0.5) * 7700) / 7);
+  var intakeCurrent = Math.max(0, maintenance - deficitPerDay);
 
   ins.push({
     icon: '🔋',
     msg: 'METABOLIC RATE: BMR ' + Math.round(m.bmr) + ' | TDEE ' + maintenance + ' kcal',
-    action: 'Basal (rest): ' + Math.round(m.bmr) + 'kcal. Total: ' + maintenance + 'kcal/day. Current deficit: ' + deficitCurrent + 'kcal/day → ' + (deficitCurrent * 7 / 3500).toFixed(1) + 'kg/week loss potential. For weight goal, target: ' + (Math.round(maintenance * 0.85)) + 'kcal/day.'
+    action: 'Basal (rest): ' + Math.round(m.bmr) + 'kcal. Total: ' + maintenance + 'kcal/day. Current intake: ' + intakeCurrent + 'kcal/day (Deficit: ' + deficitPerDay + 'kcal/day) → ' + (deficitPerDay * 7 / 7700).toFixed(1) + 'kg/week loss potential. For weight goal, target: ' + (Math.round(maintenance * 0.85)) + 'kcal/day.'
   });
 
   // ═══ TIER 6: BIOLOGICAL AGE ═══
@@ -2935,37 +3020,431 @@ function generateAdvancedMetricsHtml() {
 // ═══════════════════════════════════════════════
 // SETUP & BOOT
 // ═══════════════════════════════════════════════
-function setupSave() {
-  if (!DATA_LOADED) { showToast('Loading... please wait'); return; }
-  var name = document.getElementById('s-name').value || 'Athlete';
-  var weight = parseFloat(document.getElementById('s-weight').value);
-  var targetWeight = parseFloat(document.getElementById('s-target-weight').value);
-  var height = parseFloat(document.getElementById('s-height').value);
-  var age = parseInt(document.getElementById('s-age').value);
-  var gender = document.getElementById('s-gender').value;
-  var waterGoal = parseInt(document.getElementById('s-water-goal').value) || 10;
-  var bodyFat = parseFloat(document.getElementById('s-bodyfat').value) || 20;
-  var goalMode = document.getElementById('s-goal-mode').value;
+var SETUP_STEPS = [
+  { key: 'name', question: 'Hello! What should I call you?', type: 'text', placeholder: 'Your name', required: true },
+  { key: 'weight', question: 'What is your current weight in kilograms?', type: 'number', placeholder: '85', required: true },
+  { key: 'targetWeight', question: 'What is your target weight in kilograms?', type: 'number', placeholder: '70', required: true },
+  { key: 'height', question: 'What is your height in centimeters?', type: 'number', placeholder: '170', required: true },
+  { key: 'age', question: 'How old are you?', type: 'number', placeholder: '25', required: true },
+  { key: 'gender', question: 'Choose your gender:', type: 'select', options: [{ label: 'Male', value: 'male' }, { label: 'Female', value: 'female' }], required: true },
+  { key: 'goalMode', question: 'What do you want to achieve?', type: 'select', options: [{ label: 'Lose weight', value: 'lose' }, { label: 'Gain mass', value: 'gain' }, { label: 'Maintain weight', value: 'maintain' }], required: true },
+  { key: 'dietPreference', question: 'Which diet do you want?', type: 'select', options: [{ label: 'Vegetarian', value: 'veg' }, { label: 'Eggetarian', value: 'eggetarian' }, { label: 'Non-vegetarian', value: 'nonveg' }], required: true },
+  { key: 'workStart', question: 'Work/business day starts at what time?', type: 'time', placeholder: '09:00', required: true },
+  { key: 'workEnd', question: 'Work/business day ends at what time?', type: 'time', placeholder: '17:00', required: true },
+  { key: 'gymStart', question: 'Your daily workout starts at what time?', type: 'time', placeholder: '18:00', required: true },
+  { key: 'gymEnd', question: 'Your daily workout ends at what time?', type: 'time', placeholder: '19:30', required: true },
+  { key: 'waterGoal', question: 'How many glasses of water do you want per day?', type: 'number', placeholder: '10', required: true },
+  { key: 'review', question: 'Review your profile summary below and tap START when you are ready.', type: 'summary', required: false }
+];
 
-  if (!weight) { showToast('Enter your current weight!'); return; }
-  if (!targetWeight) { showToast('Enter your target weight!'); return; }
-  if (!height) { showToast('Enter your height for BMI!'); return; }
-  if (!age) { showToast('Enter your age for accuracy!'); return; }
+var setupState = { step: 0, history: [], answers: {} };
+
+function setupSave() {
+  finishSetup();
+}
+
+function renderSetup() {
+  setupState = { step: 0, history: [], answers: {} };
+  addSetupMessage('bot', 'Welcome to FitOs — I will ask a few quick questions and then set your optimized plan.');
+  renderSetupStep();
+}
+
+function addSetupMessage(from, text) {
+  setupState.history.push({ from: from, text: text });
+  var log = document.getElementById('setup-log');
+  if (!log) return;
+  var bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + (from === 'bot' ? 'chat-bot' : 'chat-user');
+  bubble.innerText = text;
+  log.appendChild(bubble);
+  log.scrollTop = log.scrollHeight;
+}
+
+function renderSetupSummaryText() {
+  var a = setupState.answers;
+  var lines = [
+    'Name: ' + (a.name || 'Athlete'),
+    'Goal: ' + getGoalLabel(a.goalMode || 'lose'),
+    'Diet: ' + getDietLabel(a.dietPreference || 'veg'),
+    'Work time: ' + (a.workStart && a.workEnd ? (a.workStart + ' - ' + a.workEnd) : 'N/A'),
+    'Gym time: ' + (a.gymStart && a.gymEnd ? (a.gymStart + ' - ' + a.gymEnd) : 'N/A'),
+    'Current weight: ' + (a.weight || 'N/A') + ' kg',
+    'Target weight: ' + (a.targetWeight || 'N/A') + ' kg',
+    'Height: ' + (a.height || 'N/A') + ' cm',
+    'Age: ' + (a.age || 'N/A'),
+    'Water goal: ' + (a.waterGoal || 10) + ' glasses'
+  ];
+  return lines.join('\n');
+}
+
+function renderSetupStep() {
+  var step = SETUP_STEPS[setupState.step];
+  var footer = document.getElementById('setup-input-box');
+  var nextBtn = document.getElementById('setup-next');
+  if (!footer || !nextBtn) return;
+  footer.innerHTML = '';
+  nextBtn.disabled = false;
+
+  if (!step) {
+    addSetupMessage('bot', 'All set! Saving your profile now...');
+    finishSetup();
+    return;
+  }
+
+  if (step.type === 'summary') {
+    addSetupMessage('bot', step.question);
+    addSetupMessage('bot', renderSetupSummaryText());
+    footer.innerHTML = '';
+    nextBtn.innerText = 'START FITOS';
+    nextBtn.disabled = false;
+    return;
+  }
+
+  nextBtn.innerText = 'NEXT';
+  addSetupMessage('bot', step.question);
+
+  if (step.type === 'select') {
+    var select = document.createElement('select');
+    select.id = 'setup-input';
+    select.className = 'form-input';
+    select.innerHTML = '<option value="">Select an option</option>' + step.options.map(function (o) {
+      return '<option value="' + o.value + '">' + o.label + '</option>';
+    }).join('');
+    footer.appendChild(select);
+  } else {
+    var input = document.createElement('input');
+    input.id = 'setup-input';
+    input.className = 'form-input';
+    input.type = step.type;
+    input.placeholder = step.placeholder || '';
+    input.autocomplete = 'off';
+    footer.appendChild(input);
+    input.focus();
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') nextSetupStep();
+    });
+  }
+}
+
+function nextSetupStep() {
+  var step = SETUP_STEPS[setupState.step];
+  if (!step) return;
+  if (step.type === 'summary') {
+    finishSetup();
+    return;
+  }
+  var input = document.getElementById('setup-input');
+  if (!input) return;
+  var value = input.value;
+  var label = value;
+  if (step.type === 'number' && value !== '') {
+    value = parseFloat(value);
+    if (isNaN(value)) value = '';
+  }
+  if (step.type === 'select' && value !== '') {
+    var selected = step.options.find(function (o) { return String(o.value) === String(value); });
+    if (selected) {
+      label = selected.label;
+      value = selected.value;
+    }
+  }
+  if (step.type === 'select' && value === '') {
+    showToast('Please choose one option to continue.');
+    return;
+  }
+  if (step.required && (value === '' || value === null || value === undefined)) {
+    showToast('Please answer the question before moving on.');
+    return;
+  }
+  addSetupMessage('user', String(label));
+  setupState.answers[step.key] = value;
+  setupState.step += 1;
+  renderSetupStep();
+}
+
+function finishSetup() {
+  if (!DATA_LOADED) { showToast('Loading... please wait'); return; }
+  var answers = setupState.answers;
+  var name = answers.name || 'Athlete';
+  var weight = parseFloat(answers.weight) || 75;
+  var targetWeight = parseFloat(answers.targetWeight) || weight;
+  var height = parseFloat(answers.height) || 170;
+  var age = parseInt(answers.age) || 25;
+  var gender = answers.gender || 'male';
+  var waterGoal = parseInt(answers.waterGoal) || 10;
+  var bodyFat = parseFloat(answers.bodyFat) || 20;
+  var goalMode = answers.goalMode || 'lose';
+  var dietPreference = answers.dietPreference || 'veg';
+  var workStart = answers.workStart || '09:00';
+  var workEnd = answers.workEnd || '17:00';
+  var gymStart = answers.gymStart || '18:00';
+  var gymEnd = answers.gymEnd || '19:30';
+
+  var profileData = {
+    name: name,
+    weight: weight,
+    targetWeight: targetWeight,
+    height: height,
+    age: age,
+    gender: gender,
+    waterGoal: waterGoal,
+    startWeight: weight,
+    startDate: today(),
+    bodyFat: bodyFat,
+    goalMode: goalMode,
+    dietPreference: dietPreference,
+    workStart: workStart,
+    workEnd: workEnd,
+    gymStart: gymStart,
+    gymEnd: gymEnd
+  };
+  
+  DB.setProfile(profileData);
+  DB.addWeight(today(), weight);
+  
+  try {
+    var engineData = NeuralCore.generateTimelineAndSchedule(profileData);
+    var req = indexedDB.open('fitos_sw_db', 2);
+    req.onsuccess = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains('config')) return;
+        var tx = db.transaction('config', 'readwrite');
+        tx.objectStore('config').put(engineData.schedule, 'custom_schedule');
+    };
+  } catch(e) { console.error('Error saving dynamic schedule:', e); }
+  
+  initApp();
+}
+
+function openProfileEditor() {
+  var prof = DB.profile();
+  openModal(
+    '<div class="modal-title">🧠 PROFILE SETTINGS</div>' +
+    '<div style="font-size:.75rem;color:var(--sub);margin-bottom:12px;">Update your target, diet type, work hours, gym window and hydration goal.</div>' +
+    '<div style="display:grid;gap:12px;">' +
+    '<input id="edit-targetWeight" class="modal-input" type="number" placeholder="Target weight" value="' + (prof.targetWeight || '') + '">' +
+    '<select id="edit-goalMode" class="modal-input">' +
+      '<option value="lose"' + ((prof.goalMode || 'lose') === 'lose' ? ' selected' : '') + '>Lose weight</option>' +
+      '<option value="gain"' + ((prof.goalMode || 'lose') === 'gain' ? ' selected' : '') + '>Gain mass</option>' +
+      '<option value="maintain"' + ((prof.goalMode || 'lose') === 'maintain' ? ' selected' : '') + '>Maintain weight</option>' +
+    '</select>' +
+    '<select id="edit-dietPreference" class="modal-input">' +
+      '<option value="veg"' + ((prof.dietPreference || 'veg') === 'veg' ? ' selected' : '') + '>Vegetarian</option>' +
+      '<option value="eggetarian"' + ((prof.dietPreference || 'veg') === 'eggetarian' ? ' selected' : '') + '>Eggetarian</option>' +
+      '<option value="nonveg"' + ((prof.dietPreference || 'veg') === 'nonveg' ? ' selected' : '') + '>Non-vegetarian</option>' +
+    '</select>' +
+    '<input id="edit-workStart" class="modal-input" type="time" placeholder="Work start" value="' + (prof.workStart || '') + '">' +
+    '<input id="edit-workEnd" class="modal-input" type="time" placeholder="Work end" value="' + (prof.workEnd || '') + '">' +
+    '<input id="edit-gymStart" class="modal-input" type="time" placeholder="Gym start" value="' + (prof.gymStart || '') + '">' +
+    '<input id="edit-gymEnd" class="modal-input" type="time" placeholder="Gym end" value="' + (prof.gymEnd || '') + '">' +
+    '<input id="edit-waterGoal" class="modal-input" type="number" placeholder="Water glasses" value="' + (prof.waterGoal || 10) + '">' +
+    '</div>' +
+    '<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">' +
+    '<button class="modal-btn primary" onclick="saveProfileSettings()">SAVE</button>' +
+    '<button class="modal-btn" onclick="closeModal()">CANCEL</button>' +
+    '</div>'
+  );
+}
+
+function saveProfileSettings() {
+  var targetWeight = parseFloat(document.getElementById('edit-targetWeight').value);
+  var goalMode = document.getElementById('edit-goalMode').value;
+  var dietPreference = document.getElementById('edit-dietPreference').value;
+  var workStart = document.getElementById('edit-workStart').value || '';
+  var workEnd = document.getElementById('edit-workEnd').value || '';
+  var gymStart = document.getElementById('edit-gymStart').value || '';
+  var gymEnd = document.getElementById('edit-gymEnd').value || '';
+  var waterGoal = parseInt(document.getElementById('edit-waterGoal').value) || 10;
 
   DB.setProfile({
-    name: name, weight: weight, targetWeight: targetWeight,
-    height: height, age: age, gender: gender, waterGoal: waterGoal,
-    startWeight: weight, bodyFat: bodyFat, goalMode: goalMode
+    targetWeight: targetWeight,
+    goalMode: goalMode,
+    dietPreference: dietPreference,
+    workStart: workStart,
+    workEnd: workEnd,
+    gymStart: gymStart,
+    gymEnd: gymEnd,
+    waterGoal: waterGoal
   });
-  DB.addWeight(today(), weight);
-  initApp();
+  closeModal();
+  renderHome();
+  renderDiet();
+  showToast('✅ Profile settings updated!');
+}
+
+function getGoalLabel(mode) {
+  if (mode === 'gain') return 'GAIN MASS';
+  if (mode === 'maintain') return 'MAINTAIN';
+  return 'LOSE WEIGHT';
+}
+
+function getDietLabel(pref) {
+  if (pref === 'nonveg') return 'NON-VEG';
+  if (pref === 'eggetarian') return 'EGGETARIAN';
+  return 'VEG';
+}
+
+function parseTimeString(value) {
+  if (!value || typeof value !== 'string') return null;
+  var parts = value.split(':');
+  if (parts.length !== 2) return null;
+  var hh = parseInt(parts[0], 10);
+  var mm = parseInt(parts[1], 10);
+  if (isNaN(hh) || isNaN(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+  return hh * 60 + mm;
+}
+
+function formatMinutes(total) {
+  total = Math.max(0, Math.min(total, 24 * 60 - 1));
+  var hh = Math.floor(total / 60);
+  var mm = total % 60;
+  return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+}
+
+function getTimeDurationHours(start, end) {
+  if (start === null || end === null) return 8;
+  var diff = end - start;
+  if (diff <= 0) diff += 24 * 60;
+  return Math.round((diff / 60) * 10) / 10;
+}
+
+function getTimeRangeLabel(start, end) {
+  if (!start || !end) return 'SET SCHEDULE';
+  return start + ' - ' + end;
+}
+
+function personalizeMenuText(text) {
+  var pref = (DB.profile().dietPreference || 'veg').toLowerCase();
+  if (!text) return text;
+  if (pref === 'nonveg') {
+    text = text
+      .replace(/soya chunks/gi, 'grilled chicken breast')
+      .replace(/soy chunks/gi, 'grilled chicken breast')
+      .replace(/dal/gi, 'lean chicken curry')
+      .replace(/roti/gi, 'brown rice')
+      .replace(/low-fat milk/gi, 'egg white shake')
+      .replace(/roasted chana/gi, 'boiled egg whites')
+      .replace(/vegetarian/gi, 'protein-rich non-veg')
+      .replace(/vegan/gi, 'lean non-veg')
+      .replace(/vegetables/gi, 'vegetables with lean meat')
+      .replace(/\bveg\b/gi, 'non-veg');
+  }
+
+  var goalMode = DB.profile().goalMode || 'lose';
+  if (goalMode === 'gain') {
+    text = text
+      .replace(/compact carb/gi, 'extra carbs')
+      .replace(/balanced lunch/gi, 'calorie-dense lunch')
+      .replace(/light dinner/gi, 'muscle-building dinner')
+      .replace(/protein-rich snack/gi, 'high-calorie protein snack')
+      .replace(/lean protein/gi, 'calorie-rich protein');
+  } else if (goalMode === 'lose') {
+    text = text
+      .replace(/extra carbs/gi, 'moderate carbs')
+      .replace(/calorie-dense lunch/gi, 'low-calorie lunch')
+      .replace(/muscle-building dinner/gi, 'light dinner')
+      .replace(/high-calorie protein snack/gi, 'protein snack')
+      .replace(/calorie-rich protein/gi, 'lean protein');
+  }
+
+  return text;
+}
+
+function getTimelineIcon(item) {
+  var map = {
+    pregym: '🍌',
+    postworkout: '🥛',
+    lunch: '🍱',
+    dinner: '🍽️',
+    supp_fatburner: '💊',
+    supp_jeera1: '🌿',
+    supp_tslim: '💊',
+    supp_centrum: '💊',
+    supp_acv1: '🍎',
+    supp_isab2: '🌾',
+    supp_snack: '🥜',
+    supp_gt: '🍵'
+  };
+  if (item.icon) return item.icon;
+  if (item.id && map[item.id]) return map[item.id];
+  if (item.a && item.a.indexOf('JOB') !== -1) return '🏢';
+  if (item.a && item.a.indexOf('GYM') !== -1) return '🏋️';
+  if (item.a && item.a.indexOf('TREADMILL') !== -1) return '🚶';
+  if (item.a && item.a.indexOf('DETOX') !== -1) return '🌿';
+  return '';
+}
+
+function getDietTimeline() {
+  var profile = DB.profile();
+  var workStart = parseTimeString(profile.workStart) || 540;
+  var workEnd = parseTimeString(profile.workEnd) || 1020;
+  var gymStart = parseTimeString(profile.gymStart) || 360;
+  var gymEnd = parseTimeString(profile.gymEnd) || 420;
+
+  var items = [];
+  var beforeGym = gymStart - 45;
+  if (beforeGym < 60) beforeGym = 60;
+
+  items.push({ t: formatMinutes(beforeGym), id: 'pregym', icon: '🍌', a: 'PRE-WORKOUT MEAL', d: 'Compact carb + protein snack before workout' });
+  items.push({ t: formatMinutes(gymStart), icon: '🏋️', a: 'GYM TRAINING', d: 'Workout session for strength and conditioning' });
+  items.push({ t: formatMinutes(gymEnd + 15), id: 'postworkout', icon: '🥛', a: 'POST-WORKOUT RECOVERY', d: 'Protein shake or high-protein snack' });
+
+  if (gymEnd <= workStart) {
+    items.push({ t: formatMinutes(workStart), icon: '🏢', a: 'WORK STARTS', d: 'Begin your business day with focus and hydration' });
+    items.push({ t: formatMinutes(workStart + 240), id: 'lunch', icon: '🍱', a: 'MAIN LUNCH', d: 'Balanced lunch with protein, carbs and greens' });
+    items.push({ t: formatMinutes(Math.min(workEnd - 90, workStart + 420)), id: 'supp_snack', icon: '🥜', a: 'AFTERNOON SNACK', d: 'Protein-rich snack to sustain energy' });
+    items.push({ t: formatMinutes(Math.max(workEnd + 60, gymEnd + 120)), id: 'dinner', icon: '🍽️', a: 'DINNER', d: 'Clean dinner with lean protein and vegetables' });
+  } else {
+    items.push({ t: formatMinutes(workStart), icon: '🏢', a: 'WORK STARTS', d: 'Begin your business day with focus and hydration' });
+    items.push({ t: formatMinutes(workStart + 240), id: 'lunch', icon: '🍱', a: 'MAIN LUNCH', d: 'Balanced lunch with protein, carbs and greens' });
+    items.push({ t: formatMinutes(Math.max(workEnd - 90, workStart + 420)), id: 'supp_snack', icon: '🥜', a: 'AFTERNOON SNACK', d: 'Protein-rich snack to sustain energy' });
+    items.push({ t: formatMinutes(workEnd), icon: '🏁', a: 'WORK ENDS', d: 'Finish work and prepare for your post-workout session' });
+    if (gymStart > workEnd + 30) {
+      items.push({ t: formatMinutes(Math.max(workEnd + 30, gymStart - 45)), icon: '🍌', a: 'PRE-WORKOUT MEAL', d: 'Light carb snack before training' });
+    }
+    items.push({ t: formatMinutes(gymStart), icon: '🏋️', a: 'GYM TRAINING', d: 'Workout session for strength and conditioning' });
+    items.push({ t: formatMinutes(gymEnd + 15), id: 'postworkout', icon: '🥛', a: 'POST-WORKOUT RECOVERY', d: 'Protein shake or high-protein snack' });
+    items.push({ t: formatMinutes(Math.max(gymEnd + 90, workEnd + 120)), id: 'dinner', icon: '🍽️', a: 'DINNER', d: 'Clean dinner with lean protein and vegetables' });
+  }
+
+  return items.map(function (item) {
+    var copy = Object.assign({}, item);
+    if (copy.d) copy.d = personalizeMenuText(copy.d);
+    if (copy.a) copy.a = personalizeMenuText(copy.a);
+    copy.label = copy.a || copy.name || copy.label || '';
+    copy.desc = copy.d || copy.description || copy.desc || '';
+    if (!copy.icon) copy.icon = getTimelineIcon(copy);
+    return copy;
+  });
 }
 
 function initApp() {
   document.getElementById('setup').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
-  updateTopBar();
-  setInterval(updateTopBar, 30000);
+  
+  var profile = DB.profile();
+  if (profile && profile.gymStart) {
+    try {
+      var engine = NeuralCore.generateTimelineAndSchedule(profile);
+      DAILY_TIMELINE = engine.timeline;
+      
+      var meals = NeuralCore.generateMeals(profile);
+      MEAL_CONFIG['pregym'].time = (engine.timeline.find(function(t){return t.id==='pregym'}) || {}).t || '17:30 PM';
+      MEAL_CONFIG['pregym'].note = meals.pregym;
+      
+      MEAL_CONFIG['lunch'].time = (engine.timeline.find(function(t){return t.id==='lunch'}) || {}).t || '13:00 PM';
+      MEAL_CONFIG['lunch'].note = meals.lunch;
+      
+      MEAL_CONFIG['dinner'].time = (engine.timeline.find(function(t){return t.id==='dinner'}) || {}).t || '20:00 PM';
+      MEAL_CONFIG['dinner'].note = meals.dinner;
+      
+      MEAL_CONFIG['postworkout'].time = (engine.timeline.find(function(t){return t.id==='postworkout'}) || {}).t || '19:30 PM';
+      MEAL_CONFIG['postworkout'].note = meals.postworkout;
+      
+    } catch(e) { console.error('Error applying dynamic engine UI:', e); }
+  }
+  
+  // updateTopbar() handles date/time
   initNav();
   goPage('home');
   // Start background systems after UI is ready
@@ -2998,6 +3477,7 @@ function initApp() {
         // Ensure setup is visible
         document.getElementById('setup').style.display = 'block';
         window.setupReady = true;
+        renderSetup();
       }
     })
     .catch(function (e) {
@@ -3177,50 +3657,41 @@ function checkTimelineReminders() {
   var notifLog = DB.getNotifHistory();
   var todayPrefix = d + '_';
 
-  /* 1. Job Ends - Pre-gym / Setup */
-  if (h === 2 && m >= 30 && m < 35) {
-    if (!notifLog[todayPrefix + 'job_end']) {
-      sendStrictNotif('🏁 JOB ENDS!', 'Shift khatam! Start your pre-workout meal now.', 'job_end');
+  var profile = DB.profile();
+  var workEndMin = parseTimeString(profile.workEnd);
+  var gymStartMin = parseTimeString(profile.gymStart);
+  var gymEndMin = parseTimeString(profile.gymEnd);
+  var nowMin = h * 60 + m;
+
+  /* 1. Pre-gym meal reminder 30 minutes before workout */
+  if (gymStartMin !== null && nowMin === gymStartMin - 30) {
+    if (!notifLog[todayPrefix + 'pre_gym']) {
+      sendStrictNotif('🍌 PRE-WORKOUT', 'Time for a light pre-workout snack.', 'pre_gym');
     }
   }
 
-  /* 2. Gym time at 4 AM */
-  if (h === 4 && m < 5) {
-    var wkData = DB.getWorkout(d);
-    if (!wkData.completed && !notifLog[todayPrefix + 'gym_4am']) {
-      sendStrictNotif('🏋️ GYM TIME — AB JAO!', '4:00 AM. Beast Mode ON at Fit Master Gym! No excuses.', 'gym_4am');
+  /* 2. Gym start reminder */
+  if (gymStartMin !== null && nowMin === gymStartMin) {
+    if (!notifLog[todayPrefix + 'gym_start']) {
+      sendStrictNotif('🏋️ GYM START', 'Your workout window begins now. Let’s go!', 'gym_start');
     }
   }
 
-  /* 3. Sleep at 6:15 AM */
-  if (h === 6 && m >= 15 && m < 20) {
-    if (!notifLog[todayPrefix + 'sleep_6am']) {
-      sendStrictNotif('😴 RECOVERY SLEEP', 'Deep 6-hour recovery window begins. Rest up.', 'sleep_6am');
+  /* 3. Workout complete reminder */
+  if (gymEndMin !== null && nowMin === gymEndMin) {
+    if (!notifLog[todayPrefix + 'gym_end']) {
+      sendStrictNotif('✅ GYM COMPLETE', 'Great job! Log your recovery and hydration.', 'gym_end');
     }
   }
 
-  /* 4. Wake up at 12 PM */
-  if (h === 12 && m < 5) {
-    if (!notifLog[todayPrefix + 'wake_12pm']) {
-      sendStrictNotif('⏰ WAKE UP!', 'Day shift shuru! Fasted detox modes ON.', 'wake_12pm');
+  /* 4. Work end reminder */
+  if (workEndMin !== null && nowMin === workEndMin) {
+    if (!notifLog[todayPrefix + 'work_end']) {
+      sendStrictNotif('🏁 WORK ENDS', 'Your work/business day is over. Prepare for your post-workout routine.', 'work_end');
     }
   }
 
-  /* 5. Pre-shift Dinner at 5 PM */
-  if (h === 17 && m < 5) {
-    if (!notifLog[todayPrefix + 'dinner_5pm']) {
-      sendStrictNotif('🍽️ DINNER TIME', 'Get your lean fuel before work shift.', 'dinner_5pm');
-    }
-  }
-
-  /* 6. Job Starts at 6:30 PM */
-  if (h === 18 && m >= 30 && m < 35) {
-    if (!notifLog[todayPrefix + 'job_start']) {
-      sendStrictNotif('🏢 JOB STARTS', 'Night grind mode ON! Focus up.', 'job_start');
-    }
-  }
-
-  /* 7. Daily log reminder at 11 PM */
+  /* 5. Daily log reminder at 11 PM */
   if (h === 23 && m < 5) {
     if (!notifLog[todayPrefix + 'endofday']) {
       sendStrictNotif('📋 DAILY LOG', 'Raat ke 11 baj gaye. Log your progress!', 'endofday');
@@ -3578,13 +4049,20 @@ async function syncNativeReminders() {
 
     // Schedule new ones
     var notifications = [];
+    var profile = DB.profile();
+    var workEndMin = parseTimeString(profile.workEnd) || 1020;
+    var gymStartMin = parseTimeString(profile.gymStart) || 1080;
+    var gymEndMin = parseTimeString(profile.gymEnd) || 1170;
+    var preGymMin = Math.max(60, gymStartMin - 30);
     var sched = [
       { h: 3, m: 15, t: '💊 DR. MOREPEN', b: 'Pre-gym Fat Burner time! 1 tab with warm water. 🔥' },
       { h: 13, m: 15, t: '🍱 MAIN LUNCH', b: 'High Protein / High Fiber meal khao! Support with Centrum Men. 💪' },
       { h: 15, m: 10, t: '🌿 AFTERNOON DETOX', b: 'Jeera/Saunf drink + ACV sequence starts now! 💧' },
       { h: 16, m: 30, t: '💊 T-SLIM TIME', b: 'Take T-Slim tablet (30 mins before dinner)! 🥗' },
-      { h: 17, m: 0, t: '🍽️ DINNER', b: 'Lean fuel before job shift! Sahi khao. 🥗' },
-      { h: 18, m: 30, t: '🏢 JOB STARTS', b: 'Night grind mode ON! Stay focused. 💼' },
+      { h: Math.floor(preGymMin / 60), m: preGymMin % 60, t: '🍌 PRE-WORKOUT', b: 'Light snack before your workout window starts.' },
+      { h: Math.floor(gymStartMin / 60), m: gymStartMin % 60, t: '🏋️ GYM STARTS', b: 'Workout time begins. Crush your session.' },
+      { h: Math.floor(gymEndMin / 60), m: gymEndMin % 60, t: '✅ GYM COMPLETE', b: 'Workout done. Hydrate and recover.' },
+      { h: Math.floor(workEndMin / 60), m: workEndMin % 60, t: '🏁 WORK ENDS', b: 'Your work/business day ends. Time to transition to recovery mode.' },
       { h: 23, m: 0, t: '📋 DAILY LOG', b: 'Aaj ka progress record kiya? check karo! ✍️' },
       { h: 23, m: 59, t: '🍵 GREEN TEA', b: 'Last supplement of the day! Metabolism boost. 🌙' }
     ];
@@ -3752,7 +4230,7 @@ function updateTopbar() {
 
   var dateStr = dy + ' ' + m + ' ' + yr + '  ' + h12 + ':' + mm + ' ' + ampm;
   var topdate = document.getElementById('topbar-date');
-  if (topdate) topdate.textContent = dateStr;
+  if (topdate) topdate.innerHTML = dateStr;
 
   try {
     var dayNum = getDayNum();
@@ -3767,6 +4245,196 @@ function updateTopbar() {
       }
     }
   } catch (e) { }
-}
-setInterval(updateTopbar, 10000);
 
+  // Smart schedule exactly on the next minute mark
+  var msUntilNextMinute = (60 - d.getSeconds()) * 1000 - d.getMilliseconds() + 100;
+  setTimeout(updateTopbar, msUntilNextMinute);
+}
+
+function renderProfile() {
+  var p = DB.profile();
+  var weights = DB.weights().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  var lastWt = weights.length ? weights[weights.length - 1].kg : parseFloat(p.weight) || 75;
+  var targetWt = parseFloat(p.targetWeight || 0);
+  var needsToLose = targetWt > 0 ? (lastWt - targetWt).toFixed(1) : '--';
+  if (parseFloat(needsToLose) < 0) needsToLose = '0';
+  
+  var workStart = p.workStart || '09:00';
+  var workEnd = p.workEnd || '18:00';
+  var gymStart = p.gymStart || '06:00';
+  var gymEnd = p.gymEnd || '07:30';
+  
+  var dayNum = getDayNum();
+
+  var html = '<div class="profile-container">' +
+    '<div class="profile-header">' +
+      '<div class="profile-avatar-circle" onclick="editName()">' +
+        '<span style="font-size:2.5rem;">' + (p.gender === 'female' ? '👩‍🦰' : '🧔') + '</span>' +
+        '<div class="avatar-edit-badge">✎</div>' +
+      '</div>' +
+      '<div class="profile-name-area" onclick="editName()">' +
+        '<div class="profile-name">' + (p.name || 'ATHLETE') + '</div>' +
+        '<div class="profile-subtitle">DAY ' + dayNum + ' • PERFORMANCE TRACKER</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="profile-section">' +
+      '<div class="profile-section-title">BODY METRICS</div>' +
+      '<div class="profile-list">' +
+        '<div class="profile-list-item" onclick="editWeight()">' +
+          '<div class="list-item-label">Current Weight</div>' +
+          '<div class="list-item-val" style="color:var(--gold)">' + lastWt + ' kg</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editTarget()">' +
+          '<div class="list-item-label">Target Weight</div>' +
+          '<div class="list-item-val" style="color:var(--blue)">' + (targetWt || '--') + ' kg</div>' +
+        '</div>' +
+        '<div class="profile-list-item">' +
+          '<div class="list-item-label">To Lose</div>' +
+          '<div class="list-item-val" style="color:var(--red)">' + needsToLose + ' kg</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editHeight()">' +
+          '<div class="list-item-label">Height</div>' +
+          '<div class="list-item-val" style="color:var(--green)">' + (p.height || '--') + ' cm</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editAge()">' +
+          '<div class="list-item-label">Age</div>' +
+          '<div class="list-item-val">' + (p.age || '--') + ' yrs</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editGender()">' +
+          '<div class="list-item-label">Gender</div>' +
+          '<div class="list-item-val">' + (p.gender || 'MALE').toUpperCase() + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="profile-section">' +
+      '<div class="profile-section-title">FITNESS SETTINGS</div>' +
+      '<div class="profile-list">' +
+        '<div class="profile-list-item" onclick="editGoal()">' +
+          '<div class="list-item-label">Fitness Goal</div>' +
+          '<div class="list-item-val" style="color:var(--purple)">' + getGoalLabel(p.goalMode) + '</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editDiet()">' +
+          '<div class="list-item-label">Diet Preference</div>' +
+          '<div class="list-item-val" style="color:var(--blue)">' + getDietLabel(p.dietPreference) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="profile-section">' +
+      '<div class="profile-section-title">DAILY SCHEDULE</div>' +
+      '<div class="profile-list">' +
+        '<div class="profile-list-item" onclick="editWorkTime()">' +
+          '<div class="list-item-label">Work Hours</div>' +
+          '<div class="list-item-val" style="color:var(--green)">' + workStart + ' - ' + workEnd + '</div>' +
+        '</div>' +
+        '<div class="profile-list-item" onclick="editGymTime()">' +
+          '<div class="list-item-label">Gym Hours</div>' +
+          '<div class="list-item-val" style="color:var(--blue)">' + gymStart + ' - ' + gymEnd + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  document.getElementById('page-profile').innerHTML = html;
+}
+
+function editTarget() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">TARGET WEIGHT</div>' +
+    '<input class="modal-input" id="edit-val" type="number" step="0.1" value="' + (p.targetWeight || 70) + '"/>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'targetWeight\')">SAVE TARGET</button>');
+}
+function editHeight() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">HEIGHT (CM)</div>' +
+    '<input class="modal-input" id="edit-val" type="number" value="' + (p.height || 170) + '"/>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'height\')">SAVE HEIGHT</button>');
+}
+function editAge() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">AGE</div>' +
+    '<input class="modal-input" id="edit-val" type="number" value="' + (p.age || 25) + '"/>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'age\')">SAVE AGE</button>');
+}
+function editGender() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">GENDER</div>' +
+    '<select class="modal-input" id="edit-val">' +
+    '<option value="male" ' + (p.gender==='male'?'selected':'') + '>MALE</option>' +
+    '<option value="female" ' + (p.gender==='female'?'selected':'') + '>FEMALE</option>' +
+    '</select>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'gender\')">SAVE GENDER</button>');
+}
+function editGoal() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">FITNESS GOAL</div>' +
+    '<select class="modal-input" id="edit-val">' +
+    '<option value="lose" ' + (p.goalMode==='lose'?'selected':'') + '>LOSE WEIGHT</option>' +
+    '<option value="gain" ' + (p.goalMode==='gain'?'selected':'') + '>GAIN MASS</option>' +
+    '<option value="maintain" ' + (p.goalMode==='maintain'?'selected':'') + '>MAINTAIN</option>' +
+    '</select>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'goalMode\')">SAVE GOAL</button>');
+}
+function editDiet() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">DIET PREFERENCE</div>' +
+    '<select class="modal-input" id="edit-val">' +
+    '<option value="veg" ' + (p.dietPreference==='veg'?'selected':'') + '>VEG</option>' +
+    '<option value="nonveg" ' + (p.dietPreference==='nonveg'?'selected':'') + '>NON-VEG</option>' +
+    '<option value="eggetarian" ' + (p.dietPreference==='eggetarian'?'selected':'') + '>EGGETARIAN</option>' +
+    '</select>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'dietPreference\')">SAVE DIET</button>');
+}
+function editWorkTime() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">WORK HOURS</div>' +
+    '<div style="display:flex;gap:10px;margin-bottom:15px;">' +
+    '<input class="modal-input" id="val-start" type="time" value="' + (p.workStart || '09:00') + '"/>' +
+    '<input class="modal-input" id="val-end" type="time" value="' + (p.workEnd || '18:00') + '"/>' +
+    '</div>' +
+    '<button class="modal-btn primary" onclick="saveTimeField(\'work\')">SAVE WORK TIME</button>');
+}
+function editGymTime() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">GYM HOURS</div>' +
+    '<div style="display:flex;gap:10px;margin-bottom:15px;">' +
+    '<input class="modal-input" id="val-start" type="time" value="' + (p.gymStart || '06:00') + '"/>' +
+    '<input class="modal-input" id="val-end" type="time" value="' + (p.gymEnd || '07:30') + '"/>' +
+    '</div>' +
+    '<button class="modal-btn primary" onclick="saveTimeField(\'gym\')">SAVE GYM TIME</button>');
+}
+function editName() {
+  var p = DB.profile();
+  openModal('<div class="modal-title">EDIT YOUR NAME</div>' +
+    '<input class="modal-input" id="edit-val" type="text" value="' + (p.name || '') + '" placeholder="Enter your name..."/>' +
+    '<button class="modal-btn primary" onclick="saveProfileField(\'name\')">UPDATE NAME</button>');
+}
+
+function saveProfileField(field) {
+  var input = document.getElementById('edit-val');
+  if (!input) return;
+  var val = input.value;
+  var p = DB.profile();
+  p[field] = val;
+  DB.saveProfile(p);
+  closeModal();
+  setTimeout(renderProfile, 100);
+  showToast('Profile updated!');
+}
+
+function saveTimeField(type) {
+  var sInput = document.getElementById('val-start');
+  var eInput = document.getElementById('val-end');
+  if (!sInput || !eInput) return;
+  var start = sInput.value;
+  var end = eInput.value;
+  var p = DB.profile();
+  if (type === 'work') { p.workStart = start; p.workEnd = end; }
+  else { p.gymStart = start; p.gymEnd = end; }
+  DB.saveProfile(p);
+  closeModal();
+  setTimeout(renderProfile, 100);
+  showToast('Schedule updated!');
+}

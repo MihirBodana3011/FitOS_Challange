@@ -1,7 +1,7 @@
 {
-  "name": "FitOS — 90-Day Challenge",
+  "name": "FitOS — Elite Fitness",
   "short_name": "FitOS",
-  "description": "Premium 90-Day Fitness Challenge Tracker with 24/7 Background Reminders",
+  "description": "Premium Fitness Evolution Tracker with 24/7 Background Reminders",
   "start_url": "./index.html?source=pwa",
   "display": "standalone",
   "orientation": "portrait",

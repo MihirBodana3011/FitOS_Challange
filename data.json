@@ -626,126 +626,77 @@
   },
   "WEEKLY_MEALS": {
     "sun": {
-      "pregym": "1 Banana + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Chana",
-      "lunch": "<strong>Lunch:</strong> Mix Dal 1.5 bowl + Mix Veg + 1 Roti + Chaas",
-      "dinner": "<strong>Dinner:</strong> Moong Dal Dalia 1 bowl",
-      "supp_snack": "30g Roasted Makhana",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "mon": {
-      "pregym": "1 Banana + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Chana",
-      "lunch": "<strong>Lunch:</strong> Mix Dal 1.5 bowl + 1 Multigrain Roti + Cucumber Salad + 1 bowl Dahi",
-      "dinner": "<strong>Dinner:</strong> Moong Dal Chilla 2 pcs + Mint Chutney",
-      "supp_snack": "30g Roasted Makhana",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "tue": {
-      "pregym": "1 Apple + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Peanuts",
-      "lunch": "<strong>Lunch:</strong> Rajma Curry 1.5 bowl + Jeera Rice 1 bowl + Salad",
-      "dinner": "<strong>Dinner:</strong> Soy Chunks Pulao 1.5 bowl + Cucumber Raita",
-      "supp_snack": "30g Roasted Chana",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "wed": {
-      "pregym": "1 Banana + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Chana",
-      "lunch": "<strong>Lunch:</strong> Chola Masala 1.5 bowl + 1 Roti + Salad",
-      "dinner": "<strong>Dinner:</strong> Paneer Bhurji 50g + 1 Multigrain Roti",
-      "supp_snack": "30g Roasted Peanuts",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "thu": {
-      "pregym": "1 Apple + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Peanuts",
-      "lunch": "<strong>Lunch:</strong> Masoor Dal Tadka 1.5 bowl + 1 Roti + Dahi",
-      "dinner": "<strong>Dinner:</strong> Besan Chilla 2 pcs + Green Chutney",
-      "supp_snack": "30g Roasted Makhana",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "fri": {
-      "pregym": "1 Banana + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Chana",
-      "lunch": "<strong>Lunch:</strong> Soya Chunks Sabzi + 1 Roti + Curd",
-      "dinner": "<strong>Dinner:</strong> Mix Dal Khichdi 1.5 bowl + Veg Raita",
-      "supp_snack": "30g Roasted Chana",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     },
     "sat": {
-      "pregym": "1 Apple + Black Coffee",
-      "postworkout": "<strong>Post-Workout:</strong> 200ml Low-fat Milk + 30g Roasted Peanuts",
-      "lunch": "<strong>Lunch:</strong> Kala Chana Curry 1.5 bowl + 1 Roti + Salad",
-      "dinner": "<strong>Dinner:</strong> 50g Paneer stir-fry + Light Dal",
-      "supp_snack": "30g Roasted Peanuts",
-      "supp_fatburner": "1 capsule with fruit",
-      "supp_jeera1": "Warm lemon drink with jeera",
-      "supp_centrum": "Centrum Men multivitamin",
-      "supp_tslim": "T-Slim tablet",
-      "supp_acv1": "1 tbsp ACV",
-      "supp_isab2": "1 tsp Isabgol",
-      "supp_gt": "1 cup green tea"
+      "pregym": "1 Fruit (Banana/Apple) + Black Coffee",
+      "postworkout": "<strong>Post-Workout:</strong> Protein Shake or Milk + Handful of nuts",
+      "lunch": "<strong>Lunch:</strong> Lean Protein + Complex Carbs + Mixed Salad",
+      "dinner": "<strong>Dinner:</strong> Light Protein + Cooked Vegetables",
+      "supp_snack": "Low-Calorie Protein Snack"
     }
   },
   "MEAL_CONFIG": {
     "pregym": {
       "label": "Pre-Workout Meal",
-      "time": "03:00 AM",
+      "time": "05:30 PM",
       "icon": "🍌",
       "bg": "#1a0a00",
       "cal": 105,
       "protein": 1,
       "carbs": 27,
       "fat": 0,
-      "note": "1 Fruit (Banana/Apple) + Black Coffee (No Sugar)"
+      "note": "1 Fruit + Black Coffee / Pre-workout"
     },
     "postworkout": {
       "label": "Post-Workout Recovery",
-      "time": "06:00 AM",
+      "time": "07:30 PM",
       "icon": "🥛",
       "bg": "#0d1a1a",
       "cal": 175,
       "protein": 12,
       "carbs": 10,
       "fat": 8,
-      "note": "200ml Low-fat Milk + Roasted Chana/Peanuts"
+      "note": "Protein Shake / Milk + Nuts"
     },
     "lunch": {
       "label": "Main Lunch",
@@ -756,29 +707,29 @@
       "protein": 18,
       "carbs": 61,
       "fat": 9,
-      "note": "Main Meal: Dal / Rajma / Chole / Soy + Roti"
+      "note": "Lean Protein + Complex Carbs + Veggies"
     },
     "dinner": {
       "label": "Dinner",
-      "time": "05:00 PM",
+      "time": "08:30 PM",
       "icon": "🍽️",
       "bg": "#0a0a1a",
       "cal": 250,
       "protein": 16,
       "carbs": 31,
       "fat": 7,
-      "note": "Light Protein: Chilla / Dal / Paneer / Oats"
+      "note": "Light Protein + Vegetables"
     },
     "supp_snack": {
       "label": "Office Break Snack",
-      "time": "09:30 PM",
+      "time": "04:00 PM",
       "icon": "🥜",
       "bg": "#141400",
       "cal": 120,
       "protein": 7,
       "carbs": 18,
       "fat": 3,
-      "note": "Roasted Makhana / Peanuts / Chana"
+      "note": "Healthy Nuts / Low-calorie Protein"
     }
   },
   "DAILY_MACROS": {
@@ -1009,106 +960,54 @@
   },
   "DAILY_TIMELINE": [
     {
-      "t": "2:30 AM",
-      "a": "🏁 JOB ENDS",
-      "d": "Job finished — hydrate with 1 glass lukewarm water"
+      "t": "7:00 AM",
+      "a": "☀️ WAKE UP",
+      "d": "Start the day with a glass of water"
     },
     {
-      "t": "2:45 AM",
-      "id": "supp_fatburner",
-      "a": "💊 Dr. Morepen Fat Burner",
-      "d": "Take with half banana — not on empty stomach"
+      "t": "8:00 AM",
+      "a": "🍳 BREAKFAST",
+      "d": "High protein breakfast"
     },
     {
-      "t": "3:00 AM",
-      "id": "pregym",
-      "a": "🍌 PRE-WORKOUT MEAL",
-      "d": "1 medium banana + black coffee (no sugar, no milk)"
-    },
-    {
-      "t": "4:00 AM",
-      "a": "🏋️ GYM TRAINING",
-      "d": "High intensity training (1 hr)"
-    },
-    {
-      "t": "5:00 AM",
-      "a": "🚶 TREADMILL WALK",
-      "d": "1 hr walk at 4.5–5 km/hr"
-    },
-    {
-      "t": "6:00 AM",
-      "id": "postworkout",
-      "a": "🥛 POST-WORKOUT RECOVERY",
-      "d": "200ml warm low-fat milk + 30g roasted chana"
-    },
-    {
-      "t": "6:15 AM",
-      "a": "😴 RECOVERY SLEEP",
-      "d": "6 hours of recovery sleep"
-    },
-    {
-      "t": "12:00 PM",
-      "a": "⏰ WAKE UP",
-      "d": "Start the day with a detox drink"
-    },
-    {
-      "t": "12:05 PM",
-      "id": "supp_jeera1",
-      "a": "🌿 DETOX DRINK",
-      "d": "Warm water with lemon, jeera/saunf/ajwain"
-    },
-    {
-      "t": "12:15 PM",
-      "id": "supp_tslim",
-      "a": "💊 T-Slim Tablet",
-      "d": "Take with water 15 min before lunch"
-    },
-    {
-      "t": "12:15 PM",
-      "id": "supp_centrum",
-      "a": "💊 Centrum Men Multivitamin",
-      "d": "Take with lunch"
+      "t": "10:30 AM",
+      "a": "💧 HYDRATION",
+      "d": "Keep drinking water"
     },
     {
       "t": "1:00 PM",
       "id": "lunch",
-      "a": "🍱 MAIN LUNCH",
-      "d": "High protein vegetarian lunch + salad, no roti"
-    },
-    {
-      "t": "2:30 PM",
-      "id": "supp_acv1",
-      "a": "🍎 Apple Cider Vinegar",
-      "d": "1 tbsp ACV in warm water"
+      "a": "🍱 LUNCH",
+      "d": "Lean protein + complex carbs"
     },
     {
       "t": "4:00 PM",
-      "id": "supp_isab2",
-      "a": "🌾 Isabgol",
-      "d": "1 tsp in lukewarm water before dinner"
+      "id": "supp_snack",
+      "a": "🥜 SNACK",
+      "d": "Low calorie protein snack"
     },
     {
-      "t": "5:00 PM",
+      "t": "5:30 PM",
+      "id": "pregym",
+      "a": "🍌 PRE-WORKOUT",
+      "d": "Pre-workout meal or drink"
+    },
+    {
+      "t": "6:00 PM",
+      "a": "🏋️ GYM",
+      "d": "High intensity training"
+    },
+    {
+      "t": "7:30 PM",
+      "id": "postworkout",
+      "a": "🥛 POST-WORKOUT",
+      "d": "Protein shake or recovery meal"
+    },
+    {
+      "t": "8:30 PM",
       "id": "dinner",
       "a": "🍽️ DINNER",
-      "d": "Alternating protein-rich dinner"
-    },
-    {
-      "t": "6:30 PM",
-      "a": "🏢 JOB STARTS",
-      "d": "Keep a 1 litre water bottle with you"
-    },
-    {
-      "t": "9:30 PM",
-      "id": "supp_snack",
-      "a": "🥜 OFFICE BREAK SNACK",
-      "d": "30g roasted chana or 20g makhana"
-    },
-    {
-      "t": "12:00 AM",
-      "id": "supp_gt",
-      "a": "🍵 Green Tea",
-      "d": "Plain, no sugar"
+      "d": "Light protein rich dinner"
     }
   ]
 }

@@ -28,158 +28,103 @@ const ASSETS = [
    urgent: true     = requireInteraction + strong vibration
 ──────────────────────────────────────────────────────────────────*/
 const DAILY_SCHEDULE = [
-  // === NIGHT SHIFT END / PRE-WORKOUT (2:30 AM – 6 AM) ===
+  // === MORNING WAKE & HYDRATE (7:00 AM) ===
   {
-    h: 2, m: 30, tag: 'job_ends', challenge: false, urgent: true,
-    title: '🏁 JOB ENDS — Pre-Workout Phase',
-    body: 'Shift khatam! Ab gym ki taiyari karo. ½ Banana + Black Coffee ready karo. 🔥'
+    h: 7, m: 0, tag: 'wake_up', challenge: false, urgent: true,
+    title: '☀️ Good Morning — Wake Up!',
+    body: 'Time to start the day. Drink a glass of warm water to kickstart your metabolism.'
+  },
+  {
+    h: 7, m: 15, tag: 'morning_supp', challenge: false, urgent: false,
+    title: '💊 Morning Supplements',
+    body: 'Take your morning vitamin or detox drink.'
   },
 
+  // === BREAKFAST (8:00 AM) ===
   {
-    h: 3, m: 0, tag: 'pregym', challenge: false, urgent: true,
-    title: '🍌 PRE-WORKOUT MEAL',
-    body: '1 medium banana + black coffee (no sugar, no milk). Energy and fat-burning boost before gym.'
+    h: 8, m: 0, tag: 'breakfast', challenge: false, urgent: true,
+    title: '🍳 Breakfast Time',
+    body: 'Fuel up for the day with a high-protein breakfast.'
   },
 
+  // === HYDRATION & SNACK (10:30 AM) ===
   {
-    h: 2, m: 45, tag: 'fat_burner', challenge: false, urgent: false,
-    title: '💊 Dr. Morepen Fat Burner',
-    body: 'Take the fat burner with half banana — avoid empty stomach before workout.'
+    h: 10, m: 30, tag: 'water_mid_morn', challenge: false, urgent: false,
+    title: '💧 Hydration Check',
+    body: 'Keep drinking water. Stay hydrated and focused.'
   },
 
-  {
-    h: 4, m: 0, tag: 'gym', challenge: false, urgent: true,
-    title: '🏋️ GYM TIME — BEAST MODE ON!',
-    body: '4 AM – 6 AM: High-intensity training. Stay strong and controlled. 💪'
-  },
-
-  {
-    h: 5, m: 0, tag: 'treadmill', challenge: false, urgent: false,
-    title: '🚶 TREADMILL WALK — 5:00 AM',
-    body: '1 hr walk at 4.5–5 km/hr. Keep pace steady on a low-calorie day.'
-  },
-
-  {
-    h: 6, m: 0, tag: 'postworkout', challenge: false, urgent: false,
-    title: '🥛 POST-WORKOUT RECOVERY — 6:00 AM',
-    body: '200ml warm low-fat milk + 30g roasted chana to protect muscle and recovery.'
-  },
-
-  // === RECOVERY SLEEP (6:15 AM – 12:00 PM) ===
-  {
-    h: 6, m: 15, tag: 'recovery_sleep', challenge: false, urgent: true,
-    title: '😴 RECOVERY SLEEP — Abhi So Jao!',
-    body: 'Post-gym 6-hour deep recovery window. So jao — muscle growth isi mein hoti hai! 💤'
-  },
-
-  // === WAKE UP & FASTED SUPPLEMENTS (12:00 PM onward) ===
-  {
-    h: 12, m: 0, tag: 'wake_up', challenge: false, urgent: true,
-    title: '⏰ WAKE UP — 12:00 PM',
-    body: 'Uth ja bhai! Start the day with a detox drink first. ☀️'
-  },
-  {
-    h: 12, m: 5, tag: 'jeera1', challenge: false, urgent: false,
-    title: '🌿 DETOX DRINK',
-    body: 'Warm water with lemon, jeera, saunf, and ajwain. Hydrate and reset. ⚡'
-  },
-  {
-    h: 12, m: 15, tag: 'supp_tslim', challenge: false, urgent: false,
-    title: '💊 T-Slim Tablet',
-    body: 'Take T-Slim with lunch to support appetite control. ✅'
-  },
-  {
-    h: 12, m: 15, tag: 'supp_centrum', challenge: false, urgent: false,
-    title: '💊 Centrum Men Multivitamin',
-    body: 'Take Centrum with lunch for daily nutrient support.'
-  },
+  // === LUNCH (1:00 PM) ===
   {
     h: 13, m: 0, tag: 'lunch', challenge: false, urgent: true,
-    title: '🍱 MAIN LUNCH — 1:00 PM',
-    body: 'Alternating high-protein items + salad, no roti. High protein & fiber. 💪'
+    title: '🍱 Lunch Time',
+    body: 'Time for your main midday meal. Focus on protein and fiber.'
   },
   {
-    h: 14, m: 30, tag: 'acv1', challenge: false, urgent: false,
-    title: '🍎 Apple Cider Vinegar',
-    body: '1 tbsp ACV in warm water after lunch. Gut and sugar support.'
+    h: 13, m: 15, tag: 'supp_vitamin', challenge: false, urgent: false,
+    title: '💊 Daily Vitamin',
+    body: 'Don\'t forget to take your multivitamin with lunch.'
+  },
+
+  // === AFTERNOON SNACK (4:00 PM) ===
+  {
+    h: 16, m: 0, tag: 'afternoon_snack', challenge: false, urgent: false,
+    title: '🥜 Afternoon Snack',
+    body: 'Grab a low-calorie protein snack to keep energy levels stable.'
+  },
+
+  // === PRE-WORKOUT & GYM (5:30 PM - 6:00 PM) ===
+  {
+    h: 17, m: 30, tag: 'pregym', challenge: false, urgent: true,
+    title: '🍌 Pre-Workout',
+    body: 'Get your pre-workout meal or supplement ready. Gym time is approaching!'
   },
   {
-    h: 16, m: 0, tag: 'isab2', challenge: false, urgent: false,
-    title: '🌾 Isabgol — Pre-Dinner',
-    body: '1 tsp Isabgol in lukewarm water before dinner. Fullness and fiber support.'
+    h: 18, m: 0, tag: 'gym', challenge: false, urgent: true,
+    title: '🏋️ GYM TIME',
+    body: 'Time to train! Stay focused, lift heavy, and push your limits. 💪'
   },
-
-
-  // === DINNER (5:00 PM) ===
   {
-    h: 17, m: 0, tag: 'dinner', challenge: false, urgent: true,
-    title: '🍽️ DINNER — 5:00 PM',
-    body: 'Alternating protein-rich dinner. Balanced and nutritious. 🥗'
+    h: 19, m: 30, tag: 'postworkout', challenge: false, urgent: false,
+    title: '🥛 Post-Workout Recovery',
+    body: 'Great session! Grab your protein shake or recovery meal.'
   },
 
-  // === JOB STARTS (6:30 PM) ===
+  // === DINNER (8:00 PM) ===
   {
-    h: 18, m: 30, tag: 'job_starts', challenge: false, urgent: true,
-    title: '🏢 JOB STARTS — 6:30 PM',
-    body: 'Shift starts — keep a 1 litre water bottle with you.'
+    h: 20, m: 0, tag: 'dinner', challenge: false, urgent: true,
+    title: '🍽️ Dinner Time',
+    body: 'Have a light, protein-rich dinner to support overnight recovery.'
   },
 
-  // === HYDRATION MID-SHIFT ===
+  // === EVENING ROUTINE (10:00 PM) ===
   {
-    h: 20, m: 0, tag: 'water_mid', challenge: false, urgent: false,
-    title: '💧 HYDRATION CHECK — Shift mein',
-    body: 'Paani peena mat bhoolna. Stay hydrated through the night.'
+    h: 22, m: 0, tag: 'log_check', challenge: false, urgent: true,
+    title: '📋 Daily Log Check',
+    body: 'Did you log your weight, water, and workouts today? Update your progress now.'
   },
-
   {
-    h: 21, m: 30, tag: 'supp_snack', challenge: false, urgent: false,
-    title: '🥜 OFFICE BREAK SNACK — 9:30 PM',
-    body: '30g roasted chana or 20g makhana during your break. Low-calorie protein.'
+    h: 22, m: 30, tag: 'supp_night', challenge: false, urgent: false,
+    title: '🍵 Night Routine',
+    body: 'Have your green tea or evening supplement. Time to wind down.'
   },
 
+  // === CHALLENGE MODE EXTRAS ===
   {
-    h: 22, m: 0, tag: 'water_22', challenge: false, urgent: false,
-    title: '💧 WATER REMINDER — 10 PM',
-    body: 'Raat mein bhi hydrated raho. Goal check karo!'
+    h: 8, m: 15, tag: 'c_morning', challenge: true, urgent: true,
+    title: '🔥 Challenge Active!',
+    body: 'Every day is a step towards your transformation. Keep the momentum going! 💪'
   },
-
-  // === GREEN TEA (12:00 AM) ===
-  {
-    h: 0, m: 0, tag: 'gt', challenge: false, urgent: false,
-    title: '🍵 Green Tea',
-    body: 'Plain green tea, no sugar. Night-time metabolism support. 🌙'
-  },
-
-  {
-    h: 23, m: 0, tag: 'log_check', challenge: false, urgent: true,
-    title: '📋 DAILY LOG — Bharo Abhi!',
-    body: 'Aaj sab log kiya? Weight, water, workout, meals — sab check karo.'
-  },
-
-  // === CHALLENGE MODE EXTRAS (only when 90-day challenge is active) ===
-  {
-    h: 12, m: 5, tag: 'c_morning', challenge: true, urgent: true,
-    title: '🔥 CHALLENGE DAY — JEET KA DIN!',
-    body: 'Har rep teri transformation ki taraf ek step hai. Aaj bhi beast raho! 💪'
-  },
-
   {
     h: 15, m: 0, tag: 'c_afternoon', challenge: true, urgent: false,
-    title: '⚡ CHALLENGE ENERGY BOOST',
-    body: 'Afternoon slump mat aane dena. Paani pi, chal, focused raho!'
+    title: '⚡ Challenge Energy Boost',
+    body: 'Don\'t let the afternoon slump hit you. Drink water and stay focused!'
   },
-
   {
     h: 21, m: 0, tag: 'c_night', challenge: true, urgent: true,
-    title: '🌙 END OF DAY — CHALLENGE LOG',
-    body: 'Aaj ka progress log karo. Har logged day = ek guaranteed win! 🏆'
-  },
-
-  {
-    h: 1, m: 30, tag: 'c_midnight', challenge: true, urgent: false,
-    title: '💪 SHIFT MIDNIGHT MOTIVATION',
-    body: 'Shift ke beech bhi motivated raho. Aaj ka din jeet chuke ho! 🏆'
-  },
+    title: '🌙 Challenge Progress',
+    body: 'Another day conquered! Logging your progress guarantees a win. 🏆'
+  }
 ];
 
 /* ── IndexedDB helpers ──────────────────────────────────────────── */
@@ -248,7 +193,8 @@ async function updateScheduledTriggers() {
     const profile = await dbGet('profile') || {};
     const isChallengeActive = !!(profile.startDate);
     const now = Date.now();
-    for (const slot of DAILY_SCHEDULE) {
+    const scheduleArray = await dbGet('custom_schedule') || DAILY_SCHEDULE;
+    for (const slot of scheduleArray) {
        if (slot.challenge && !isChallengeActive) continue;
        // Today
        let d = new Date(); d.setHours(slot.h, slot.m, 0, 0);
@@ -289,8 +235,9 @@ async function checkAndFire() {
     const firedLog = await dbGet('firedLog_' + todayKey) || {};
 
     let fired = false;
+    const scheduleArray = await dbGet('custom_schedule') || DAILY_SCHEDULE;
 
-    for (const slot of DAILY_SCHEDULE) {
+    for (const slot of scheduleArray) {
       // Skip challenge-only slots if challenge is not running
       if (slot.challenge && !isChallengeActive) continue;
 
@@ -355,21 +302,17 @@ async function cleanOldLogs(todayKey) {
 let _clockRunning = false;
 
 function scheduleNextMinute() {
-  if (_clockRunning) return; // prevent duplicate timers
+  if (_clockRunning) return; 
   _clockRunning = true;
 
   const now = new Date();
-  // Calculate ms until the start of next minute + 100ms buffer
   const msUntilNext = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 100;
 
   setTimeout(async () => {
     _clockRunning = false;
     await checkAndFire();
-    // Self-extend: do a dummy fetch to keep SW alive
-    try {
-      await fetch('./manifest.json?_sw_ping=' + Date.now(), { cache: 'no-store' });
-    } catch (e) { /* offline is fine */ }
-    scheduleNextMinute(); // reschedule for the minute after
+    // Recursive infinite loop removed to prevent background battery drain.
+    // Background notifications now rely fully on Periodic Background Sync and OS-level Alarms.
   }, msUntilNext);
 }
 
@@ -560,8 +503,8 @@ self.addEventListener('message', async event => {
 
     // App requests test notification
     case 'TEST_NOTIF': {
-      await self.registration.showNotification('🔥 FitOS — Test Notification', {
-        body: 'Bhai, notifications sahi se kaam kar rahi hain! Background mein bhi aayengi. 💪',
+      await self.registration.showNotification('✅ FitOS - Test Notification', {
+        body: 'Notifications are working perfectly! You will receive them in the background too. 🚀',
         icon: './icons/fitos_icon_512.png',
         badge: './icons/fitos_icon.png',
         vibrate: [200, 100, 200, 100, 400, 100, 200],
